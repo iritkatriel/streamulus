@@ -53,7 +53,6 @@ namespace streamulus
     struct bitwise_and_rule        : proto::bitwise_and        <smls_grammar,smls_grammar> {};
     struct bitwise_xor_rule        : proto::bitwise_xor        <smls_grammar,smls_grammar> {};
     struct comma_rule              : proto::comma              <smls_grammar,smls_grammar> {};
-    struct mem_ptr_rule            : proto::mem_ptr            <smls_grammar,smls_grammar> {};
     struct assign_rule             : proto::assign             <smls_grammar,smls_grammar> {};
     struct lshift_assign_rule      : proto::shift_left_assign  <smls_grammar,smls_grammar> {};
     struct rshift_assign_rule      : proto::shift_right_assign <smls_grammar,smls_grammar> {};
@@ -109,86 +108,110 @@ namespace streamulus
     >
     {};
     
-    // Operator expressions 
-    template<>
-    struct smls_grammar_cases::case_<proto::tag::unary_plus>
-    : proto::or_<
-    proto::when<
-    unary_plus_rule, 
-    proto::_value 
-    >
-    >
-    {};
+    // ////////////////////////////// Operator expressions //////////////////////////////
     
-    template<>
-    struct smls_grammar_cases::case_<proto::tag::plus>
-    : proto::or_<
-    proto::when<
-    plus_rule, 
-    lib_func<plus_func>(smls_grammar(proto::_left),smls_grammar(proto::_right) ,proto::_state) 
-    >
-    >
-    {};
+#define STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(TAG, RULE, FUNCTOR) \
+template<> \
+struct smls_grammar_cases::case_<TAG> \
+: proto::or_<proto::when<RULE, lib_func<FUNCTOR>(smls_grammar(proto::_child), proto::_state)> >{}; 
+
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::unary_plus, unary_plus_rule, unary_plus_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::negate, negate_rule, negate_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::dereference, dereference_rule, dereference_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::complement, complement_rule, complement_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::address_of, address_of_rule, address_of_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::logical_not, logical_not_rule, logical_not_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::pre_inc, prefix_inc_rule, prefix_inc_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::pre_dec, prefix_dec_rule, prefix_dec_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::post_inc, postfix_inc_rule, postfix_inc_func);
+    STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::post_dec, postfix_dec_rule, postfix_dec_func);
+
+#undef STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE
     
-    template<>
-    struct smls_grammar_cases::case_<proto::tag::minus>
-    : proto::or_<
-    proto::when<
-    minus_rule, 
-    lib_func<minus_func>(smls_grammar(proto::_left),smls_grammar(proto::_right) ,proto::_state) 
-    > 
-    >
-    {};
     
+#define STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(TAG, RULE, FUNCTOR) \
+    template<> \
+    struct smls_grammar_cases::case_<TAG> \
+    : proto::or_<proto::when<RULE, \
+        lib_func<FUNCTOR>(smls_grammar(proto::_left),smls_grammar(proto::_right), proto::_state)  \
+    > > {}; 
+
+    
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::shift_left, shift_left_rule, shift_left_func);                                       
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::shift_right, shift_right_rule, shift_right_func);                                       
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::multiplies, multiplies_rule, multiplies_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::divides, divides_rule, divides_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::modulus, modulus_rule, modulus_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::plus, plus_rule, plus_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::minus, minus_rule, minus_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::less, less_rule, less_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::greater, greater_rule, greater_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::less_equal, less_eq_rule, less_eq_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::greater_equal, greater_eq_rule, greater_eq_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::equal_to, equal_rule, equal_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::not_equal_to, not_equal_rule, not_equal_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::logical_or, logical_or_rule, logical_or_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::logical_and, logical_and_rule, logical_and_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::bitwise_or, bitwise_or_rule, bitwise_or_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::bitwise_and, bitwise_and_rule, bitwise_and_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::bitwise_xor, bitwise_xor_rule, bitwise_xor_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::comma, comma_rule, comma_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::assign, assign_rule, assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::shift_left_assign, lshift_assign_rule, lshift_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::shift_right_assign, rshift_assign_rule, rshift_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::multiplies_assign, mult_assign_rule, mult_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::divides_assign, div_assign_rule, div_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::modulus_assign, mod_assign_rule, mod_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::plus_assign, plus_assign_rule, plus_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::minus_assign, minus_assign_rule, minus_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::bitwise_and_assign, bitand_assign_rule, bitand_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::bitwise_or_assign, bitor_assign_rule, bitor_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::bitwise_xor_assign, bitxor_assign_rule, bitxor_assign_func);
+    STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE(proto::tag::subscript, subscript_rule, subscript_func);
+
+#undef STREAMULUS_GRAMMAR_BINARY_OPERATOR_CASE
     
     template<>
     struct smls_grammar_cases::case_<proto::tag::function>
     : proto::or_< 
-    proto::when<
-    function_0_rule, 
-    generic_func(smls_grammar(proto::_child0),
-                 proto::_state)
-    >
-    , proto::when<
-    function_1_rule, 
-    generic_func(smls_grammar(proto::_child0),
-                 smls_grammar(proto::_child1),
-                 proto::_state)
-    >
-    , proto::when<
-    function_2_rule, 
-    generic_func(smls_grammar(proto::_child0),
-                 smls_grammar(proto::_child1),
-                 smls_grammar(proto::_child2),
-                 proto::_state)
-    >
-    , proto::when<
-    function_3_rule, 
-    generic_func(smls_grammar(proto::_child0), 
-                 smls_grammar(proto::_child1), 
-                 smls_grammar(proto::_child2), 
-                 smls_grammar(proto::_child3), 
-                 proto::_state) 
-    >
-    , proto::when<
-    function_4_rule, 
-    generic_func(smls_grammar(proto::_child0),
-                 smls_grammar(proto::_child1),
-                 smls_grammar(proto::_child2),
-                 smls_grammar(proto::_child3),
-                 smls_grammar(proto::_child4),
-                 proto::_state)
-    >
-    , proto::when<
-    function_5_rule,
-    generic_func(smls_grammar(proto::_child0),
-                 smls_grammar(proto::_child1),
-                 smls_grammar(proto::_child2),
-                 smls_grammar(proto::_child3),
-                 smls_grammar(proto::_child4),
-                 smls_grammar(proto::_child5),
-                 proto::_state)
-    >
+        proto::when<function_0_rule, 
+                    generic_func(smls_grammar(proto::_child0), proto::_state)
+        >
+        , proto::when<function_1_rule, 
+                    generic_func(smls_grammar(proto::_child0), 
+                                 smls_grammar(proto::_child1), 
+                                 proto::_state)
+        >
+        , proto::when<function_2_rule, 
+                      generic_func(smls_grammar(proto::_child0), 
+                                   smls_grammar(proto::_child1),
+                                   smls_grammar(proto::_child2),
+                                   proto::_state)
+        >
+        , proto::when<function_3_rule, 
+                      generic_func(smls_grammar(proto::_child0), 
+                                   smls_grammar(proto::_child1), 
+                                   smls_grammar(proto::_child2), 
+                                   smls_grammar(proto::_child3), 
+                                   proto::_state) 
+        >
+        , proto::when<function_4_rule, 
+                      generic_func(smls_grammar(proto::_child0),
+                                   smls_grammar(proto::_child1),
+                                   smls_grammar(proto::_child2),
+                                   smls_grammar(proto::_child3),
+                                   smls_grammar(proto::_child4),
+                                   proto::_state)
+        >
+        , proto::when<function_5_rule,
+                      generic_func(smls_grammar(proto::_child0),
+                                   smls_grammar(proto::_child1),
+                                   smls_grammar(proto::_child2),
+                                   smls_grammar(proto::_child3),
+                                   smls_grammar(proto::_child4),
+                                   smls_grammar(proto::_child5),
+                                   proto::_state)
+        >
     >
     {};
     
