@@ -11,7 +11,7 @@
 #include "engine.h"
 #include "stream.h"
 #include "strop.h"
-#include "func.h"
+#include "strop_func.h"
 #include "engine_api.h"
 
 #include <boost/fusion/include/make_vector.hpp>
