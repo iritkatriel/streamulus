@@ -7,15 +7,27 @@
 #pragma once
 
 #include <boost/type_traits.hpp> 
-#include "unit_test_api.h"
 
 namespace streamulus
-{   
-    struct operator_strops_unit_tests : public unit_test_api
+{       
+    struct unary_plus_func 
     {
-        virtual void Run();
+        template<class Sig> struct result;
+        
+        template<class This,typename A> 
+        struct result<This(A)>
+        {
+            typedef A type; 
+        };
+        
+        template<typename A>
+        typename result<unary_plus_func(A)>::type
+        operator()(const A& value) const
+        { 
+            return +value; 
+        }
     };
-    
+
     struct negate_func 
     {
         template<class Sig> struct result;
