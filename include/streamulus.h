@@ -7,16 +7,17 @@
 #pragma once
 
 #include "engine.h"
-#include "data_source.h"
+#include "strop_data_source.h"
 #include "operators.h"
 #include "streamify.h"
-#include "const.h"
+#include "strop_const.h"
 
 
 namespace streamulus
 {
     typedef Engine Streamulus;
-    
+
+    // A convenience utility for defining input streams    
     
     template<typename T>
     struct InputStream
