@@ -1,5 +1,5 @@
 //
-//  strop_data_source.h
+//  strop_print.h
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //
@@ -21,49 +21,29 @@
 
 #pragma once
 
-#include <iostream>
+#include <sstream>
 
 #include "strop.h"
 
 namespace streamulus
 {    
     
-    template<typename R>
-    class DataSource : public Strop<R()>  
+    template<typename T>
+    class Print : public Strop<T(T)> 
     {
     public:
-        DataSource(const std::string& name)
-        : mName(name)
-        , mIsValid(false)
+                        
+        T Compute(T& value)
         {
-        }
-                
-        bool Compute(R& result)
-        {
-            // Return the last tick's value. 
-            if (mIsValid)
-                result = mLastValue;
-            return mIsValid;
-        }
-        
-        void Tick(const R& value)
-        {
-            std::cout << "-------------   " << mName << " <-- " << value << "   -------------" << std::endl;
-            Strop<R()>::Output(value); 
-            mLastValue = value;
-            mIsValid = true;
+            std::cout << value << std::endl;
+            return value;
         }
         
         virtual std::string DisplayName() const
         {
-            return mName;
+            std::stringstream ss;
+            ss << "Print";
+            return ss.str();
         }
-        
-        
-    private:
-        std::string mName; 
-        R           mLastValue;
-        bool        mIsValid;
-    };
-    
+    };    
 } // ns streamulus

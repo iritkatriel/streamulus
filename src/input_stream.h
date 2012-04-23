@@ -1,5 +1,6 @@
 //
-//  strop_data_source.h
+//  input_stream.h
+//  streamulus
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //
@@ -21,49 +22,38 @@
 
 #pragma once
 
-#include <iostream>
-
-#include "strop.h"
+#include "strop_data_source.h"
 
 namespace streamulus
-{    
+{
     
-    template<typename R>
-    class DataSource : public Strop<R()>  
+    // A convenience utility for defining input streams    
+    
+    template<typename T>
+    struct InputStream
     {
-    public:
-        DataSource(const std::string& name)
-        : mName(name)
-        , mIsValid(false)
+        typedef const boost::shared_ptr<DataSource<T> > stream_type;
+        typedef const boost::proto::literal<stream_type> expr_type;
+        
+        InputStream(const std::string& name)
+        : stream(new DataSource<T>(name))
+        , literal(boost::proto::lit(stream))
         {
-        }
-                
-        bool Compute(R& result)
-        {
-            // Return the last tick's value. 
-            if (mIsValid)
-                result = mLastValue;
-            return mIsValid;
         }
         
-        void Tick(const R& value)
+        void Put(const T& value)
         {
-            std::cout << "-------------   " << mName << " <-- " << value << "   -------------" << std::endl;
-            Strop<R()>::Output(value); 
-            mLastValue = value;
-            mIsValid = true;
+            stream->Tick(value);
         }
         
-        virtual std::string DisplayName() const
+        expr_type expr()
         {
-            return mName;
+            return literal;
         }
-        
         
     private:
-        std::string mName; 
-        R           mLastValue;
-        bool        mIsValid;
+        stream_type stream;
+        expr_type literal;
     };
     
 } // ns streamulus

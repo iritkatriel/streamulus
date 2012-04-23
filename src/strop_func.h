@@ -1,5 +1,5 @@
 //
-//  func.h
+//  strop_func.h
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //
@@ -52,13 +52,16 @@ namespace streamulus
             A1 a1;
             bool valid = true;        
             valid &= Strop<R(A1)>::template Input<A1,0>()->Current(a1);
-            result = mFunction(a1);
-            std::cout << FuncBase<R(A1)>::DisplayName() << "(" << a1 << ")=" << result <<std::endl;
+            if (valid)
+            {
+                result = mFunction(a1);
+                std::cout << FuncBase<R(A1)>::DisplayName() << "(" << a1 << ")=" << result <<std::endl;
+            }
             return valid;
         }
         
     private:
-        F* mFunction;
+        F mFunction;
     };
     
     template<class F, 
@@ -76,8 +79,11 @@ namespace streamulus
             bool valid = true;        
             valid &= Strop<R(A1,A2)>::template Input<A1,0>()->Current(a1);
             valid &= Strop<R(A1,A2)>::template Input<A2,1>()->Current(a2);
-            result = mFunction(a1,a2);
-            std::cout << FuncBase<R(A1,A2)>::DisplayName() << "(" << a1 << "," << a2 << ")=" << result <<std::endl;
+            if (valid)
+            {
+                result = mFunction(a1,a2);
+                std::cout << FuncBase<R(A1,A2)>::DisplayName() << "(" << a1 << "," << a2 << ")=" << result <<std::endl;
+            }
             return valid;
         }
                 
@@ -104,8 +110,10 @@ namespace streamulus
             valid &= Strop<R(A1,A2,A3)>::template Input<A3,2>()->Current(a3);
             
             if (valid)
+            {
                 result = mFunction(a1,a2,a3);
-            std::cout << FuncBase<R(A1,A2,A3)>::DisplayName() << "(" << a1 << "," << a2 << "," << a3 << ")=" << result <<std::endl;
+                std::cout << FuncBase<R(A1,A2,A3)>::DisplayName() << "(" << a1 << "," << a2 << "," << a3 << ")=" << result <<std::endl;
+            }
             return valid;
         }
         
@@ -135,8 +143,10 @@ namespace streamulus
             valid &= Strop<R(A1,A2,A3,A4)>::template Input<A4,3>()->Current(a4);
             
             if (valid)
+            {
                 result = mFunction(a1,a2,a3,a4);
-            std::cout << FuncBase<R(A1,A2,A3,A4)>::DisplayName() << "(" << a1 << "," << a2 << "," << a3 << "," << a4 << ")=" << result <<std::endl;
+                std::cout << FuncBase<R(A1,A2,A3,A4)>::DisplayName() << "(" << a1 << "," << a2 << "," << a3 << "," << a4 << ")=" << result <<std::endl;
+            }
             return valid;
         }
         
@@ -169,8 +179,10 @@ namespace streamulus
             valid &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A5,4>()->Current(a5);
             
             if (valid)
+            {
                 result = mFunction(a1,a2,a3,a4,a5);
-            std::cout << FuncBase<R(A1,A2,A3,A4,A5)>::DisplayName() << "(" << a1 << "," << a2 << "," << a3 << "," << a4 << "," << a5 << ")=" << result <<std::endl;
+                std::cout << FuncBase<R(A1,A2,A3,A4,A5)>::DisplayName() << "(" << a1 << "," << a2 << "," << a3 << "," << a4 << "," << a5 << ")=" << result <<std::endl;
+            }
             return valid;
         }
                 

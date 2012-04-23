@@ -1,5 +1,5 @@
 //
-//  const.h
+//  strop_const.h
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //

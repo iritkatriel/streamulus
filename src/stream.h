@@ -34,6 +34,7 @@ namespace streamulus
     {
     public:	
         
+        
         Stream()
 		: mHistory(1)
         {

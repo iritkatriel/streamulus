@@ -26,12 +26,14 @@
 #include "engine.h"
 #include "stream.h"
 #include "strop.h"
+#include "strop_const.h"
 #include "strop_func.h"
 #include "engine_api.h"
+#include "input_stream.h"
 
 #include <boost/fusion/include/make_vector.hpp>
 #include <boost/fusion/include/algorithm.hpp>
-
+#include <boost/type_traits.hpp>
 
 namespace streamulus
 {
@@ -96,7 +98,45 @@ namespace streamulus
         }
     };
     
-    
+    struct GetLiteralFromInput : proto::callable
+    {
+        template<class Sig> struct result;
+        
+        template<class This, class InputStreamType>
+        struct result<This(InputStreamType)>
+        {
+            typedef typename InputStreamType::literal_type type;
+        };
+        
+        template<class InputStreamType>    
+        typename result<GetLiteralFromInput(InputStreamType)>::type 
+        operator()(InputStreamType input)
+        {
+            return input.lit();
+        }
+    };
+
+    struct AddConstToGraph : proto::callable  
+    {
+        template<class Sig> struct result;
+        
+        template<class This, typename T, class State>
+        struct result<This(T,State)>
+        {
+            typedef typename boost::remove_const<typename boost::remove_reference<T>::type>::type ConstType;
+            typedef const boost::shared_ptr<Strop<ConstType()> > type;
+        };
+        
+        template<typename T, class State>
+        typename result<AddConstToGraph(T,State)>::type operator()(T& value, State engine)
+        {
+            typedef typename result<AddConstToGraph(T,State)>::ConstType ConstType;
+            std::cout << "Add const to graph " << value <<std::endl;
+            boost::shared_ptr<Const<ConstType> > strop(new Const<ConstType>(value));
+            return AddStropToGraph()(strop,engine);
+        }
+    };
+
     struct generic_func : proto::callable
     {
         template<typename Sig> struct result;

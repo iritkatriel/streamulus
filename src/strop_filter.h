@@ -1,5 +1,5 @@
 //
-//  filter.h
+//  strop_filter.h
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //
