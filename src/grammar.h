@@ -43,7 +43,6 @@ namespace streamulus
     
     // terminals
     struct strop_terminal_rule        : proto::terminal<boost::shared_ptr<proto::_> > {};
-//    struct input_stream_terminal_rule : proto::terminal<InputStream<proto::_> > {};
     struct const_terminal_rule        : proto::terminal<proto::_>                     {};
     
     //operators
@@ -124,10 +123,6 @@ namespace streamulus
     strop_terminal_rule, 
     AddStropToGraph(proto::_value,proto::_state)
     >  
-//    , proto::when<
-//    strop_input_terminal_rule,
-//    smls_grammar(GetLiteralFromInput(proto::_value),proto::_state)
-//    >
     , proto::when<
     const_terminal_rule,
     AddConstToGraph(proto::_value,proto::_state)
@@ -140,7 +135,7 @@ namespace streamulus
 #define STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(TAG, RULE, FUNCTOR) \
 template<> \
 struct smls_grammar_cases::case_<TAG> \
-: proto::or_<proto::when<RULE, lib_func<FUNCTOR>(smls_grammar(proto::_child), proto::_state)> >{}; 
+: proto::or_<proto::when<RULE, lib_unary_func<FUNCTOR>(smls_grammar(proto::_child), proto::_state)> >{}; 
 
     STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::unary_plus, unary_plus_rule, unary_plus_func);
     STREAMULUS_GRAMMAR_UNARY_OPERATOR_CASE(proto::tag::negate, negate_rule, negate_func);
@@ -160,7 +155,7 @@ struct smls_grammar_cases::case_<TAG> \
     template<> \
     struct smls_grammar_cases::case_<TAG> \
     : proto::or_<proto::when<RULE, \
-        lib_func<FUNCTOR>(smls_grammar(proto::_left),smls_grammar(proto::_right), proto::_state)  \
+        lib_binary_func<FUNCTOR>(smls_grammar(proto::_left),smls_grammar(proto::_right), proto::_state)  \
     > > {}; 
 
     

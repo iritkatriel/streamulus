@@ -25,7 +25,6 @@
 #include <boost/function_types/result_type.hpp>
 #include <boost/fusion/include/vector.hpp>
 #include <boost/proto/proto.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 #include "stream.h" 
 #include "engine_api.h" 
@@ -34,11 +33,9 @@
 namespace streamulus
 {
     
-    
     template<typename F> // F = function signature
     class Strop 
         : public StropBase
-        , public boost::enable_shared_from_this<Strop<F> >
     {
     public:
         
@@ -50,7 +47,6 @@ namespace streamulus
         typedef boost::function_types::parameter_types<F> param_types;
         
         typedef boost::shared_ptr<Strop<F> > StropPtrType;
-        typedef typename boost::proto::terminal<const StropPtrType>::type ProtoTerminalType;
         
         virtual bool Compute(result_type& result)=0;
         
@@ -61,7 +57,7 @@ namespace streamulus
             if (! Compute(res))
                 return false;
             
-            std::cout << "Compute[" << mTopSortIndex << "]: " << res << std::endl;
+            // std::cout << "Compute[" << mTopSortIndex << "]: " << res << std::endl;
             
             Output(res);
             return true;
@@ -90,7 +86,7 @@ namespace streamulus
         {
             return OutputStreamPtr(new Stream<result_type>());
         }
-                
+                        
     private:
         template<typename T>
         struct MakeStreamPtrType 

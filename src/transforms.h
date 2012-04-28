@@ -77,10 +77,10 @@ namespace streamulus
     {
         template<class Sig> struct result;
         
-        template<class This, class T, class State>
-        struct result<This(T,State)>
+        template<class This, class StropType, class State>
+        struct result<This(StropType,State)>
         {
-            typedef T type;
+            typedef StropType type;
         };
         
         template<typename StropType>
@@ -376,17 +376,38 @@ namespace streamulus
     };
     
     template<typename F, typename CallableDummy = proto::callable>
-    struct lib_func : proto::callable
+    struct lib_unary_func : proto::callable
+    {
+        template<typename Sig> struct result;
+        
+        template<typename ArgStrop, typename State>
+        struct result<lib_unary_func(ArgStrop,State)> 
+        : generic_func::result<generic_func(F&,ArgStrop,State)> 
+        {};    
+        
+        template<typename ArgStrop, typename State>
+        typename result<lib_unary_func(ArgStrop,State)>::type
+        operator()(const ArgStrop arg, State engine)
+        {
+            generic_func gf;
+            F func;
+            std::cout << "builtin func: " << typeid(func).name() << std::endl;
+            return gf(func,arg,engine);
+        }
+    };
+
+    template<typename F, typename CallableDummy = proto::callable>
+    struct lib_binary_func : proto::callable
     {
         template<typename Sig> struct result;
         
         template<typename LhsStrop, typename RhsStrop, typename State>
-        struct result<lib_func(LhsStrop,RhsStrop,State)> 
+        struct result<lib_binary_func(LhsStrop,RhsStrop,State)> 
         : generic_func::result<generic_func(F&,LhsStrop,RhsStrop,State)> 
         {};    
         
         template<typename LhsStrop, typename RhsStrop, typename State>
-        typename result<lib_func(LhsStrop,RhsStrop,State)>::type
+        typename result<lib_binary_func(LhsStrop,RhsStrop,State)>::type
         operator()(const LhsStrop left, const RhsStrop right, State engine)
         {
             generic_func gf;

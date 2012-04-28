@@ -65,7 +65,7 @@ namespace streamulus
         mWorking = true;
         
         
-        std::cout << "Work called. mQueue.size() = " << mQueue.size() << std::endl;
+        // std::cout << "Work called. mQueue.size() = " << mQueue.size() << std::endl;
         while (!mQueue.empty())
         {
             std::set<QueueEntry>::iterator it = mQueue.begin();

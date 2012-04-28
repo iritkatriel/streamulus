@@ -52,9 +52,30 @@ namespace streamulus
         void Work();
         
         
+        template<typename R, typename Expr>
+        const boost::shared_ptr<Strop<R()> > Subscribe(Expr const &expr)
+        {
+            typedef boost::shared_ptr<Strop<R()> > ResultType;
+
+            std::cout << "Engine::Parse()" << std::endl;
+            boost::proto::display_expr(expr);
+            
+            // Make sure the expression conforms to our grammar
+            BOOST_MPL_ASSERT(( boost::proto::matches<Expr, smls_grammar> ));
+            
+            // add the expression to the graph
+          
+            const boost::shared_ptr<Strop<R()> > result;
+            smls_grammar()(expr, this);
+            
+            StartEngine();
+            return result;
+        }
+
         template<typename Expr>
         void Subscribe(Expr const &expr)
         {
+            
             std::cout << "Engine::Parse()" << std::endl;
             boost::proto::display_expr(expr);
             
@@ -63,14 +84,18 @@ namespace streamulus
             
             // add the expression to the graph
             smls_grammar()(expr, this);
-
-            WriteGraph("/Users/iritkatriel/data/TsGraph.vis");
             
-            ActivateSources();
-            Work();
+            StartEngine();
         }
-        
+
     private:
+        
+        void StartEngine()
+        {
+            WriteGraph("/Users/iritkatriel/data/TsGraph.vis");
+            ActivateSources();
+            Work();            
+        }
         
         void ActivateVertex(BoostGraph::vertex_descriptor vertex);
         

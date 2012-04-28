@@ -7,7 +7,7 @@
 #pragma once
 
 #include "engine.h"
-#include "strop_data_source.h"
+#include "input_stream.h"
 #include "operators.h"
 #include "streamify.h"
 #include "strop_const.h"
