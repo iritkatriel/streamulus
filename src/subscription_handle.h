@@ -1,5 +1,5 @@
 //
-//  input_stream.h
+//  subscription_handle.h
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //
@@ -19,40 +19,27 @@
 // along with Streamulus.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#pragma once
-
-#include "strop_data_source.h"
-
-namespace streamulus
+namespace streamulus {
+    
+template<typename T>
+struct SubscriptionHandle
 {
+    typedef T type;    
+    typedef const boost::shared_ptr<StropStreamGenerator<T> > StropType;
+    typedef const boost::proto::literal<StropType> expr_type;
     
-    // A convenience utility for defining input streams    
-    
-    template<typename T>
-    struct InputStream
+    SubscriptionHandle(StropType s)
+    : strop(s)
     {
-        typedef const boost::shared_ptr<DataSource<T> > stream_type;
-        typedef const boost::proto::literal<stream_type> expr_type;
-        
-        InputStream(const std::string& name)
-        : stream(new DataSource<T>(name))
-        , literal(boost::proto::lit(stream))
-        {
-        }
-        
-        void Put(const T& value)
-        {
-            stream->Tick(value);
-        }
-        
-        expr_type expr()
-        {
-            return literal;
-        }
-        
-    private:
-        stream_type stream;
-        expr_type literal;
-    };
+        std::cout << "TYPE OF s: " << typeid(s).name() << std::endl;
+    }
     
+    expr_type expr()
+    {
+        return proto::lit(strop);        
+    }
+    
+    StropType strop;
+};
+
 } // ns streamulus

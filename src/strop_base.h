@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include "engine_api.h" 
+
 namespace streamulus
 {
     

@@ -28,6 +28,7 @@
 #include "graph.h"
 #include "strop.h"
 #include "grammar.h"
+#include "strop_stream_generator.h"
 
 namespace streamulus
 {
@@ -53,9 +54,9 @@ namespace streamulus
         
         
         template<typename R, typename Expr>
-        const boost::shared_ptr<Strop<R()> > Subscribe(Expr const &expr)
+        const boost::shared_ptr<StropStreamGenerator<R> > Subscribe(Expr const &expr)
         {
-            typedef boost::shared_ptr<Strop<R()> > ResultType;
+            typedef boost::shared_ptr<StropStreamGenerator<R> > ResultType;
 
             std::cout << "Engine::Parse()" << std::endl;
             boost::proto::display_expr(expr);
@@ -65,8 +66,7 @@ namespace streamulus
             
             // add the expression to the graph
           
-            const boost::shared_ptr<Strop<R()> > result;
-            smls_grammar()(expr, this);
+            ResultType result = smls_grammar()(expr, this);
             
             StartEngine();
             return result;

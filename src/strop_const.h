@@ -23,13 +23,13 @@
 
 #include <sstream>
 
-#include "strop.h"
+#include "strop_stream_generator.h"
 
 namespace streamulus
 {    
         
     template<typename T>
-    class Const : public Strop<T()> 
+    class Const : public StropStreamGenerator<T> 
     {
     public:
         
@@ -47,14 +47,13 @@ namespace streamulus
             result = mValue;
             return true;
         }
-        
+
         virtual std::string DisplayName() const
         {
             std::stringstream ss;
             ss << "Const" << mValue;
             return ss.str();
         }
-        
         
 
     private:

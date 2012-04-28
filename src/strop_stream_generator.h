@@ -1,5 +1,5 @@
 //
-//  strop_data_source.h
+//  strop_stream_generator.h
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //
@@ -21,52 +21,51 @@
 
 #pragma once
 
-#include <iostream>
-
-#include "strop_stream_generator.h"
+#include "strop_base.h" 
+#include "stream.h" 
 
 namespace streamulus
-{    
+{
     
-    template<typename R>
-    class DataSource : public StropStreamGenerator<R>  
+    template<typename R> // R = result type
+    class StropStreamGenerator
+    : public StropBase
     {
     public:
         
         typedef R result_type;
         
-        DataSource(const std::string& name)
-        : mName(name)
-        , mIsValid(false)
+        virtual ~StropStreamGenerator() 
         {
         }
-                
-        bool Compute(R& result)
-        {
-            // Return the last tick's value. 
-            if (mIsValid)
-                result = mLastValue;
-            return mIsValid;
+
+        virtual bool Compute(R& result)=0;
+        
+        // return true if you put any data on output streams, false otherwise
+        virtual bool Work()
+        {            
+            R res;
+            if (! Compute(res))
+                return false;
+            
+            // std::cout << "Compute[" << mTopSortIndex << "]: " << res << std::endl;
+            
+            Output(res);
+            return true;
         }
         
-        void Tick(const R& value)
+        void Output(const R& value)
         {
-            std::cout << "-------------   " << mName << " <-- " << value << "   -------------" << std::endl;
-            StropStreamGenerator<R>::Output(value); 
-            mLastValue = value;
-            mIsValid = true;
-        }
+            mEngine->Output<R>(mVertexDescriptor,value);
+        }        
         
-        virtual std::string DisplayName() const
+        typedef boost::shared_ptr<Stream<R> > OutputStreamPtr;
+        
+        OutputStreamPtr MakeOutputStream() const
         {
-            return mName;
-        }
-        
-        
-    private:
-        std::string mName; 
-        R           mLastValue;
-        bool        mIsValid;
+            return OutputStreamPtr(new Stream<R>());
+        }        
     };
+    
     
 } // ns streamulus

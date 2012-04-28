@@ -61,6 +61,12 @@ namespace streamulus
     struct StropReturnType;
     
     template<typename StropType>
+    struct StropReturnType<boost::shared_ptr<StropType> >
+    {
+        typedef typename StropType::result_type type;
+    };
+
+    template<typename StropType>
     struct StropReturnType<const boost::shared_ptr<StropType> >
     {
         typedef typename StropType::result_type type;
@@ -68,6 +74,12 @@ namespace streamulus
     
     template<typename StropType>
     struct StropReturnType<const boost::shared_ptr<StropType>& >
+    {
+        typedef typename StropType::result_type type;
+    };
+
+    template<typename StropType>
+    struct StropReturnType<boost::shared_ptr<StropType>& >
     {
         typedef typename StropType::result_type type;
     };
@@ -98,24 +110,6 @@ namespace streamulus
         }
     };
     
-    struct GetLiteralFromInput : proto::callable
-    {
-        template<class Sig> struct result;
-        
-        template<class This, class InputStreamType>
-        struct result<This(InputStreamType)>
-        {
-            typedef typename InputStreamType::literal_type type;
-        };
-        
-        template<class InputStreamType>    
-        typename result<GetLiteralFromInput(InputStreamType)>::type 
-        operator()(InputStreamType input)
-        {
-            return input.lit();
-        }
-    };
-
     struct AddConstToGraph : proto::callable  
     {
         template<class Sig> struct result;
@@ -124,7 +118,7 @@ namespace streamulus
         struct result<This(T,State)>
         {
             typedef typename boost::remove_const<typename boost::remove_reference<T>::type>::type ConstType;
-            typedef const boost::shared_ptr<Strop<ConstType()> > type;
+            typedef const boost::shared_ptr<StropStreamGenerator<ConstType> > type;
         };
         
         template<typename T, class State>

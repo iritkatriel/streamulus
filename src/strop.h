@@ -26,46 +26,20 @@
 #include <boost/fusion/include/vector.hpp>
 #include <boost/proto/proto.hpp>
 
-#include "stream.h" 
-#include "engine_api.h" 
-#include "strop_base.h" 
+
+#include "strop_stream_generator.h" 
 
 namespace streamulus
 {
     
     template<typename F> // F = function signature
     class Strop 
-        : public StropBase
+        : public StropStreamGenerator<typename boost::function_types::result_type<F>::type>
     {
     public:
         
         virtual ~Strop() 
         {
-        }
-        
-        typedef typename boost::function_types::result_type<F>::type result_type;
-        typedef boost::function_types::parameter_types<F> param_types;
-        
-        typedef boost::shared_ptr<Strop<F> > StropPtrType;
-        
-        virtual bool Compute(result_type& result)=0;
-        
-        // return true if you put any data on output streams, false otherwise
-        virtual bool Work()
-        {            
-            result_type res;
-            if (! Compute(res))
-                return false;
-            
-            // std::cout << "Compute[" << mTopSortIndex << "]: " << res << std::endl;
-            
-            Output(res);
-            return true;
-        }
-        
-        void Output(const result_type& value)
-        {
-            mEngine->Output<result_type>(mVertexDescriptor,value);
         }
         
         template<typename Inputs> // a fusion sequence of the inputs
@@ -80,12 +54,6 @@ namespace streamulus
             return boost::fusion::at_c<I>(mInputs);
         }
         
-        typedef boost::shared_ptr<Stream<result_type> > OutputStreamPtr;
-        
-        OutputStreamPtr MakeOutputStream() const
-        {
-            return OutputStreamPtr(new Stream<result_type>());
-        }
                         
     private:
         template<typename T>
@@ -93,6 +61,7 @@ namespace streamulus
         {
             typedef boost::shared_ptr<Stream<T>  > type;
         };
+        typedef boost::function_types::parameter_types<F> param_types;
         typedef typename boost::mpl::transform<param_types,MakeStreamPtrType<boost::mpl::_1> >::type input_types;
         typename boost::fusion::result_of::as_vector<typename input_types::type>::type mInputs;
     };
