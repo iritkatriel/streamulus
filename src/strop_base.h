@@ -50,7 +50,7 @@ namespace streamulus
         {
         }
         
-        Graph::vertex_descriptor Descriptor() const
+        Graph::vertex_descriptor GetDescriptor() const
         {
             return mVertexDescriptor;
         }
@@ -60,14 +60,14 @@ namespace streamulus
             return mTopSortIndex;
         }
         
-        bool GraphIsSet() const
+        EngineApi* GetEngine()
         {
-            return mEngine != NULL;
+            return mEngine;
         }
         
         void SetGraph(EngineApi* engine, const Graph::vertex_descriptor& desc, size_t top_sort_index)
         {
-            assert(mEngine==NULL || engine == mEngine);
+            assert(mEngine==NULL || engine==NULL || engine == mEngine);
             mEngine = engine; 
             mVertexDescriptor = desc;
             mTopSortIndex = top_sort_index;
@@ -91,7 +91,7 @@ namespace streamulus
         {
             return os << strop.mDisplayName;    
         }
-        
+
     protected:
         
         EngineApi* mEngine; // no ownership. Do not delete. 

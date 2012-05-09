@@ -48,6 +48,21 @@ namespace streamulus
         mSources.push_back(strop);
     }
     
+    bool Engine::ReplaceStrop(StropPtr strop, StropPtr new_strop)
+    {
+        if (strop->GetEngine() != this)
+            return false;
+
+        new_strop->SetGraph(strop->GetEngine(), 
+                            strop->GetDescriptor(), 
+                            strop->GetTopSortIndex());
+        
+        mGraph[strop->GetDescriptor()] = new_strop;
+
+        strop->SetGraph(NULL, 0, 0); 
+        return true;
+    }
+
     
     void Engine::AddEdgeToGraph(BoostGraph::vertex_descriptor source, 
                                 BoostGraph::vertex_descriptor target,
@@ -99,9 +114,12 @@ namespace streamulus
     
     void Engine::ActivateVertex(StropPtr strop)
     {
+        if (!strop->GetEngine())
+            return;
+        
         if (strop->IsActive())
             return;
-        mQueue.insert(QueueEntry(mCurrentTime++, strop->GetTopSortIndex(), strop->Descriptor()));
+        mQueue.insert(QueueEntry(mCurrentTime++, strop->GetTopSortIndex(), strop->GetDescriptor()));
         strop->SetIsActive(true);
     }
     

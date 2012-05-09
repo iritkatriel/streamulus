@@ -31,28 +31,33 @@ namespace streamulus
     template<typename T>
     struct InputStream
     {
-        typedef const boost::shared_ptr<DataSource<T> > stream_type;
-        typedef const boost::proto::literal<stream_type> expr_type;
+        typedef const boost::shared_ptr<DataSource<T> > strop_type;
+        typedef const boost::proto::literal<strop_type> expr_type;
         
         InputStream(const std::string& name)
-        : stream(new DataSource<T>(name))
-        , literal(boost::proto::lit(stream))
+        : mStrop(new DataSource<T>(name))
+        , mLiteral(boost::proto::lit(mStrop))
         {
         }
         
         void Put(const T& value)
         {
-            stream->Tick(value);
+            mStrop->Tick(value);
         }
         
         expr_type expr()
         {
-            return literal;
+            return mLiteral;
+        }
+        
+        strop_type strop()
+        {
+            return mStrop;
         }
         
     private:
-        stream_type stream;
-        expr_type literal;
+        strop_type mStrop;
+        expr_type mLiteral;
     };
     
 } // ns streamulus

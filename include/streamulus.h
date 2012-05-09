@@ -12,6 +12,7 @@
 #include "operators.h"
 #include "streamify.h"
 #include "strop_const.h"
+#include "strop_data_source.h"
 
 
 namespace streamulus

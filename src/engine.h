@@ -45,11 +45,14 @@ namespace streamulus
         void AddVertexToGraph(StropPtr strop);
         
         void AddSource(StropPtr strop);        
+
+        bool ReplaceStrop(StropPtr strop, StropPtr new_strop);
         
         void AddEdgeToGraph(BoostGraph::vertex_descriptor source, 
                             BoostGraph::vertex_descriptor target,
                             const StreamPtr& stream);        
         
+
         void Work();
         
         
@@ -165,7 +168,7 @@ namespace streamulus
             void operator()(std::ostream& out, const Graph::vertex_descriptor& v) const
             {
                 out << "[label=" << mGraph[v]->DisplayName() 
-                    << "_Desc" << mGraph[v]->Descriptor() 
+                    << "_Desc" << mGraph[v]->GetDescriptor() 
                     << "_TO" << mGraph[v]->GetTopSortIndex() << "]";
             }
             

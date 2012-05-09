@@ -24,16 +24,15 @@ namespace streamulus {
 template<typename T>
 struct SubscriptionHandle
 {
-    typedef T type;    
     typedef const boost::shared_ptr<StropStreamGenerator<T> > StropType;
     typedef const boost::proto::literal<StropType> expr_type;
     
     SubscriptionHandle(StropType s)
-    : strop(s)
+        : strop(s)
     {
         std::cout << "TYPE OF s: " << typeid(s).name() << std::endl;
     }
-    
+        
     expr_type expr()
     {
         return proto::lit(strop);        

@@ -37,6 +37,7 @@ namespace streamulus
         
         virtual void AddVertexToGraph(StropPtr strop)=0;
         virtual void AddSource(StropPtr strop)=0;
+        virtual bool ReplaceStrop(StropPtr strop, StropPtr new_strop)=0;
         
         template<typename T>
         void Output(BoostGraph::vertex_descriptor source, const T& value)

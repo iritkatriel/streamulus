@@ -30,6 +30,7 @@ namespace streamulus
     public:
         StreamBase()
         : mGraph(NULL)
+        , mIsFeedbackEdge(false)
         {
         }
         
@@ -47,10 +48,21 @@ namespace streamulus
             mGraph = g;
             mEdgeDescriptor = desc;
         }
-        
+    
+        bool IsFeedbackEdge()
+        {
+            return mIsFeedbackEdge;
+        }
+
+        void SetIsFeedbackEdge(bool v)
+        {
+            mIsFeedbackEdge = v;
+        }
+
     private:
         Graph* mGraph;  // no ownership. do not delete.
         Graph::edge_descriptor mEdgeDescriptor;
+        bool mIsFeedbackEdge;
     };
     
 } // ns streamulus

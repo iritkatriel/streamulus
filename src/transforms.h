@@ -99,13 +99,13 @@ namespace streamulus
         const StropType operator()(StropType strop, EngineApi* engine)
         {
             std::cout << "AddStropToGraph: strop=" << strop << std::endl;
-            if (!strop->GraphIsSet())
+            if (!strop->GetEngine())
             {
                 std::cout << "AddStropToGraph::operator()" << std::endl;
                 engine->AddVertexToGraph(strop);
                 engine->AddSource(strop);
             }
-            std::cout << "returning " << strop->Descriptor() << std::endl;
+            std::cout << "returning " << strop->GetDescriptor() << std::endl;
             return strop;
         }
     };
@@ -166,7 +166,7 @@ namespace streamulus
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream));
             
             engine->AddVertexToGraph(funcStropPtr);
-            engine->AddEdgeToGraph(arg1->Descriptor(), funcStropPtr->Descriptor(), arg1Stream);
+            engine->AddEdgeToGraph(arg1->GetDescriptor(), funcStropPtr->GetDescriptor(), arg1Stream);
             return funcStropPtr;
         }
 
@@ -194,8 +194,8 @@ namespace streamulus
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream));
             
             engine->AddVertexToGraph(funcStropPtr);
-            engine->AddEdgeToGraph(arg1->Descriptor(), funcStropPtr->Descriptor(), arg1Stream);
-            engine->AddEdgeToGraph(arg2->Descriptor(), funcStropPtr->Descriptor(), arg2Stream);
+            engine->AddEdgeToGraph(arg1->GetDescriptor(), funcStropPtr->GetDescriptor(), arg1Stream);
+            engine->AddEdgeToGraph(arg2->GetDescriptor(), funcStropPtr->GetDescriptor(), arg2Stream);
             return funcStropPtr;
         }
 
@@ -242,9 +242,9 @@ namespace streamulus
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream));
             
             engine->AddVertexToGraph(funcStropPtr);
-            engine->AddEdgeToGraph(arg1->Descriptor(), funcStropPtr->Descriptor(), arg1Stream);
-            engine->AddEdgeToGraph(arg2->Descriptor(), funcStropPtr->Descriptor(), arg2Stream);
-            engine->AddEdgeToGraph(arg3->Descriptor(), funcStropPtr->Descriptor(), arg3Stream);
+            engine->AddEdgeToGraph(arg1->GetDescriptor(), funcStropPtr->GetDescriptor(), arg1Stream);
+            engine->AddEdgeToGraph(arg2->GetDescriptor(), funcStropPtr->GetDescriptor(), arg2Stream);
+            engine->AddEdgeToGraph(arg3->GetDescriptor(), funcStropPtr->GetDescriptor(), arg3Stream);
             return funcStropPtr;
         }
         
@@ -297,10 +297,10 @@ namespace streamulus
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream, arg4Stream));
             
             engine->AddVertexToGraph(funcStropPtr);
-            engine->AddEdgeToGraph(arg1->Descriptor(), funcStropPtr->Descriptor(), arg1Stream);
-            engine->AddEdgeToGraph(arg2->Descriptor(), funcStropPtr->Descriptor(), arg2Stream);
-            engine->AddEdgeToGraph(arg3->Descriptor(), funcStropPtr->Descriptor(), arg3Stream);
-            engine->AddEdgeToGraph(arg4->Descriptor(), funcStropPtr->Descriptor(), arg4Stream);
+            engine->AddEdgeToGraph(arg1->GetDescriptor(), funcStropPtr->GetDescriptor(), arg1Stream);
+            engine->AddEdgeToGraph(arg2->GetDescriptor(), funcStropPtr->GetDescriptor(), arg2Stream);
+            engine->AddEdgeToGraph(arg3->GetDescriptor(), funcStropPtr->GetDescriptor(), arg3Stream);
+            engine->AddEdgeToGraph(arg4->GetDescriptor(), funcStropPtr->GetDescriptor(), arg4Stream);
             return funcStropPtr;
         }
         
@@ -359,11 +359,11 @@ namespace streamulus
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream, arg4Stream, arg5Stream));
             
             engine->AddVertexToGraph(funcStropPtr);
-            engine->AddEdgeToGraph(arg1->Descriptor(), funcStropPtr->Descriptor(), arg1Stream);
-            engine->AddEdgeToGraph(arg2->Descriptor(), funcStropPtr->Descriptor(), arg2Stream);
-            engine->AddEdgeToGraph(arg3->Descriptor(), funcStropPtr->Descriptor(), arg3Stream);
-            engine->AddEdgeToGraph(arg4->Descriptor(), funcStropPtr->Descriptor(), arg4Stream);
-            engine->AddEdgeToGraph(arg5->Descriptor(), funcStropPtr->Descriptor(), arg5Stream);
+            engine->AddEdgeToGraph(arg1->GetDescriptor(), funcStropPtr->GetDescriptor(), arg1Stream);
+            engine->AddEdgeToGraph(arg2->GetDescriptor(), funcStropPtr->GetDescriptor(), arg2Stream);
+            engine->AddEdgeToGraph(arg3->GetDescriptor(), funcStropPtr->GetDescriptor(), arg3Stream);
+            engine->AddEdgeToGraph(arg4->GetDescriptor(), funcStropPtr->GetDescriptor(), arg4Stream);
+            engine->AddEdgeToGraph(arg5->GetDescriptor(), funcStropPtr->GetDescriptor(), arg5Stream);
             return funcStropPtr;
         }
 
