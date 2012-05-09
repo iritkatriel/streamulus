@@ -95,7 +95,7 @@ namespace streamulus
         
         void StartEngine()
         {
-            WriteGraph("/Users/iritkatriel/data/TsGraph.vis");
+            WriteGraph("TsGraph.vis");
             ActivateSources();
             Work();            
         }
