@@ -70,7 +70,6 @@ namespace streamulus
             if (!mBuffer.empty())
             {
                 value = Top();
-                Pop();
                 return true;
             }
             // No new data - return last (if exists)
@@ -87,9 +86,11 @@ namespace streamulus
             return mBuffer.front();
         }
         
-        void Pop()
+        void Pop(bool check_not_empty = false)
         {
-            assert(!Empty());
+            assert(!(check_not_empty && Empty()));
+            if (Empty())
+                return;
             mHistory.push_back(Top());
             mBuffer.pop_front();
         }
