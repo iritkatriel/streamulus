@@ -55,7 +55,7 @@ void hello_stream()
     std::string hello("Hello ");
     std::string exc("!");
     
-    SubscriptionHandle<std::string> 
+    Subscription<std::string>::type
     handle(streamulus.Subscribe<std::string>(
                                              Streamify<print>(hello + s + exc)));
     

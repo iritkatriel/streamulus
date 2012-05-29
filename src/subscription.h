@@ -1,5 +1,5 @@
 //
-//  subscription_handle.h
+//  subscription.h
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //
@@ -19,26 +19,15 @@
 // along with Streamulus.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#pragma once 
+
 namespace streamulus {
     
 template<typename T>
-struct SubscriptionHandle
+struct Subscription
 {
-    typedef const boost::shared_ptr<StropStreamGenerator<T> > StropType;
-    typedef const boost::proto::literal<StropType> expr_type;
-    
-    SubscriptionHandle(StropType s)
-        : strop(s)
-    {
-        std::cout << "TYPE OF s: " << typeid(s).name() << std::endl;
-    }
-        
-    expr_type expr()
-    {
-        return proto::lit(strop);        
-    }
-    
-    StropType strop;
+    typedef const boost::shared_ptr<StropStreamGenerator<T> > strop_type;
+    typedef const boost::proto::literal<strop_type> type;
 };
 
 } // ns streamulus
