@@ -25,39 +25,28 @@
 
 namespace streamulus
 {
-    
-    // A convenience utility for defining input streams    
+    // Convenience utilities for defining input streams    
     
     template<typename T>
     struct InputStream
     {
-        typedef const boost::shared_ptr<DataSource<T> > strop_type;
-        typedef const boost::proto::literal<strop_type> expr_type;
-        
-        InputStream(const std::string& name)
-        : mStrop(new DataSource<T>(name))
-        , mLiteral(boost::proto::lit(mStrop))
-        {
-        }
-        
-        void Put(const T& value)
-        {
-            mStrop->Tick(value);
-        }
-        
-        expr_type expr()
-        {
-            return mLiteral;
-        }
-        
-        strop_type strop()
-        {
-            return mStrop;
-        }
-        
-    private:
-        strop_type mStrop;
-        expr_type mLiteral;
+        typedef boost::shared_ptr<DataSource<T> > data_source_t;
+        typedef const boost::proto::literal<data_source_t> type;
     };
+
+    // Create a new stream
+    template<typename T>
+    typename InputStream<T>::type NewInputStream(const std::string& name)
+    {
+        return boost::proto::lit(typename InputStream<T>::data_source_t(new DataSource<T>(name)));
+    }
+
+    // Add an input to the stream
+    template<typename T>
+    void InputStreamPut(typename InputStream<T>::type literal, const T& value)
+    {
+        boost::proto::value(literal)->Tick(value);
+    }
     
+        
 } // ns streamulus

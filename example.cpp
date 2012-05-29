@@ -47,24 +47,21 @@ void hello_stream()
 {
     using namespace streamulus;
 
-    InputStream<std::string> stream("Input Stream");
-    Engine streamulus;        
+    InputStream<std::string>::type s = NewInputStream<std::string>("Input Stream");
     
-    InputStream<std::string>::expr_type s = stream.expr();
+    Engine streamulus;            
     
     std::string hello("Hello ");
     std::string exc("!");
     
-    Subscription<std::string>::type
-    handle(streamulus.Subscribe<std::string>(
-                                             Streamify<print>(hello + s + exc)));
+    Subscription<std::string>::type greeting = 
+        streamulus.Subscribe<std::string>(Streamify<print>(hello + s + exc));
     
-//    streamulus.Subscribe(Streamify<print>(std::string("Well, ") + handle.expr() ));
-//    streamulus.Subscribe(Streamify<print>(std::string("I said: ") + handle.expr()  + exc));
+    streamulus.Subscribe(Streamify<print>(std::string("Well, ") + greeting ));
+    streamulus.Subscribe(Streamify<print>(std::string("I said: ") + greeting  + exc));
     
-    stream.Put("World");
-    stream.Put("London");
-    stream.Put("Streamulus");
-    
+    InputStreamPut<std::string>(s, "World");
+    InputStreamPut<std::string>(s, "London");
+    InputStreamPut<std::string>(s, "Streamulus");    
 }
 
