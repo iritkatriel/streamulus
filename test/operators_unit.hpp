@@ -26,6 +26,8 @@
 
 namespace streamulus
 {   
+    namespace bp = boost::proto;
+    
     struct operator_strops_unit_tests : unit_test_api
     {
         void Run()
@@ -35,118 +37,118 @@ namespace streamulus
             int iexp, jexp;
             int *pi = &i;
             
-            i=iexp=i0; j=jexp=j0; Check(negate_func()(i) == -iexp); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(negate_func()(-i) == iexp); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::negate>()(i) == -iexp); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::negate>()(-i) == iexp); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(dereference_func()(pi) == iexp); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::dereference>()(pi) == iexp); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(complement_func()(i) == ~iexp); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::complement>()(i) == ~iexp); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(address_of_func()(i) == pi); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::address_of>()(i) == pi); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(logical_not_func()(i) == !iexp); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::logical_not>()(i) == !iexp); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(prefix_inc_func()(i) == ++iexp); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(prefix_dec_func()(i) == --iexp); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(postfix_inc_func()(i) == iexp++); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(postfix_dec_func()(i) == iexp--); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::pre_inc>()(i) == ++iexp); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::pre_dec>()(i) == --iexp); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::post_inc>()(i) == iexp++); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::post_dec>()(i) == iexp--); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(shift_left_func()(i,j) == (iexp<<jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(shift_left_func()(j,i) == (jexp<<iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::shift_left>()(i,j) == (iexp<<jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::shift_left>()(j,i) == (jexp<<iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(shift_right_func()(i,j) == (iexp>>jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(shift_right_func()(j,i) == (jexp>>iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::shift_right>()(i,j) == (iexp>>jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::shift_right>()(j,i) == (jexp>>iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(multiplies_func()(i,j) == (iexp*jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(multiplies_func()(j,i) == (jexp*iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::multiplies>()(i,j) == (iexp*jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::multiplies>()(j,i) == (jexp*iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(divides_func()(i,j) == (iexp/jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(divides_func()(j,i) == (jexp/iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::divides>()(i,j) == (iexp/jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::divides>()(j,i) == (jexp/iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(modulus_func()(i,j) == (iexp%jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(modulus_func()(j,i) == (jexp%iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::modulus>()(i,j) == (iexp%jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::modulus>()(j,i) == (jexp%iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(plus_func()(i,j) == (iexp+jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(plus_func()(j,i) == (jexp+iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::plus>()(i,j) == (iexp+jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::plus>()(j,i) == (jexp+iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(minus_func()(i,j) == (iexp-jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(minus_func()(j,i) == (jexp-iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::minus>()(i,j) == (iexp-jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::minus>()(j,i) == (jexp-iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(less_func()(i,j) == (iexp<jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(less_func()(j,i) == (jexp<iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::less>()(i,j) == (iexp<jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::less>()(j,i) == (jexp<iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(greater_func()(i,j) == (iexp>jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(greater_func()(j,i) == (jexp>iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::greater>()(i,j) == (iexp>jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::greater>()(j,i) == (jexp>iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(less_eq_func()(i,j) == (iexp<=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(less_eq_func()(j,i) == (jexp<=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::less_equal>()(i,j) == (iexp<=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::less_equal>()(j,i) == (jexp<=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(greater_eq_func()(i,j) == (iexp>=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(greater_eq_func()(j,i) == (jexp>=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::greater_equal>()(i,j) == (iexp>=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::greater_equal>()(j,i) == (jexp>=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(equal_func()(i,j) == (iexp==jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(equal_func()(j,i) == (jexp==iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::equal_to>()(i,j) == (iexp==jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::equal_to>()(j,i) == (jexp==iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(not_equal_func()(i,j) == (iexp!=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(not_equal_func()(j,i) == (jexp!=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::not_equal_to>()(i,j) == (iexp!=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::not_equal_to>()(j,i) == (jexp!=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(logical_or_func()(i,j) == (iexp||jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(logical_or_func()(j,i) == (jexp||iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::logical_or>()(i,j) == (iexp||jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::logical_or>()(j,i) == (jexp||iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(logical_and_func()(i,j) == (iexp&&jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(logical_and_func()(j,i) == (jexp&&iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::logical_and>()(i,j) == (iexp&&jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::logical_and>()(j,i) == (jexp&&iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(bitwise_or_func()(i,j) == (iexp|jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(bitwise_or_func()(j,i) == (jexp|iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_or>()(i,j) == (iexp|jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_or>()(j,i) == (jexp|iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(bitwise_and_func()(i,j) == (iexp&jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(bitwise_and_func()(j,i) == (jexp&iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_and>()(i,j) == (iexp&jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_and>()(j,i) == (jexp&iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(bitwise_xor_func()(i,j) == (iexp^jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(bitwise_xor_func()(j,i) == (jexp^iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_xor>()(i,j) == (iexp^jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_xor>()(j,i) == (jexp^iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(comma_func()(i,j) == (iexp,jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(comma_func()(j,i) == (jexp,iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::comma>()(i,j) == (iexp,jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::comma>()(j,i) == (jexp,iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(assign_func()(i,j) == (iexp=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(assign_func()(j,i) == (jexp=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::assign>()(i,j) == (iexp=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::assign>()(j,i) == (jexp=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(lshift_assign_func()(i,j) == (iexp<<=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(lshift_assign_func()(j,i) == (jexp<<=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::shift_left_assign>()(i,j) == (iexp<<=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::shift_left_assign>()(j,i) == (jexp<<=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(rshift_assign_func()(i,j) == (iexp>>=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(rshift_assign_func()(j,i) == (jexp>>=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::shift_right_assign>()(i,j) == (iexp>>=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::shift_right_assign>()(j,i) == (jexp>>=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(mult_assign_func()(i,j) == (iexp*=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(mult_assign_func()(j,i) == (jexp*=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::multiplies_assign>()(i,j) == (iexp*=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::multiplies_assign>()(j,i) == (jexp*=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(div_assign_func()(i,j) == (iexp/=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(div_assign_func()(j,i) == (jexp/=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::divides_assign>()(i,j) == (iexp/=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::divides_assign>()(j,i) == (jexp/=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(mod_assign_func()(i,j) == (iexp%=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(mod_assign_func()(j,i) == (jexp%=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::modulus_assign>()(i,j) == (iexp%=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::modulus_assign>()(j,i) == (jexp%=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(plus_assign_func()(i,j) == (iexp+=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(plus_assign_func()(j,i) == (jexp+=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::plus_assign>()(i,j) == (iexp+=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::plus_assign>()(j,i) == (jexp+=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(minus_assign_func()(i,j) == (iexp-=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(minus_assign_func()(j,i) == (jexp-=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::minus_assign>()(i,j) == (iexp-=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::minus_assign>()(j,i) == (jexp-=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(bitand_assign_func()(i,j) == (iexp&=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(bitand_assign_func()(j,i) == (jexp&=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_and_assign>()(i,j) == (iexp&=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_and_assign>()(j,i) == (jexp&=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(bitor_assign_func()(i,j) == (iexp|=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(bitor_assign_func()(j,i) == (jexp|=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_or_assign>()(i,j) == (iexp|=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_or_assign>()(j,i) == (jexp|=iexp)); Check(i==iexp); Check(j==jexp);
             
-            i=iexp=i0; j=jexp=j0; Check(bitxor_assign_func()(i,j) == (iexp^=jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(bitxor_assign_func()(j,i) == (jexp^=iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_xor_assign>()(i,j) == (iexp^=jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_xor_assign>()(j,i) == (jexp^=iexp)); Check(i==iexp); Check(j==jexp);
             
             // subscript_func
             
-            i=iexp=i0; j=jexp=j0; Check(if_else_func()(true,i,j)  == (true ? iexp : jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(if_else_func()(true,j,i)  == (true ? jexp : iexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(if_else_func()(false,i,j) == (false ? iexp : jexp)); Check(i==iexp); Check(j==jexp);
-            i=iexp=i0; j=jexp=j0; Check(if_else_func()(false,j,i) == (false ? jexp : iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::if_else_>()(true,i,j)  == (true ? iexp : jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::if_else_>()(true,j,i)  == (true ? jexp : iexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::if_else_>()(false,i,j) == (false ? iexp : jexp)); Check(i==iexp); Check(j==jexp);
+            i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::if_else_>()(false,j,i) == (false ? jexp : iexp)); Check(i==iexp); Check(j==jexp);
             
         }
     };

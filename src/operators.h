@@ -25,7 +25,11 @@
 
 namespace streamulus
 {       
-    struct unary_plus_func 
+    template<typename TAG>
+    struct functor_of;
+    
+    template<>
+    struct functor_of<boost::proto::tag::unary_plus> 
     {
         template<class Sig> struct result;
         
@@ -36,14 +40,15 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<unary_plus_func(A)>::type
+        typename result<functor_of<boost::proto::tag::unary_plus>(A)>::type
         operator()(const A& value) const
         { 
             return +value; 
         }
     };
-
-    struct negate_func 
+     
+    template<>
+    struct functor_of<boost::proto::tag::negate> 
     {
         template<class Sig> struct result;
         
@@ -54,14 +59,15 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<negate_func(A)>::type
+        typename result<functor_of<boost::proto::tag::negate>(A)>::type
         operator()(const A& value) const
         { 
             return -value; 
         }
     };
     
-    struct dereference_func 
+    template<>
+    struct functor_of<boost::proto::tag::dereference> 
     {
         template<class Sig> struct result;
         
@@ -72,7 +78,7 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<dereference_func(A)>::type
+        typename result<functor_of<boost::proto::tag::dereference> (A)>::type
         operator()(const A& value) const 
         { 
             return *value; 
@@ -80,7 +86,8 @@ namespace streamulus
     };
     
     
-    struct complement_func 
+    template<>
+    struct functor_of<boost::proto::tag::complement> 
     {
         template<class Sig> struct result;
         
@@ -91,14 +98,15 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<complement_func(A)>::type
+        typename result<functor_of<boost::proto::tag::complement>(A)>::type
         operator()(const A& value) const 
         { 
             return ~value; 
         }
     };
     
-    struct address_of_func 
+    template<>
+    struct functor_of<boost::proto::tag::address_of>  
     {
         template<class Sig> struct result;
         
@@ -109,14 +117,15 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<address_of_func(A)>::type
+        typename result<functor_of<boost::proto::tag::address_of>(A)>::type
         operator()(A& value) const
         { 
             return &value; 
         }
     };
     
-    struct logical_not_func 
+    template<>
+    struct functor_of<boost::proto::tag::logical_not> 
     {
         template<class Sig> struct result;
         
@@ -127,14 +136,15 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<logical_not_func(A)>::type
+        typename result<functor_of<boost::proto::tag::logical_not>(A)>::type
         operator()(const A& value) const
         { 
             return !value; 
         }
     };
     
-    struct prefix_inc_func 
+    template<>
+    struct functor_of<boost::proto::tag::pre_inc> 
     {
         template<class Sig> struct result;
         
@@ -145,14 +155,15 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<prefix_inc_func(A)>::type
+        typename result<functor_of<boost::proto::tag::pre_inc>(A)>::type
         operator()(A& value) const
         { 
             return ++value; 
         }
     };
     
-    struct prefix_dec_func 
+    template<>
+    struct functor_of<boost::proto::tag::pre_dec> 
     {
         template<class Sig> struct result;
         
@@ -163,14 +174,15 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<prefix_dec_func(A)>::type
+        typename result<functor_of<boost::proto::tag::pre_dec>(A)>::type
         operator()(A& value) const
         { 
             return --value; 
         }
     };
     
-    struct postfix_inc_func 
+    template<>
+    struct functor_of<boost::proto::tag::post_inc> 
     {
         template<class Sig> struct result;
         
@@ -181,14 +193,15 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<postfix_inc_func(A)>::type
+        typename result<functor_of<boost::proto::tag::post_inc>(A)>::type
         operator()(A& value) const 
         { 
             return value++; 
         }
     };
     
-    struct postfix_dec_func 
+    template<>
+    struct functor_of<boost::proto::tag::post_dec> 
     {
         template<class Sig> struct result;
         
@@ -199,7 +212,7 @@ namespace streamulus
         };
         
         template<typename A>
-        typename result<postfix_dec_func(A)>::type
+        typename result<functor_of<boost::proto::tag::post_dec>(A)>::type
         operator()(A& value) const
         { 
             return value--; 
@@ -207,7 +220,8 @@ namespace streamulus
     };
     
     
-    struct shift_left_func 
+    template<>
+    struct functor_of<boost::proto::tag::shift_left> 
     {
         template<class Sig> struct result;
         
@@ -218,14 +232,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<shift_left_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::shift_left>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs<<rhs; 
         }
     };
     
-    struct shift_right_func 
+    template<>
+    struct functor_of<boost::proto::tag::shift_right> 
     {
         template<class Sig> struct result;
         
@@ -236,14 +251,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<shift_right_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::shift_right>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         {
             return lhs>>rhs; 
         }
     };
     
-    struct multiplies_func 
+    template<>
+    struct functor_of<boost::proto::tag::multiplies> 
     {
         template<class Sig> struct result;
         
@@ -254,15 +270,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<multiplies_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::multiplies>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs*rhs; 
         }
     };
     
-    
-    struct divides_func
+    template<>
+    struct functor_of<boost::proto::tag::divides> 
     {
         template<class Sig> struct result;
         
@@ -273,14 +289,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<divides_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::divides>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs/rhs; 
         }
     };
     
-    struct modulus_func 
+    template<>
+    struct functor_of<boost::proto::tag::modulus> 
     {
         template<class Sig> struct result;
         
@@ -291,14 +308,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<modulus_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::modulus>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs%rhs; 
         }
     };
     
-    struct plus_func 
+    template<>
+    struct functor_of<boost::proto::tag::plus> 
     {
         template<class Sig> struct result;
         
@@ -309,14 +327,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<plus_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::plus>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs+rhs; 
         }
     };
     
-    struct minus_func 
+    template<>
+    struct functor_of<boost::proto::tag::minus> 
     {    
         template<class Sig> struct result;
         
@@ -327,14 +346,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<minus_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::minus>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs-rhs; 
         }
     };
     
-    struct less_func 
+    template<>
+    struct functor_of<boost::proto::tag::less> 
     {    
         template<class Sig> struct result;
         
@@ -345,14 +365,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<less_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::less>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs<rhs; 
         }
     };
     
-    struct greater_func 
+    template<>
+    struct functor_of<boost::proto::tag::greater> 
     {    
         template<class Sig> struct result;
         
@@ -363,14 +384,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<greater_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::greater>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs>rhs; 
         }
     };
     
-    struct less_eq_func 
+    template<>
+    struct functor_of<boost::proto::tag::less_equal> 
     {    
         template<class Sig> struct result;
         
@@ -381,14 +403,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<less_eq_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::less_equal>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs<=rhs; 
         }
     };
     
-    struct greater_eq_func 
+    template<>
+    struct functor_of<boost::proto::tag::greater_equal> 
     {    
         template<class Sig> struct result;
         
@@ -399,14 +422,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<greater_eq_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::greater_equal>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs>=rhs; 
         }
     };
     
-    struct equal_func 
+    template<>
+    struct functor_of<boost::proto::tag::equal_to> 
     {    
         template<class Sig> struct result;
         
@@ -417,14 +441,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<equal_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::equal_to>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs==rhs; 
         }
     };
     
-    struct not_equal_func 
+    template<>
+    struct functor_of<boost::proto::tag::not_equal_to> 
     {    
         template<class Sig> struct result;
         
@@ -435,14 +460,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<not_equal_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::not_equal_to>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs!=rhs; 
         }
     };
     
-    struct logical_or_func 
+    template<>
+    struct functor_of<boost::proto::tag::logical_or> 
     {    
         template<class Sig> struct result;
         
@@ -453,14 +479,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<logical_or_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::logical_or>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs||rhs; 
         }
     };
     
-    struct logical_and_func 
+    template<>
+    struct functor_of<boost::proto::tag::logical_and> 
     {    
         template<class Sig> struct result;
         
@@ -471,14 +498,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<logical_and_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::logical_and>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs&&rhs; 
         }
     };
     
-    struct bitwise_or_func 
+    template<>
+    struct functor_of<boost::proto::tag::bitwise_or> 
     {    
         template<class Sig> struct result;
         
@@ -489,14 +517,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<bitwise_or_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::bitwise_or>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs|rhs; 
         }
     };
     
-    struct bitwise_and_func 
+    template<>
+    struct functor_of<boost::proto::tag::bitwise_and> 
     {    
         template<class Sig> struct result;
         
@@ -507,14 +536,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<bitwise_and_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::bitwise_and>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs&rhs; 
         }
     };
     
-    struct bitwise_xor_func 
+    template<>
+    struct functor_of<boost::proto::tag::bitwise_xor> 
     {    
         template<class Sig> struct result;
         
@@ -525,14 +555,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<bitwise_xor_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::bitwise_xor>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs^rhs; 
         }
     };
     
-    struct comma_func 
+    template<>
+    struct functor_of<boost::proto::tag::comma> 
     {    
         template<class Sig> struct result;
         
@@ -543,7 +574,7 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<comma_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::comma>(A,B)>::type
         operator()(const A& lhs, const B& rhs) const
         { 
             return lhs,rhs; 
@@ -551,7 +582,8 @@ namespace streamulus
     };
     
     
-    struct assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::assign> 
     {    
         template<class Sig> struct result;
         
@@ -562,14 +594,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs=rhs; 
         }
     };
     
-    struct lshift_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::shift_left_assign> 
     {    
         template<class Sig> struct result;
         
@@ -580,14 +613,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<lshift_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::shift_left_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs <<= rhs; 
         }
     };
     
-    struct rshift_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::shift_right_assign> 
     {    
         template<class Sig> struct result;
         
@@ -598,14 +632,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<rshift_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::shift_right_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs >>= rhs; 
         }
     };
     
-    struct mult_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::multiplies_assign> 
     {    
         template<class Sig> struct result;
         
@@ -616,14 +651,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<mult_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::multiplies_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs*=rhs; 
         }
     };
     
-    struct div_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::divides_assign> 
     {    
         template<class Sig> struct result;
         
@@ -634,14 +670,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<div_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::divides_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs/=rhs; 
         }
     };
     
-    struct mod_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::modulus_assign> 
     {    
         template<class Sig> struct result;
         
@@ -652,14 +689,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<mod_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::modulus_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs%=rhs; 
         }
     };
     
-    struct plus_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::plus_assign> 
     {    
         template<class Sig> struct result;
         
@@ -670,14 +708,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<plus_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::plus_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs+=rhs; 
         }
     };
     
-    struct minus_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::minus_assign> 
     {    
         template<class Sig> struct result;
         
@@ -688,14 +727,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<minus_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::minus_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs-=rhs; 
         }
     };
     
-    struct bitand_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::bitwise_and_assign> 
     {    
         template<class Sig> struct result;
         
@@ -706,14 +746,15 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<bitand_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::bitwise_and_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs&=rhs; 
         }
     };
     
-    struct bitor_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::bitwise_or_assign> 
     {    
         template<class Sig> struct result;
         
@@ -724,7 +765,7 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<bitor_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::bitwise_or_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs|=rhs; 
@@ -732,7 +773,8 @@ namespace streamulus
     };
     
     
-    struct bitxor_assign_func 
+    template<>
+    struct functor_of<boost::proto::tag::bitwise_xor_assign> 
     {    
         template<class Sig> struct result;
         
@@ -743,7 +785,7 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<bitxor_assign_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::bitwise_xor_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         { 
             return lhs^=rhs; 
@@ -751,7 +793,8 @@ namespace streamulus
     };
     
     
-    struct subscript_func 
+    template<>
+    struct functor_of<boost::proto::tag::subscript> 
     {    
         template<class Sig> struct result;
         
@@ -763,7 +806,7 @@ namespace streamulus
         };
         
         template<typename A, typename B>
-        typename result<subscript_func(A,B)>::type
+        typename result<functor_of<boost::proto::tag::subscript>(A,B)>::type
         operator()(const A& array, const B& index) const
         { 
             return array[index]; 
@@ -771,7 +814,8 @@ namespace streamulus
     };
     
     
-    struct if_else_func 
+    template<>
+    struct functor_of<boost::proto::tag::if_else_> 
     {    
         template<class Sig> struct result;
         
@@ -782,7 +826,7 @@ namespace streamulus
         };
         
         template<typename A, typename B, typename C>
-        typename result<if_else_func(A,B,C)>::type
+        typename result<functor_of<boost::proto::tag::if_else_>(A,B,C)>::type
         operator()(const A& condition, const B& yes, const C& no) 
         { 
             return condition ? yes : no; 
