@@ -54,16 +54,22 @@ namespace streamulus
         bool Compute(R& result)
         {
             A1 a1;
-            bool valid = true;        
-            valid &= Strop<R(A1)>::template Input<A1,0>()->Current(a1);
-            valid &= ApplyFilter(mFunction, a1);
+
+            bool input_exists = true;
+            input_exists &= Strop<R(A1)>::template Input<A1,0>()->Current(a1);
             
-            if (valid)
-            {
-                result = mFunction(a1);
+            bool output_exists = false;
+            if (input_exists)
+            {   
+                output_exists = ApplyFilter(mFunction, a1);
                 Strop<R(A1)>::template Input<A1,0>()->Pop();
             }
-            return valid;
+            
+            if (output_exists)
+            {
+                result = mFunction(a1);               
+            }
+            return output_exists;
         }
         
     private:
@@ -82,18 +88,22 @@ namespace streamulus
         {
             A1 a1;
             A2 a2;
-            bool valid = true;        
-            valid &= Strop<R(A1,A2)>::template Input<A1,0>()->Current(a1);
-            valid &= Strop<R(A1,A2)>::template Input<A2,1>()->Current(a2);
-            valid &= ApplyFilter(mFunction, a1,a2);
             
-            if (valid)
-            {
-                result = mFunction(a1,a2);
+            bool input_exists = true;
+            input_exists &= Strop<R(A1,A2)>::template Input<A1,0>()->Current(a1);
+            input_exists &= Strop<R(A1,A2)>::template Input<A2,1>()->Current(a2);
+            
+            bool output_exists = false;
+            if (input_exists)
+            {   
+                output_exists = ApplyFilter(mFunction,a1,a2);
                 Strop<R(A1,A2)>::template Input<A1,0>()->Pop();
                 Strop<R(A1,A2)>::template Input<A2,1>()->Pop();
             }
-            return valid;
+            
+            if (output_exists)
+                result = mFunction(a1,a2);
+            return output_exists;
         }
                 
     private:
@@ -113,20 +123,24 @@ namespace streamulus
             A1 a1;
             A2 a2;
             A3 a3;
-            bool valid = true;        
-            valid &= Strop<R(A1,A2,A3)>::template Input<A1,0>()->Current(a1);
-            valid &= Strop<R(A1,A2,A3)>::template Input<A2,1>()->Current(a2);
-            valid &= Strop<R(A1,A2,A3)>::template Input<A3,2>()->Current(a3);
-            valid &= ApplyFilter(mFunction,a1,a2,a3);
-                                    
-            if (valid)
-            {
-                result = mFunction(a1,a2,a3);
+            
+            bool input_exists = true;
+            input_exists &= Strop<R(A1,A2,A3)>::template Input<A1,0>()->Current(a1);
+            input_exists &= Strop<R(A1,A2,A3)>::template Input<A2,1>()->Current(a2);
+            input_exists &= Strop<R(A1,A2,A3)>::template Input<A3,2>()->Current(a3);
+            
+            bool output_exists = false;
+            if (input_exists)
+            {   
+                output_exists = ApplyFilter(mFunction,a1,a2,a3);
                 Strop<R(A1,A2,A3)>::template Input<A1,0>()->Pop();
                 Strop<R(A1,A2,A3)>::template Input<A2,1>()->Pop();
                 Strop<R(A1,A2,A3)>::template Input<A3,2>()->Pop();
             }
-            return valid;
+            
+            if (output_exists)
+                result = mFunction(a1,a2,a3);
+            return output_exists;
         }
         
     private:
@@ -148,22 +162,26 @@ namespace streamulus
             A2 a2;
             A3 a3;
             A4 a4;
-            bool valid = true;        
-            valid &= Strop<R(A1,A2,A3,A4)>::template Input<A1,0>()->Current(a1);
-            valid &= Strop<R(A1,A2,A3,A4)>::template Input<A2,1>()->Current(a2);
-            valid &= Strop<R(A1,A2,A3,A4)>::template Input<A3,2>()->Current(a3);
-            valid &= Strop<R(A1,A2,A3,A4)>::template Input<A4,3>()->Current(a4);
-            valid &= ApplyFilter(mFunction,a1,a2,a3,a4);
+
+            bool input_exists = true;
+            input_exists &= Strop<R(A1,A2,A3,A4)>::template Input<A1,0>()->Current(a1);
+            input_exists &= Strop<R(A1,A2,A3,A4)>::template Input<A2,1>()->Current(a2);
+            input_exists &= Strop<R(A1,A2,A3,A4)>::template Input<A3,2>()->Current(a3);
+            input_exists &= Strop<R(A1,A2,A3,A4)>::template Input<A4,3>()->Current(a4);
             
-            if (valid)
-            {
-                result = mFunction(a1,a2,a3,a4);
+            bool output_exists = false;
+            if (input_exists)
+            {   
+                output_exists = ApplyFilter(mFunction,a1,a2,a3,a4);
                 Strop<R(A1,A2,A3,A4)>::template Input<A1,0>()->Pop();
                 Strop<R(A1,A2,A3,A4)>::template Input<A2,1>()->Pop();
                 Strop<R(A1,A2,A3,A4)>::template Input<A3,2>()->Pop();
                 Strop<R(A1,A2,A3,A4)>::template Input<A4,3>()->Pop();
             }
-            return valid;
+            
+            if (output_exists)
+                result = mFunction(a1,a2,a3,a4);
+            return output_exists;
         }
         
     private:
@@ -187,26 +205,30 @@ namespace streamulus
             A3 a3;
             A4 a4;
             A5 a5;
-            bool valid = true;        
-            valid &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A1,0>()->Current(a1);
-            valid &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A2,1>()->Current(a2);
-            valid &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A3,2>()->Current(a3);
-            valid &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A4,3>()->Current(a4);
-            valid &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A5,4>()->Current(a5);
-            valid &= ApplyFilter(mFunction,a1,a2,a3,a4,a5);
-
-            if (valid)
-            {
-                result = mFunction(a1,a2,a3,a4,a5);
+            
+            bool input_exists = true;
+            input_exists &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A1,0>()->Current(a1);
+            input_exists &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A2,1>()->Current(a2);
+            input_exists &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A3,2>()->Current(a3);
+            input_exists &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A4,3>()->Current(a4);
+            input_exists &= Strop<R(A1,A2,A3,A4,A5)>::template Input<A5,4>()->Current(a5);
+            
+            bool output_exists = false;
+            if (input_exists)
+            {   
+                output_exists = ApplyFilter(mFunction,a1,a2,a3,a4,a5);
                 Strop<R(A1,A2,A3,A4,A5)>::template Input<A1,0>()->Pop();
                 Strop<R(A1,A2,A3,A4,A5)>::template Input<A2,1>()->Pop();
                 Strop<R(A1,A2,A3,A4,A5)>::template Input<A3,2>()->Pop();
                 Strop<R(A1,A2,A3,A4,A5)>::template Input<A4,3>()->Pop();
                 Strop<R(A1,A2,A3,A4,A5)>::template Input<A5,4>()->Pop();
             }
-            return valid;
+            
+            if (output_exists)
+                result = mFunction(a1,a2,a3,a4,a5);
+            return output_exists;
         }
-                
+
     private:
         F mFunction;
     };
