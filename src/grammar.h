@@ -77,6 +77,7 @@ namespace streamulus
     template<> struct BinaryOpCases::case_<proto::tag::modulus>       : proto::modulus       <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::plus>          : proto::plus          <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::minus>         : proto::minus         <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::less>          : proto::less          <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::greater>       : proto::greater       <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::less_equal>    : proto::less_equal    <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::greater_equal> : proto::greater_equal <smls_grammar,smls_grammar> {};
