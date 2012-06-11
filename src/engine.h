@@ -55,6 +55,11 @@ namespace streamulus
         
 
         void Work();
+        
+        bool IsVerbose()
+        {
+            return mVerbose;
+        }
 
         
         template<typename R, typename Expr>
@@ -80,9 +85,11 @@ namespace streamulus
         template<typename Expr>
         void Subscribe(Expr const &expr)
         {
-            
-            std::cout << "Engine::Parse()" << std::endl;
-            boost::proto::display_expr(expr);
+            if (IsVerbose())
+            {
+                std::cout << "Engine::Parse()" << std::endl;
+                boost::proto::display_expr(expr);
+            }
             
             // Make sure the expression conforms to our grammar
             BOOST_MPL_ASSERT(( boost::proto::matches<Expr, smls_grammar> ));
@@ -92,7 +99,7 @@ namespace streamulus
             
             StartEngine();
         }
-
+        
     private:
         
         void StartEngine()
@@ -124,8 +131,11 @@ namespace streamulus
                 assert( mIndex > 0);
                 mGraph[u]->SetGraph(mEngine, u, mIndex--);
                 
-                std::cout << "Finish vertex " << u << "  " //  << mGraph[u]->GetName()
-                << "  TO=" << mGraph[u]->GetTopSortIndex() << std::endl;
+                if (mEngine->IsVerbose())
+                {
+                    std::cout << "Finish vertex " << u << "  " //  << mGraph[u]->GetName()
+                              << "  TO=" << mGraph[u]->GetTopSortIndex() << std::endl;
+                }
             }
         private:
             size_t mIndex;
@@ -184,7 +194,8 @@ namespace streamulus
         TimestampT mCurrentTime;
         bool mWorking;    
         std::vector<StropPtr> mSources;
-        
+        bool mVerbose;
+
     };
     
 } // ns streamulus

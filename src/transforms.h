@@ -34,6 +34,9 @@
 #include <boost/fusion/include/make_vector.hpp>
 #include <boost/fusion/include/algorithm.hpp>
 #include <boost/type_traits.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/type_traits.hpp>
+
 
 namespace streamulus
 {
@@ -98,14 +101,17 @@ namespace streamulus
         template<typename StropType>
         const StropType operator()(StropType strop, EngineApi* engine)
         {
-            std::cout << "AddStropToGraph: strop=" << strop << std::endl;
+            if (engine->IsVerbose())
+                std::cout << "AddStropToGraph: strop=" << strop << std::endl;
             if (!strop->GetEngine())
             {
-                std::cout << "AddStropToGraph::operator()" << std::endl;
+                if (engine->IsVerbose())
+                    std::cout << "AddStropToGraph::operator()" << std::endl;
                 engine->AddVertexToGraph(strop);
                 engine->AddSource(strop);
             }
-            std::cout << "returning " << strop->GetDescriptor() << std::endl;
+            if (engine->IsVerbose())
+                std::cout << "returning " << strop->GetDescriptor() << std::endl;
             return strop;
         }
     };
@@ -125,7 +131,8 @@ namespace streamulus
         typename result<AddConstToGraph(T,State)>::type operator()(T& value, State engine)
         {
             typedef typename result<AddConstToGraph(T,State)>::ConstType ConstType;
-            std::cout << "Add const to graph " << value <<std::endl;
+            if (engine->IsVerbose())
+                std::cout << "Add const to graph " << value <<std::endl;
             boost::shared_ptr<Const<ConstType> > strop(new Const<ConstType>(value));
             return AddStropToGraph()(strop,engine);
         }
@@ -153,8 +160,9 @@ namespace streamulus
         operator()(const F& f,
                    const Arg1Strop arg1, 
                    State engine)
-        {   
-            std::cout << "generic_func" << std::endl;
+        {  
+            if (engine->IsVerbose())             
+                std::cout << "generic_func" << std::endl;
             typedef result<generic_func(F&,Arg1Strop,State)> Result;        
             typedef Func1<F
             ,typename Result::Arg1Type
@@ -184,7 +192,8 @@ namespace streamulus
         typename result<generic_func(F&,Arg1Strop,Arg2Strop, State)>::type
         operator()(const F& f,const Arg1Strop arg1, const Arg2Strop arg2, State engine)
         {   
-            std::cout << "generic_func" << std::endl;
+            if (engine->IsVerbose())
+                std::cout << "generic_func" << std::endl;
             typedef result<generic_func(F&,Arg1Strop,Arg2Strop, State)> Result;        
             typedef Func2<F, typename Result::Arg1Type, typename Result::Arg2Type> FuncStropType; 
             boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType()); 
@@ -226,7 +235,8 @@ namespace streamulus
                    const Arg3Strop arg3, 
                    State engine)
         {   
-            std::cout << "generic_func" << std::endl;
+            if (engine->IsVerbose())
+                std::cout << "generic_func" << std::endl;
             typedef result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,State)> Result;        
             typedef Func3<F
             ,typename Result::Arg1Type
@@ -279,7 +289,8 @@ namespace streamulus
                    const Arg4Strop arg4, 
                    State engine)
         {   
-            std::cout << "generic_func" << std::endl;
+            if (engine->IsVerbose())
+                std::cout << "generic_func" << std::endl;
             typedef result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)> Result;        
             typedef Func4<F
             ,typename Result::Arg1Type
@@ -339,7 +350,8 @@ namespace streamulus
                    const Arg5Strop arg5, 
                    State engine)
         {   
-            std::cout << "generic_func" << std::endl;
+            if (engine->IsVerbose())
+                std::cout << "generic_func" << std::endl;
             typedef result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)> Result;        
             typedef Func5<F
                         ,typename Result::Arg1Type
@@ -385,7 +397,8 @@ namespace streamulus
         {
             generic_func gf;
             F func;
-            std::cout << "builtin func: " << typeid(func).name() << std::endl;
+            if (engine->IsVerbose())            
+                std::cout << "builtin func: " << typeid(func).name() << std::endl;
             return gf(func,arg,engine);
         }
     };
@@ -406,9 +419,10 @@ namespace streamulus
         {
             generic_func gf;
             F func;
-            std::cout << "builtin func: " << typeid(func).name() << std::endl;
+            if (engine->IsVerbose())
+                std::cout << "builtin func: " << typeid(func).name() << std::endl;
             return gf(func,left,right,engine);
         }
     };
-    
+        
 } // ns streamulus

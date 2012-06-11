@@ -125,7 +125,8 @@ namespace streamulus
     
     void Engine::ActivateSources()
     {
-        std::cout << "Activate sources: mSources.size() = " << mSources.size() << std::endl;
+        if (IsVerbose())
+            std::cout << "Activate sources: mSources.size() = " << mSources.size() << std::endl;
         for (std::vector<StropPtr>::iterator it = mSources.begin(); it != mSources.end(); ++it)
             ActivateVertex(*it);
     }
@@ -139,7 +140,8 @@ namespace streamulus
     
     void Engine::WriteGraph(const std::string& filename)
     {
-        std::cout << "Writing graph to " << filename << std::endl;
+        if (IsVerbose())
+            std::cout << "Writing graph to " << filename << std::endl;
         std::ofstream file;
         file.open (filename.c_str());
         boost::write_graphviz(file, mGraph, VertexPropertyWriter(mGraph));

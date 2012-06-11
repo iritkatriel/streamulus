@@ -61,6 +61,8 @@ namespace streamulus
         
         virtual void Work()=0;
         
+        virtual bool IsVerbose()=0;
+        
     protected:
         
         Graph mGraph;
