@@ -22,6 +22,7 @@
 #pragma once
 
 #include <boost/type_traits.hpp> 
+#include <boost/proto/proto.hpp> 
 
 namespace streamulus
 {       
