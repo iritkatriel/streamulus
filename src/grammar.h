@@ -54,7 +54,6 @@ namespace streamulus
     template<> struct UnaryOpCases::case_<proto::tag::negate>      : proto::negate <smls_grammar>      {};
     template<> struct UnaryOpCases::case_<proto::tag::dereference> : proto::dereference <smls_grammar> {};
     template<> struct UnaryOpCases::case_<proto::tag::complement>  : proto::complement <smls_grammar>  {};
-    template<> struct UnaryOpCases::case_<proto::tag::address_of>  : proto::address_of <smls_grammar>  {};
     template<> struct UnaryOpCases::case_<proto::tag::logical_not> : proto::logical_not <smls_grammar> {};
     template<> struct UnaryOpCases::case_<proto::tag::pre_inc>     : proto::pre_inc <smls_grammar>     {};
     template<> struct UnaryOpCases::case_<proto::tag::pre_dec>     : proto::pre_dec <smls_grammar>     {};
@@ -89,8 +88,19 @@ namespace streamulus
     template<> struct BinaryOpCases::case_<proto::tag::bitwise_and>   : proto::bitwise_and   <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::bitwise_xor>   : proto::bitwise_xor   <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::comma>         : proto::comma         <smls_grammar,smls_grammar> {};
-    template<> struct BinaryOpCases::case_<proto::tag::subscript>     : proto::subscript     <smls_grammar,smls_grammar> {};
-    
+    template<> struct BinaryOpCases::case_<proto::tag::subscript>     : proto::subscript     <smls_grammar,smls_grammar> {};    
+    template<> struct BinaryOpCases::case_<proto::tag::assign>             : proto::assign             <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::shift_left_assign>  : proto::shift_left_assign  <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::shift_right_assign> : proto::shift_right_assign <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::multiplies_assign>  : proto::multiplies_assign  <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::divides_assign>     : proto::divides_assign     <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::modulus_assign>     : proto::modulus_assign     <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::plus_assign>        : proto::plus_assign        <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::minus_assign>       : proto::minus_assign       <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::bitwise_and_assign> : proto::bitwise_and_assign <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::bitwise_or_assign>  : proto::bitwise_or_assign  <smls_grammar,smls_grammar> {};
+    template<> struct BinaryOpCases::case_<proto::tag::bitwise_xor_assign> : proto::bitwise_xor_assign <smls_grammar,smls_grammar> {};
+
     struct UnsupportedOpCases
     {
         // The primary template matches nothing:
@@ -100,19 +110,11 @@ namespace streamulus
         {};
     };
 
-    // The assignment ops are not supported because they don't make sense for streams.
-    template<> struct UnsupportedOpCases::case_<proto::tag::assign>             : proto::assign             <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::shift_left_assign>  : proto::shift_left_assign  <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::shift_right_assign> : proto::shift_right_assign <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::multiplies_assign>  : proto::multiplies_assign  <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::divides_assign>     : proto::divides_assign     <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::modulus_assign>     : proto::modulus_assign     <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::plus_assign>        : proto::plus_assign        <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::minus_assign>       : proto::minus_assign       <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::bitwise_and_assign> : proto::bitwise_and_assign <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::bitwise_or_assign>  : proto::bitwise_or_assign  <smls_grammar,smls_grammar> {};
-    template<> struct UnsupportedOpCases::case_<proto::tag::bitwise_xor_assign> : proto::bitwise_xor_assign <smls_grammar,smls_grammar> {};
-
+    // Disabling the address-of operator. It is a special case in proto and is problematic to 
+    // support. It is also a bit nonsensical for streams.
+    template<> struct UnsupportedOpCases::case_<proto::tag::address_of>  : proto::address_of <smls_grammar>  {};
+    
+    
     // ************************************** RULES **************************************
     
     // terminals
@@ -120,9 +122,10 @@ namespace streamulus
     struct const_terminal_rule        : proto::terminal<proto::_>                     {};
     
     
-    struct unary_op_rule   : proto::switch_<UnaryOpCases> {};
-    struct binary_op_rule  : proto::switch_<BinaryOpCases> {};    
-    struct ternary_op_rule : proto::if_else_<smls_grammar,smls_grammar,smls_grammar> {};
+    struct unary_op_rule       : proto::switch_<UnaryOpCases> {};
+    struct binary_op_rule      : proto::switch_<BinaryOpCases> {};    
+    struct ternary_op_rule     : proto::if_else_<smls_grammar,smls_grammar,smls_grammar> {};
+    struct unsupported_op_rule : proto::switch_<UnsupportedOpCases> {};
     
         
     struct function_0_rule   : proto::function<proto::terminal<proto::_> > {};
