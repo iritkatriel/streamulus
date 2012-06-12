@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Streamulus : A C++ DSEL for real-time event stream processing" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Streamulus</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/iritkatriel/streamulus">View on GitHub</a>
+
+          <h1 id="project_title">Streamulus</h1>
+          <h2 id="project_tagline">A C++ DSEL for real-time event stream processing</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/iritkatriel/streamulus/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/iritkatriel/streamulus/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>In A Nutshell</h3>
+
+<p>Continuous computations over event streams require a data structure (typically a graph) that describes how the input streams are to be processed. A language for specifying such a computation would ideally hide the construction of the graph from the user.</p>
+
+<p>General purpose programming languages such as Java and C++ are considered to be ill suited for such tasks, prompting event processing systems such as StreamBase and Esper to support one of the variations of StreamSQL, i.e., a language that augments SQL by adding sliding window semantics as well as the possibility to write user-defined operators and embed them in continuous queries. These languages are very useful for many applications. Like SQL, they can be learned by non-programmers and used relatively easily. </p>
+
+<p>Streamulus takes a different approach to the stream programming problem. It is a C++ domain-specific embedded language (DSEL), meaning that the statements of the language are written in valid C++ syntax. The programmer needs to specify only what happens to a single event of the stream. For example, if x and y are streams, the expression (x+y)/2 is the stream of point-wise averages of x and y. The task of constructing the computation graph is delegated to the C++ compiler.  This magic is achieved by use of template metaprogramming techniques via the Boost Proto library.</p>
+
+<p>Streamulus is not intended as a replacement for the StreamSQL based systems. Its target users are C++ programmers who build real-time systems and need a lightweight tool that simplifies the task of writing stream processing code. For those users, it offers an expressive language for efficient stream computations.</p>
+
+<h3>An Example</h3>
+
+<p>The following program defines a continuous computation over two streams of numbers (of type double), labeled X and Y. It continuously computes the value of x/(x+y).</p>
+
+<pre><code>#include "streamulus.h"
+
+int main()
+{
+    using namespace streamulus;
+
+    // Set up some stream variables
+    InputStream&lt;double&gt;::type x = NewInputStream&lt;double&gt;(("X");
+    InputStream&lt;double&gt;::type y = NewInputStream&lt;double&gt;("Y");
+
+    // Subscribe the query with the engine
+    Streamulus streamulus_engine;
+    streamulus_engine.Subscribe( x / (x + y) );
+}
+</code></pre>
+
+<p>In Subscribe(), the expression is transformed into the following graph:</p>
+
+<p><img src="https://github.com/iritkatriel/streamulus/raw/master/doc/SimpleExampleGraph.jpg" alt="Graph generated for X/(X+Y)"></p>
+
+<p>Then, we insert data to the input streams as follows:</p>
+
+<pre><code>        InputStreamPut(x,5);
+        InputStreamPut(y,12);
+
+        InputStreamPut(x,23);
+        InputStreamPut(x,4);
+</code></pre>
+
+<p>Whenever new data is inserted as above, it is automatically propagated through the graph. </p>
+
+<h3>User-Defined Nodes</h3>
+
+<p>The example above is not very useful because we are not doing anything with the computed values. However, graph nodes can apply user-defined transformations. They can have any side effect whatsoever such as displaying values on the screen, storing data in a database, and so on.</p>
+
+<p>For example, this is how you can define an expression that takes a stream of strings and returns a stream of their lengths, while alerting us in case there are too many empty strings in the stream:</p>
+
+<pre><code>struct string_length
+{        
+    string_length() 
+        : num_empty(0) 
+    {
+    }
+
+    template&lt;typename Sig&gt;
+    struct result
+    {
+        typedef size_t type;  
+    };
+
+    size_t operator()(const std::string&amp; s) const
+    { 
+        if (s.size() == 0)
+            num_empty++;
+
+        if (num_empty &gt; 100)
+            std::cout &lt;&lt; "There are many empty strings" &lt;&lt; std::endl;
+
+        return s.size(); 
+    }
+private:
+    int num_empty;
+};
+</code></pre>
+
+<p>You can then use the </p>
+
+<pre><code>Streamify&lt;string_length&gt; 
+</code></pre>
+
+<p>operator in expressions. The Streamify template turns a point-computation function into one that performs the same computation continuously on a streamulus data stream:</p>
+
+<pre><code>InputStream&lt;std::string&gt;::type x("X");
+Streamulus streamulus_engine;
+streamulus_engine.Subscribe(Streamify&lt;string_length&gt;( x )); 
+</code></pre>
+
+<p>There is also support for common sub-expressions (graphs with nodes of outdegree&gt;1), filter nodes, and other constructs. </p>
+
+<h3>Design Goals</h3>
+
+<ul>
+<li>Simple syntax for specifying computation graphs (as close as possible to the syntax of the same computation on scalar values). </li>
+<li>Efficiency. The resulting graph should perform the computation as efficiently as possible. Low compilation time is a secondary concern.</li>
+<li>No wait-loop. When data is not passing through the pipes, streamulus does not take up any CPU resources.</li>
+</ul><h3>Status</h3>
+
+<p>Streamulus is open sourced on github under the GNU v3 licence. </p>
+
+<p>It is a research prototype. The first release will be coming soon.</p>
+
+<p>Follow @streamulus on twitter for updates about the projects (releases, documentation, etc).</p>
+
+<h3>Thanks</h3>
+
+<p>Streamulus relies on Boost Proto library. 
+I am grateful to Joel Falcou for his ongoing assistance and feedback. </p>
+
+<p>Irit Katriel  </p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Streamulus maintained by <a href="https://github.com/iritkatriel">iritkatriel</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-30902782-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+
+  </body>
+</html>
