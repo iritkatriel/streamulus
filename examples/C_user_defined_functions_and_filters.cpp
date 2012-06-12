@@ -1,5 +1,5 @@
 //
-// E_mavg_crossings.cpp
+// C_user_defined_functions_and_filters.cpp
 //
 // Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
 //
