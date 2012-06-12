@@ -27,12 +27,28 @@ namespace streamulus
 {    
     
     // Streamify template - turns a function object into a streamulus function.
-    // One for each arity. 
+    //
+    // There are two variants for Streamify - one that gets a function object
+    // and copies it, and the other which gets the type of the function as a 
+    // template parameter and constructs an object of this type. 
+    //
+    // Both variants are useful - the first is more general because the function
+    // object does not need to be constructible without parameters. The second
+    // can be invoked more concisely when the function is constructible in this way.
+    //
     
-    // TODO: Surely there is a more generic & concise way?
     
+    // From object: Copies the function object into a terminal.
+    template <typename F>
+    typename boost::proto::terminal<F>::type  const
+    Streamify(F const& f)
+    {   
+        typename boost::proto::terminal<F>::type that = {f};
+        return that;           
+    }
 
-    // stateless functions:    
+    // From type: Constructs the function object    
+    // We have one Streamify function for each arity of F. 
     template <typename F, typename A1>
     typename boost::proto::result_of::make_expr<
     boost::proto::tag::function  // Tag type

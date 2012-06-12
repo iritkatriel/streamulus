@@ -50,6 +50,11 @@ namespace streamulus
     class Func1 : public FuncBase<R(A1)>
     {
     public:
+
+        Func1(const F& f)
+            : mFunction(f)
+        {
+        }
         
         bool Compute(R& result)
         {
@@ -83,7 +88,12 @@ namespace streamulus
     class Func2 : public FuncBase<R(A1,A2)>
     {
     public:
-        
+
+        Func2(const F& f)
+        : mFunction(f)
+        {
+        }
+
         bool Compute(R& result)
         {
             A1 a1;
@@ -117,7 +127,13 @@ namespace streamulus
     typename R =typename F::template result<F(A1,A2,A3)>::type>
     class Func3 : public FuncBase<R(A1,A2,A3)>
     {
-    public:        
+    public: 
+        
+        Func3(const F& f)
+        : mFunction(f)
+        {
+        }
+        
         bool Compute(R& result)
         {
             A1 a1;
@@ -155,7 +171,13 @@ namespace streamulus
     typename R =typename F::template result<F(A1,A2,A3,A4)>::type>
     class Func4 : public FuncBase<R(A1,A2,A3,A4)>
     {
-    public:        
+    public:  
+        
+        Func4(const F& f)
+        : mFunction(f)
+        {
+        }
+
         bool Compute(R& result)
         {
             A1 a1;
@@ -197,7 +219,13 @@ namespace streamulus
     typename R =typename F::template result<F(A1,A2,A3,A4,A5)>::type>
     class Func5 : public FuncBase<R(A1,A2,A3,A4,A5)>
     {
-    public:        
+    public:       
+        
+        Func5(const F& f)
+        : mFunction(f)
+        {
+        }
+
         bool Compute(R& result)
         {
             A1 a1;

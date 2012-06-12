@@ -36,6 +36,10 @@
 // decreasing) and Golden Crosses (where it crosses from above, 
 // so the time series is increasing). 
 //
+// The example demonstrates expressions using user-defined functions, 
+// * with and without filters
+// * Streamified by type or by object.
+//
 // The output of the program is:
 //
 // -------------   TS <-- {0,0}   -------------
@@ -117,14 +121,14 @@ struct TimeValue
 };
 
 // Exponentially decaying moving average
-template<int DecayFactor>
 class Mavg
 {
 public:
     
-    Mavg()
-    : mMavg(0)
-    , mFirst(true)
+    Mavg(int decay_factor)
+    : mFirst(true)
+    , mDecayFactor(decay_factor)
+    , mMavg(0)
     {
     }
     
@@ -138,7 +142,7 @@ public:
     {
         if (! mFirst)
         {
-            double alpha = 1-1/exp(DecayFactor*(tick.time-mPrevTime));
+            double alpha = 1-1/exp(mDecayFactor*(tick.time-mPrevTime));
             mMavg += alpha*(tick.value - mMavg);
             mPrevTime = tick.time;
         }
@@ -152,9 +156,10 @@ public:
     }
     
 private:
-    double mMavg;  
     clock_t mPrevTime;    
     bool mFirst;
+    int mDecayFactor;
+    double mMavg;  
 };
 
 // Remove consecutive repetitions from a stream. 
@@ -270,10 +275,16 @@ void cross_alert_example()
     InputStream<TimeValue>::type ts = NewInputStream<TimeValue>("TS");
     Streamulus engine;
 
-    // The moving averages:
-    Subscription<double>::type slow = engine.Subscribe<double>(Streamify<Mavg<1> >(ts));
-    Subscription<double>::type fast = engine.Subscribe<double>(Streamify<Mavg<10> >(ts));
+    // The moving averages are streamified from the function objects.
+    Mavg mavg1(1);
+    Mavg mavg10(10);
+    
+    Subscription<double>::type slow = engine.Subscribe<double>(Streamify(mavg1)(ts));
+    Subscription<double>::type fast = engine.Subscribe<double>(Streamify(mavg10)(ts));
 
+    // print and cross_alert are streamified from the types (this work because they 
+    // can be default constructed).
+    
     // Print the moving averages:
     engine.Subscribe(Streamify<print>(std::string("Slow Mavg = ") + Streamify<as_string>(slow)));
     engine.Subscribe(Streamify<print>(std::string("Fast Mavg = ") + Streamify<as_string>(fast)));
@@ -284,3 +295,11 @@ void cross_alert_example()
     for (int i=0; i<15; i++)
         InputStreamPut(ts, TimeValue(i, i % 5));
 }
+
+/*
+int main()
+{
+    cross_alert_example();
+    return 0;
+}
+*/

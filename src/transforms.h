@@ -168,7 +168,7 @@ namespace streamulus
             ,typename Result::Arg1Type
             > FuncStropType; 
             
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType()); 
+            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream));
@@ -196,7 +196,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             typedef result<generic_func(F&,Arg1Strop,Arg2Strop, State)> Result;        
             typedef Func2<F, typename Result::Arg1Type, typename Result::Arg2Type> FuncStropType; 
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType()); 
+            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -244,7 +244,7 @@ namespace streamulus
             ,typename Result::Arg3Type
             > FuncStropType; 
             
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType()); 
+            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -299,7 +299,7 @@ namespace streamulus
             ,typename Result::Arg4Type
             > FuncStropType; 
             
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType()); 
+            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -361,7 +361,7 @@ namespace streamulus
                         ,typename Result::Arg5Type
                         > FuncStropType; 
             
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType()); 
+            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());

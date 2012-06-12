@@ -84,6 +84,7 @@ void hello_stream()
     //     print it 
     //     emit it into the output stream
     // 
+    
     streamulus_engine.Subscribe(Streamify<print>(hello + s + exc));    
     
     // Insert data to the input stream
@@ -92,3 +93,10 @@ void hello_stream()
     InputStreamPut<std::string>(s, "Streamulus");    
 }
 
+/*
+int main()
+{
+    hello_stream();
+    return 0;
+}
+*/

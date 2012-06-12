@@ -102,3 +102,11 @@ void common_subexpressions()
     InputStreamPut<std::string>(s, "Streamulus");    
 }
 
+/*
+ int main()
+ {
+ common_subexpressions();
+ return 0;
+ }
+ */
+
