@@ -19,9 +19,7 @@
 // along with Streamulus.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-// #include <iostream>
-
-#include "../include/streamulus.h"
+#include "../src/streamulus.h"
 
 #include <iostream>
 
@@ -267,6 +265,7 @@ struct as_string
     }
 };
 
+void cross_alert_example();
 
 void cross_alert_example()
 {

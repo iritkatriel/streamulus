@@ -38,7 +38,9 @@
 //
 // ********************************************************
 
-#include "../include/streamulus.h"
+#include "../src/streamulus.h"
+
+#include <iostream>
 
 // print is a functor that prints whatever it gets. 
 // Stremify<print> is a stream function that prints every
@@ -64,6 +66,7 @@ struct print
     }
 };
 
+void hello_stream();
 
 void hello_stream()
 {
@@ -85,8 +88,9 @@ void hello_stream()
     //     emit it into the output stream
     // 
     
-    streamulus_engine.Subscribe(Streamify<print>(hello + s + exc));    
     
+    streamulus_engine.Subscribe(Streamify<print>(hello + s + exc));    
+
     // Insert data to the input stream
     InputStreamPut<std::string>(s, "World");
     InputStreamPut<std::string>(s, "London");

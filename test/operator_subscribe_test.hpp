@@ -29,7 +29,7 @@
 // something reasonable.
 //
 
-#include "../include/streamulus.h"
+#include "../src/streamulus.h"
 
 namespace streamulus
 {   

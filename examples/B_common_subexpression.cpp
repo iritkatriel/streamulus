@@ -44,8 +44,9 @@
 // All together now: Hello Streamulus!!
 // *******************************************************
 
-#include "../include/streamulus.h"
+#include "../src/streamulus.h"
 
+#include <iostream>
 
 // The print functor from example A.
 struct print 
