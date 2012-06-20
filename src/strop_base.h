@@ -73,7 +73,7 @@ namespace streamulus
             mTopSortIndex = top_sort_index;
         }
         
-        bool IsActive()
+        inline bool IsActive()
         {
             return mIsActive;
         }

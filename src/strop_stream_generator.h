@@ -24,10 +24,12 @@
 #include "strop_base.h" 
 #include "stream.h" 
 
+#include <boost/make_shared.hpp>
+
 namespace streamulus
 {
     
-    template<typename R> // R = result type
+    template<typename R> 
     class StropStreamGenerator
     : public StropBase
     {
@@ -47,9 +49,7 @@ namespace streamulus
             R res;
             if (! Compute(res))
                 return false;
-            
-            // std::cout << "Compute[" << mTopSortIndex << "]: " << res << std::endl;
-            
+                        
             Output(res);
             return true;
         }
@@ -59,11 +59,11 @@ namespace streamulus
             mEngine->Output<R>(mVertexDescriptor,value);
         }        
         
-        typedef boost::shared_ptr<Stream<R> > OutputStreamPtr;
+        typedef boost::shared_ptr< Stream<R> > OutputStreamPtr;
         
         OutputStreamPtr MakeOutputStream() const
         {
-            return OutputStreamPtr(new Stream<R>());
+            return boost::make_shared< Stream<R> > ();
         }        
     };
     

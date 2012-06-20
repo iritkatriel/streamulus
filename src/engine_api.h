@@ -35,12 +35,12 @@ namespace streamulus
         {
         }
         
-        virtual void AddVertexToGraph(StropPtr strop)=0;
-        virtual void AddSource(StropPtr strop)=0;
-        virtual bool ReplaceStrop(StropPtr strop, StropPtr new_strop)=0;
+        virtual void AddVertexToGraph(const StropPtr& strop)=0;
+        virtual void AddSource(const StropPtr& strop)=0;
+        virtual bool ReplaceStrop(const StropPtr& strop, const StropPtr& new_strop)=0;
         
         template<typename T>
-        void Output(BoostGraph::vertex_descriptor source, const T& value)
+        void Output(const BoostGraph::vertex_descriptor& source, const T& value)
         {
             BoostGraph::out_edge_iterator it, it_end;
             
@@ -57,7 +57,7 @@ namespace streamulus
             Work();
         }
         
-        virtual void ActivateVertex(BoostGraph::vertex_descriptor vertex)=0;
+        virtual void ActivateVertex(const BoostGraph::vertex_descriptor& vertex)=0;
         
         virtual void Work()=0;
         

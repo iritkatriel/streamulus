@@ -43,20 +43,20 @@ namespace streamulus
         Engine();
         
         
-        void AddVertexToGraph(StropPtr strop);
+        void AddVertexToGraph(const StropPtr& strop);
         
-        void AddSource(StropPtr strop);        
+        void AddSource(const StropPtr& strop);        
 
-        bool ReplaceStrop(StropPtr strop, StropPtr new_strop);
+        bool ReplaceStrop(const StropPtr& strop, const StropPtr& new_strop);
         
-        void AddEdgeToGraph(BoostGraph::vertex_descriptor source, 
-                            BoostGraph::vertex_descriptor target,
+        void AddEdgeToGraph(const BoostGraph::vertex_descriptor& source, 
+                            const BoostGraph::vertex_descriptor& target,
                             const StreamPtr& stream);        
         
 
         void Work();
         
-        bool IsVerbose()
+        inline bool IsVerbose()
         {
             return mVerbose;
         }
@@ -64,11 +64,13 @@ namespace streamulus
         
         template<typename R, typename Expr>
         const typename Subscription<R>::type
-        Subscribe(Expr const &expr)
+        Subscribe(const Expr &expr)
         {
             typedef typename Subscription<R>::strop_type ResultType;
 
-            std::cout << "Engine::Parse()" << std::endl;
+            if (IsVerbose())
+                std::cout << "Engine::Parse()" << std::endl;
+            
             boost::proto::display_expr(expr);
             
             // Make sure the expression conforms to our grammar
@@ -83,7 +85,7 @@ namespace streamulus
         }
 
         template<typename Expr>
-        void Subscribe(Expr const &expr)
+        void Subscribe(const Expr &expr)
         {
             if (IsVerbose())
             {
@@ -109,9 +111,9 @@ namespace streamulus
             Work();            
         }
         
-        void ActivateVertex(BoostGraph::vertex_descriptor vertex);
+        void ActivateVertex(const BoostGraph::vertex_descriptor& vertex);
         
-        void ActivateVertex(StropPtr strop);
+        void ActivateVertex(const StropPtr& strop);
         
         void ActivateSources();        
         

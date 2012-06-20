@@ -35,7 +35,7 @@ namespace streamulus
         
         typedef R result_type;
         
-        DataSource(const std::string& name)
+        DataSource(const char* name)
         : mName(name)
         , mIsValid(false)
         {

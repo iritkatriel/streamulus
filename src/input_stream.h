@@ -23,6 +23,8 @@
 
 #include "strop_data_source.h"
 
+#include <boost/make_shared.hpp>
+
 namespace streamulus
 {
     // Convenience utilities for defining input streams    
@@ -36,9 +38,9 @@ namespace streamulus
 
     // Create a new stream
     template<typename T>
-    typename InputStream<T>::type NewInputStream(const std::string& name)
+    typename InputStream<T>::type NewInputStream(const char* name)
     {
-        return boost::proto::lit(typename InputStream<T>::data_source_t(new DataSource<T>(name)));
+        return boost::proto::lit(boost::make_shared<DataSource<T> >(name));
     }
 
     // Add an input to the stream
