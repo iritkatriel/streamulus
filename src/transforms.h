@@ -30,6 +30,7 @@
 #include "strop_func.h"
 #include "engine_api.h"
 #include "input_stream.h"
+#include "strop_return_type.h"
 
 #include <boost/fusion/include/make_vector.hpp>
 #include <boost/fusion/include/algorithm.hpp>
@@ -58,35 +59,6 @@ namespace streamulus
     {  
         typedef boost::shared_ptr<Strop<Sig> > type;    
     };
-    
-    
-    template<typename StropType>
-    struct StropReturnType;
-    
-    template<typename StropType>
-    struct StropReturnType<boost::shared_ptr<StropType> >
-    {
-        typedef typename StropType::result_type type;
-    };
-
-    template<typename StropType>
-    struct StropReturnType<const boost::shared_ptr<StropType> >
-    {
-        typedef typename StropType::result_type type;
-    };
-    
-    template<typename StropType>
-    struct StropReturnType<const boost::shared_ptr<StropType>& >
-    {
-        typedef typename StropType::result_type type;
-    };
-
-    template<typename StropType>
-    struct StropReturnType<boost::shared_ptr<StropType>& >
-    {
-        typedef typename StropType::result_type type;
-    };
-    
     
     struct AddStropToGraph : proto::callable  
     {
