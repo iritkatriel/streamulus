@@ -47,8 +47,16 @@ namespace streamulus
     {
     public:
         typedef BoostGraph type;
-        StropPtr operator[](const BoostGraph::vertex_descriptor& d) const;
-        StreamPtr operator[](const BoostGraph::edge_descriptor& d) const;
+        
+        StropPtr operator[](const BoostGraph::vertex_descriptor& d) const
+        {
+            return boost::get(StropTag(), *this)[d];
+        }
+        
+        StreamPtr operator[](const BoostGraph::edge_descriptor& d) const
+        {
+            return boost::get(StreamTag(), *this)[d];
+        }	
     };
     
     

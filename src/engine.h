@@ -21,15 +21,17 @@
 
 #pragma once
 
-#include <boost/graph/graphviz.hpp>
-#include <boost/graph/depth_first_search.hpp>
-#include <boost/utility.hpp>
-
 #include "graph.h"
 #include "strop.h"
 #include "grammar.h"
 #include "strop_stream_generator.h"
 #include "subscription.h"
+
+#include <boost/graph/graphviz.hpp>
+#include <boost/graph/depth_first_search.hpp>
+#include <boost/utility.hpp>
+
+#include <iostream>
 
 namespace streamulus
 {
@@ -40,21 +42,80 @@ namespace streamulus
     {
     public:
         
-        Engine();
+        Engine()
+            : mWorking(false)
+            , mCurrentTime(0)
+        {
+        };
         
         
-        void AddVertexToGraph(const StropPtr& strop);
+        void AddVertexToGraph(const StropPtr& strop)
+        {
+            boost::add_vertex(strop, mGraph);
+            GraphChanged();
+        }
         
-        void AddSource(const StropPtr& strop);        
-
-        bool ReplaceStrop(const StropPtr& strop, const StropPtr& new_strop);
+        void AddSource(const StropPtr& strop)
+        {
+            mSources.push_back(strop);
+        }
+        
+        bool ReplaceStrop(const StropPtr& strop, const StropPtr& new_strop)
+        {
+            if (strop->GetEngine() != this)
+                return false;
+            
+            new_strop->SetGraph(strop->GetEngine(), 
+                                strop->GetDescriptor(), 
+                                strop->GetTopSortIndex());
+            
+            mGraph[strop->GetDescriptor()] = new_strop;
+            
+            strop->SetGraph(NULL, 0, 0); 
+            return true;
+        }
         
         void AddEdgeToGraph(const BoostGraph::vertex_descriptor& source, 
-                            const BoostGraph::vertex_descriptor& target,
-                            const StreamPtr& stream);        
+                                    const BoostGraph::vertex_descriptor& target,
+                                    const StreamPtr& stream)
+        {
+            Graph::edge_descriptor desc = boost::add_edge(source, target, stream, mGraph).first;
+            GraphChanged();
+        }
         
-
-        void Work();
+        
+        void Work()
+        {
+            if (mWorking)
+                return;
+            mWorking = true;
+            
+            
+            // std::cout << "Work called. mQueue.size() = " << mQueue.size() << std::endl;
+            while (!mQueue.empty())
+            {
+                std::set<QueueEntry>::iterator it = mQueue.begin();
+                mCurrentTime = std::max(mCurrentTime,it->mTime);
+                
+                StropPtr strop(mGraph[it->mVertexDescriptor]);
+                if (strop->Work())
+                {
+                    // activate successors
+                    BoostGraph::out_edge_iterator out_it, out_it_end;
+                    for (boost::tie(out_it, out_it_end) = boost::out_edges(it->mVertexDescriptor, mGraph); 
+                         out_it != out_it_end; 
+                         ++out_it )
+                    {
+                        BoostGraph::edge_descriptor edge(*out_it);
+                        BoostGraph::vertex_descriptor target(boost::target(edge,mGraph));
+                        ActivateVertex(mGraph[target]);
+                    }
+                }
+                strop->SetIsActive(false);
+                mQueue.erase(it);
+            }
+            mWorking = false;
+        }
         
         inline bool IsVerbose()
         {
@@ -111,12 +172,30 @@ namespace streamulus
             Work();            
         }
         
-        void ActivateVertex(const BoostGraph::vertex_descriptor& vertex);
+        void ActivateVertex(const BoostGraph::vertex_descriptor& vertex)
+        {
+            ActivateVertex(mGraph[vertex]);
+        }
         
-        void ActivateVertex(const StropPtr& strop);
+        void ActivateVertex(const StropPtr& strop)
+        {
+            assert(strop->GetEngine());
+            if (!strop->GetEngine())
+                return;
+            
+            if (strop->IsActive())
+                return;
+            mQueue.insert(QueueEntry(mCurrentTime++, strop->GetTopSortIndex(), strop->GetDescriptor()));
+            strop->SetIsActive(true);
+        }
         
-        void ActivateSources();        
-        
+        void ActivateSources()
+        {
+            if (IsVerbose())
+                std::cout << "Activate sources: mSources.size() = " << mSources.size() << std::endl;
+            for (std::vector<StropPtr>::iterator it = mSources.begin(); it != mSources.end(); ++it)
+                ActivateVertex(*it);
+        }        
 
         struct TopologicalSortVisitor : public boost::default_dfs_visitor
         {  // Reset descriptors and recompute topological order labels in the graph:
@@ -145,7 +224,12 @@ namespace streamulus
             EngineApi* mEngine;
         };
         
-        void GraphChanged();
+        void GraphChanged()
+        {
+            TopologicalSortVisitor vis(mGraph, this);
+            boost::depth_first_search(mGraph, boost::visitor(vis));
+        }
+        
         
         typedef long TimestampT;
 
@@ -190,7 +274,15 @@ namespace streamulus
             Graph& mGraph;
         };
         
-        void WriteGraph(const std::string& filename);
+        void WriteGraph(const std::string& filename)
+        {
+            if (IsVerbose())
+                std::cout << "Writing graph to " << filename << std::endl;
+            std::ofstream file;
+            file.open (filename.c_str());
+            boost::write_graphviz(file, mGraph, VertexPropertyWriter(mGraph));
+            file.close();
+        }
 
         std::set<QueueEntry> mQueue;
         TimestampT mCurrentTime;
