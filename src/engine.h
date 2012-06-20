@@ -122,13 +122,21 @@ namespace streamulus
             return mVerbose;
         }
 
-        
-        template<typename R, typename Expr>
-        const typename Subscription<R>::type
+        template<typename Expr>
+        struct ExpressionResultType
+        {
+            // Get the type of the strop created by the expression
+            typedef typename boost::result_of<smls_grammar(const Expr&, Engine*)>::type result_strop_type;
+            // Extract the output type
+            typedef typename StropReturnType<result_strop_type>::type type;            
+        };
+
+        template<typename Expr>
+        const typename Subscription<typename ExpressionResultType<Expr>::type>::type
         Subscribe(const Expr &expr)
         {
-            typedef typename Subscription<R>::strop_type ResultType;
-
+            typedef typename ExpressionResultType<Expr>::type R;
+            
             if (IsVerbose())
                 std::cout << "Engine::Parse()" << std::endl;
             
@@ -138,29 +146,11 @@ namespace streamulus
             BOOST_MPL_ASSERT(( boost::proto::matches<Expr, smls_grammar> ));
             
             // add the expression to the graph
-          
-            ResultType result = smls_grammar()(expr, this);
-            
+            typedef typename Subscription<R>::strop_type ResultStropType;
+            ResultStropType result = smls_grammar()(expr, this);
+                     
             StartEngine();
             return proto::lit(result);
-        }
-
-        template<typename Expr>
-        void Subscribe(const Expr &expr)
-        {
-            if (IsVerbose())
-            {
-                std::cout << "Engine::Parse()" << std::endl;
-                boost::proto::display_expr(expr);
-            }
-            
-            // Make sure the expression conforms to our grammar
-            BOOST_MPL_ASSERT(( boost::proto::matches<Expr, smls_grammar> ));
-            
-            // add the expression to the graph
-            smls_grammar()(expr, this);
-            
-            StartEngine();
         }
         
     private:

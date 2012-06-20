@@ -91,7 +91,7 @@ void common_subexpressions()
     // which can be used in other streamulus expressions. 
     // 
     Subscription<std::string>::type greeting = 
-        streamulus_engine.Subscribe<std::string>(Streamify<print>(hello + s + exc));
+        streamulus_engine.Subscribe(Streamify<print>(hello + s + exc));
     
     // Use the 'greeting' variable in other streamulus expressions. 
     streamulus_engine.Subscribe(Streamify<print>(std::string("I said: ") + greeting ));

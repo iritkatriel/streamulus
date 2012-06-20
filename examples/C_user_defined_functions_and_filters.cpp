@@ -278,8 +278,8 @@ void cross_alert_example()
     Mavg mavg1(1);
     Mavg mavg10(10);
     
-    Subscription<double>::type slow = engine.Subscribe<double>(Streamify(mavg1)(ts));
-    Subscription<double>::type fast = engine.Subscribe<double>(Streamify(mavg10)(ts));
+    Subscription<double>::type slow = engine.Subscribe(Streamify(mavg1)(ts));
+    Subscription<double>::type fast = engine.Subscribe(Streamify(mavg10)(ts));
 
     // print and cross_alert are streamified from the types (this work because they 
     // can be default constructed).
