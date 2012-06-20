@@ -68,7 +68,7 @@ struct print
     }
 };
 
-
+void common_subexpressions();
 void common_subexpressions()
 {
     using namespace streamulus;

@@ -87,7 +87,6 @@ namespace streamulus
     template<> struct BinaryOpCases::case_<proto::tag::bitwise_or>    : proto::bitwise_or    <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::bitwise_and>   : proto::bitwise_and   <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::bitwise_xor>   : proto::bitwise_xor   <smls_grammar,smls_grammar> {};
-    template<> struct BinaryOpCases::case_<proto::tag::comma>         : proto::comma         <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::subscript>     : proto::subscript     <smls_grammar,smls_grammar> {};    
     template<> struct BinaryOpCases::case_<proto::tag::assign>             : proto::assign             <smls_grammar,smls_grammar> {};
     template<> struct BinaryOpCases::case_<proto::tag::shift_left_assign>  : proto::shift_left_assign  <smls_grammar,smls_grammar> {};
@@ -113,7 +112,8 @@ namespace streamulus
     // Disabling the address-of operator. It is a special case in proto and is problematic to 
     // support. It is also a bit nonsensical for streams.
     template<> struct UnsupportedOpCases::case_<proto::tag::address_of>  : proto::address_of <smls_grammar>  {};
-    
+    template<> struct UnsupportedOpCases::case_<proto::tag::comma>       : proto::comma      <smls_grammar,smls_grammar> {};
+
     
     // ************************************** RULES **************************************
     

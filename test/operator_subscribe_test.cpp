@@ -126,10 +126,7 @@ namespace streamulus
         
         v1=v1_; v2=v2_; RunTest(t1 ^ t2, v1 ^ v2);
         v1=v1_; v2=v2_; RunTest(t2 ^ t1, v2 ^ v1);
-        
-        v1=v1_; v2=v2_; RunTest((t1 , t2), (v1 , v2));
-        v1=v1_; v2=v2_; RunTest((t2 , t1), (v2 , v1));
-        
+                
         v1=v1_; v2=v2_; RunTest((t1 = t2), (v1 = v2));
         v1=v1_; v2=v2_; RunTest((t2 = t1), (v2 = v1));
         
@@ -178,7 +175,6 @@ namespace streamulus
         int v1_=7;
         int v1=v1_;
         proto::terminal<int>::type t1 = {v1};
-        proto::terminal<int*>::type p1 = {&v1};
         
         v1=v1_; RunTest(t1 << 2, v1 << 2);
         v1=v1_; RunTest(2 << t1, 2 << v1);
@@ -218,13 +214,7 @@ namespace streamulus
         
         v1=v1_; RunTest(t1 != 2, v1 != 2);
         v1=v1_; RunTest(2 != t1, 2 != v1);
-        
-        v1=v1_; RunTest(t1 || 2, v1 || 2);
-        v1=v1_; RunTest(2 || t1, 2 || v1);
-        
-        v1=v1_; RunTest(t1 && 2, v1 && 2);
-        v1=v1_; RunTest(2 && t1, 2 && v1);
-        
+                
         v1=v1_; RunTest(t1 | 2, v1 | 2);
         v1=v1_; RunTest(2 | t1, 2 | v1);
         
@@ -233,10 +223,7 @@ namespace streamulus
         
         v1=v1_; RunTest(t1 ^ 2, v1 ^ 2);
         v1=v1_; RunTest(2 ^ t1, 2 ^ v1);
-        
-        v1=v1_; RunTest((t1 , 2), (v1 , 2));
-        v1=v1_; RunTest((2 , t1), (2 , v1));
-        
+                
         v1=v1_; RunTest((t1 = 2), (v1 = 2));
         
         v1=v1_; RunTest(t1 <<= 2, v1 <<= 2);

@@ -102,10 +102,7 @@ namespace streamulus
         
         i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_xor>()(i,j) == (iexp^jexp)); Check(i==iexp); Check(j==jexp);
         i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::bitwise_xor>()(j,i) == (jexp^iexp)); Check(i==iexp); Check(j==jexp);
-        
-        i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::comma>()(i,j) == (iexp,jexp)); Check(i==iexp); Check(j==jexp);
-        i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::comma>()(j,i) == (jexp,iexp)); Check(i==iexp); Check(j==jexp);
-        
+                
         i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::assign>()(i,j) == (iexp=jexp)); Check(i==iexp); Check(j==jexp);
         i=iexp=i0; j=jexp=j0; Check(functor_of<bp::tag::assign>()(j,i) == (jexp=iexp)); Check(i==iexp); Check(j==jexp);
         
