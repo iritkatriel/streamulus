@@ -37,18 +37,18 @@ namespace streamulus
     };
     
     
-    void Engine::AddVertexToGraph(StropPtr strop)
+    void Engine::AddVertexToGraph(const StropPtr& strop)
     {
         boost::add_vertex(strop, mGraph);
         GraphChanged();
     }
     
-    void Engine::AddSource(StropPtr strop)
+    void Engine::AddSource(const StropPtr& strop)
     {
         mSources.push_back(strop);
     }
     
-    bool Engine::ReplaceStrop(StropPtr strop, StropPtr new_strop)
+    bool Engine::ReplaceStrop(const StropPtr& strop, const StropPtr& new_strop)
     {
         if (strop->GetEngine() != this)
             return false;
@@ -64,8 +64,8 @@ namespace streamulus
     }
 
     
-    void Engine::AddEdgeToGraph(BoostGraph::vertex_descriptor source, 
-                                BoostGraph::vertex_descriptor target,
+    void Engine::AddEdgeToGraph(const BoostGraph::vertex_descriptor& source, 
+                                const BoostGraph::vertex_descriptor& target,
                                 const StreamPtr& stream)
     {
         Graph::edge_descriptor desc = boost::add_edge(source, target, stream, mGraph).first;
@@ -107,13 +107,14 @@ namespace streamulus
     }
     
     
-    void Engine::ActivateVertex(BoostGraph::vertex_descriptor vertex)
+    void Engine::ActivateVertex(const BoostGraph::vertex_descriptor& vertex)
     {
         ActivateVertex(mGraph[vertex]);
     }
     
-    void Engine::ActivateVertex(StropPtr strop)
+    void Engine::ActivateVertex(const StropPtr& strop)
     {
+        assert(strop->GetEngine());
         if (!strop->GetEngine())
             return;
         
