@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Streamulus : A C++ DSEL for
+      real-time event stream processing">
+    <link rel="stylesheet" type="text/css" media="screen"
+      href="stylesheets/stylesheet.css">
+    <title>Streamulus</title>
+  </head>
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+      <header class="inner"> <a id="forkme_banner"
+          href="https://github.com/iritkatriel/streamulus">View on
+          GitHub</a>
+        <h3 style="text-align: left;"><img style=" width: 250px; height:
+            100px;" alt=""
+src="file:///Users/iritkatriel/src/streamulus/website/streamulus/streamulus_logo.png"></h3>
+        <h1 id="project_title">Streamulus</h1>
+        <h2 id="project_tagline">A C++ Embedded Language for Event
+          Stream Processing</h2>
+        <section id="downloads"> <a class="zip_download_link"
+            href="https://github.com/iritkatriel/streamulus/zipball/master">Download
+
+
+
+
+            this project as a .zip file</a> <a
+            class="tar_download_link"
+            href="https://github.com/iritkatriel/streamulus/tarball/master">Download
+
+
+
+
+            this project as a tar.gz file</a> </section>
+      </header>
+    </div>
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>Hello Stream!</h2>
+        <p>We are going to write a program that receives a stream of
+          strings and needs to say hello to each of them. First we write
+          a functor that prints a string:<br>
+        </p>
+        <pre>struct print <br>{&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; // Boost result-of protocol (not necessary in C++11)
+&nbsp;&nbsp;&nbsp; template&lt;class Sig&gt; <br>    struct result<br>&nbsp;&nbsp;&nbsp; {<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typedef std::string type; <br>&nbsp;&nbsp;&nbsp; };<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; // The actual function<br>&nbsp;&nbsp;&nbsp; std::string operator()(const std::string&amp; str) const<br>&nbsp;&nbsp;&nbsp; { <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; std::cout &lt;&lt; str &lt;&lt; std::endl;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return str;<br>&nbsp;&nbsp;&nbsp; }<br>};<br></pre>
+        <p>Then we create an input stream:<br>
+        </p>
+        <pre>InputStream&lt;std::string&gt;::type input = <br>	             NewInputStream&lt;std::string&gt;("Give It A Name");</pre>
+        <p>Finally, we create a Streamulus engine instance and subscribe
+          an expression that computes a greeting from each input, and
+          prints it:<br>
+        </p>
+        <pre>Streamulus streamulus_engine;            <br>    <br>std::string hello("Hello "), exc("!");  // string constants<br><big><span style="font-weight: bold;">streamulus_engine.Subscribe(Streamify&lt;print&gt;(hello + input + exc));  </span>  </big><br></pre>
+        <p>All that remains is to insert the strings to the input
+          stream. This is done by calls to InputStreamPut, as follows:<br>
+        </p>
+        <pre>InputStreamPut&lt;std::string&gt;(input, "World");<br>InputStreamPut&lt;std::string&gt;(input, "London");<br>InputStreamPut&lt;std::string&gt;(input, "Streamulus");    
+</pre>
+        <p>For this stream, our program will print <br>
+        </p>
+        <pre>Hello World!<br>Hello London!<br>Hello Streamulus!<br></pre>
+        <h5><br>
+        </h5>
+        The Subscribe function call is where it all happens. The
+        parameter to this function is a Streamulus expression that
+        applies two types of stream operators to its inputs: The
+        built-in <span style="font-style: italic;">+</span> operator
+        and the user-defined <span style="font-style: italic;">Streamify&lt;print&gt;</span>
+        operator. Note that <span style="font-style: italic;">print</span>
+        is a scalar function, but <span style="font-style: italic;">Streamify&lt;print&gt;</span>
+        is a stream operator. Streamify is a template that Streamulus
+        provides for this purpose. <br>
+        <br>
+        Subscribe transforms the expression into a data structure that
+        computes the expression over an infinite stream of inputs. The
+        example above is very simple, but it gets much more
+        interesting.&nbsp; </section>
+    </div>
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Streamulus maintained by <a
+            href="https://github.com/iritkatriel">iritkatriel</a> <br>
+        </p>
+        <p>Published with <a href="http://pages.github.com">GitHub
+            Pages</a></p>
+      </footer>
+    </div>
+    <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+    <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-30902782-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+  </body>
+</html>
