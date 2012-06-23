@@ -271,7 +271,7 @@ void cross_alert_example()
 {
     using namespace streamulus;
     
-    InputStream<TimeValue>::type ts = NewInputStream<TimeValue>("TS");
+    InputStream<TimeValue>::type ts = NewInputStream<TimeValue>("TS", true /* verbose */);
     Streamulus engine;
 
     // The moving averages are streamified from the function objects.

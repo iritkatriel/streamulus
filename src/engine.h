@@ -45,6 +45,7 @@ namespace streamulus
         Engine()
             : mWorking(false)
             , mCurrentTime(0)
+            , mVerbose(false)
         {
         };
         
@@ -136,11 +137,9 @@ namespace streamulus
         Subscribe(const Expr &expr)
         {
             typedef typename ExpressionResultType<Expr>::type R;
-            
+                        
             if (IsVerbose())
-                std::cout << "Engine::Parse()" << std::endl;
-            
-            boost::proto::display_expr(expr);
+                boost::proto::display_expr(expr);
             
             // Make sure the expression conforms to our grammar
             BOOST_MPL_ASSERT(( boost::proto::matches<Expr, smls_grammar> ));

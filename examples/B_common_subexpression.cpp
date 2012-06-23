@@ -73,7 +73,7 @@ void common_subexpressions()
 {
     using namespace streamulus;
 
-    InputStream<std::string>::type s = NewInputStream<std::string>("Input Stream");
+    InputStream<std::string>::type s = NewInputStream<std::string>("Input Stream", true /* verbose */);
     
     // Construct a streamulus instance
     Streamulus streamulus_engine;            

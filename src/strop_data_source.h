@@ -35,9 +35,10 @@ namespace streamulus
         
         typedef R result_type;
         
-        DataSource(const char* name)
+        DataSource(const char* name, bool verbose)
         : mName(name)
         , mIsValid(false)
+        , mIsVerbose(verbose)
         {
         }
                 
@@ -48,10 +49,16 @@ namespace streamulus
                 result = mLastValue;
             return mIsValid;
         }
+            
+        inline bool IsVerbose()
+        {
+            return mIsVerbose;
+        }
         
         void Tick(const R& value)
         {
-            std::cout << "-------------   " << mName << " <-- " << value << "   -------------" << std::endl;
+            if (IsVerbose())
+                std::cout << "-------------   " << mName << " <-- " << value << "   -------------" << std::endl;
             StropStreamGenerator<R>::Output(value); 
             mLastValue = value;
             mIsValid = true;
@@ -67,6 +74,7 @@ namespace streamulus
         std::string mName; 
         R           mLastValue;
         bool        mIsValid;
+        bool        mIsVerbose;
     };
     
 } // ns streamulus

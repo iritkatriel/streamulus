@@ -38,9 +38,9 @@ namespace streamulus
 
     // Create a new stream
     template<typename T>
-    typename InputStream<T>::type NewInputStream(const char* name)
+    typename InputStream<T>::type NewInputStream(const char* name, bool verbose)
     {
-        return boost::proto::lit(boost::make_shared<DataSource<T> >(name));
+        return boost::proto::lit(boost::make_shared<DataSource<T> >(name, verbose));
     }
 
     // Add an input to the stream
