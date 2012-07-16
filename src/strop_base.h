@@ -85,7 +85,7 @@ namespace streamulus
         
         virtual std::string DisplayName() const=0;
         
-        virtual bool Work()=0;
+        virtual void Work()=0;
         
         friend std::ostream& operator<<(std::ostream& os, const StropBase& strop)
         {

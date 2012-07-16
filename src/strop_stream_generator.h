@@ -44,14 +44,11 @@ namespace streamulus
         virtual bool Compute(R& result)=0;
         
         // return true if you put any data on output streams, false otherwise
-        virtual bool Work()
+        virtual void Work()
         {            
             R res;
-            if (! Compute(res))
-                return false;
-                        
-            Output(res);
-            return true;
+            if (Compute(res))
+                Output(res);
         }
         
         void Output(const R& value)

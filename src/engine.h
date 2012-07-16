@@ -99,19 +99,7 @@ namespace streamulus
                 mCurrentTime = std::max(mCurrentTime,it->mTime);
                 
                 StropPtr strop(mGraph[it->mVertexDescriptor]);
-                if (strop->Work())
-                {
-                    // activate successors
-                    BoostGraph::out_edge_iterator out_it, out_it_end;
-                    for (boost::tie(out_it, out_it_end) = boost::out_edges(it->mVertexDescriptor, mGraph); 
-                         out_it != out_it_end; 
-                         ++out_it )
-                    {
-                        BoostGraph::edge_descriptor edge(*out_it);
-                        BoostGraph::vertex_descriptor target(boost::target(edge,mGraph));
-                        ActivateVertex(mGraph[target]);
-                    }
-                }
+                strop->Work();
                 strop->SetIsActive(false);
                 mQueue.erase(it);
             }
