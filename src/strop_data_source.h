@@ -42,12 +42,11 @@ namespace streamulus
         {
         }
                 
-        virtual bool Compute(R& result)
+        virtual void Work()
         {
             // Return the last tick's value. 
             if (mIsValid)
-                result = mLastValue;
-            return mIsValid;
+                StropStreamProducer<R>::Output(mLastValue);
         }
             
         inline bool IsVerbose()

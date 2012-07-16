@@ -40,15 +40,6 @@ namespace streamulus
         virtual ~StropStreamProducer() 
         {
         }
-
-        virtual bool Compute(R& result)=0;
-        
-        virtual void Work()
-        {            
-            R res;
-            if (Compute(res))
-                Output(res);
-        }
         
         void Output(const R& value)
         {

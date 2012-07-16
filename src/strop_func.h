@@ -56,7 +56,7 @@ namespace streamulus
         {
         }
         
-        bool Compute(R& result)
+        virtual void Work()
         {
             A1 a1;
 
@@ -71,10 +71,7 @@ namespace streamulus
             }
             
             if (output_exists)
-            {
-                result = mFunction(a1);               
-            }
-            return output_exists;
+                StropStreamProducer<R>::Output(mFunction(a1));
         }
         
     private:
@@ -94,7 +91,7 @@ namespace streamulus
         {
         }
 
-        bool Compute(R& result)
+        virtual void Work()
         {
             A1 a1;
             A2 a2;
@@ -112,8 +109,7 @@ namespace streamulus
             }
             
             if (output_exists)
-                result = mFunction(a1,a2);
-            return output_exists;
+                StropStreamProducer<R>::Output(mFunction(a1,a2));
         }
                 
     private:
@@ -134,7 +130,7 @@ namespace streamulus
         {
         }
         
-        bool Compute(R& result)
+        virtual void Work()
         {
             A1 a1;
             A2 a2;
@@ -155,8 +151,7 @@ namespace streamulus
             }
             
             if (output_exists)
-                result = mFunction(a1,a2,a3);
-            return output_exists;
+                StropStreamProducer<R>::Output(mFunction(a1,a2,a3));
         }
         
     private:
@@ -178,7 +173,7 @@ namespace streamulus
         {
         }
 
-        bool Compute(R& result)
+        virtual void Work()
         {
             A1 a1;
             A2 a2;
@@ -202,8 +197,7 @@ namespace streamulus
             }
             
             if (output_exists)
-                result = mFunction(a1,a2,a3,a4);
-            return output_exists;
+                StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4));
         }
         
     private:
@@ -226,7 +220,7 @@ namespace streamulus
         {
         }
 
-        bool Compute(R& result)
+        virtual void Work()
         {
             A1 a1;
             A2 a2;
@@ -253,8 +247,7 @@ namespace streamulus
             }
             
             if (output_exists)
-                result = mFunction(a1,a2,a3,a4,a5);
-            return output_exists;
+                StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4,5));
         }
 
     private:

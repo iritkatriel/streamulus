@@ -42,10 +42,9 @@ namespace streamulus
         {
         }
                 
-        virtual bool Compute(T& result)
+        virtual void Work()
         {
-            result = mValue;
-            return true;
+            StropStreamProducer<T>::Output(mValue);
         }
 
         virtual std::string DisplayName() const
