@@ -43,7 +43,6 @@ namespace streamulus
 
         virtual bool Compute(R& result)=0;
         
-        // return true if you put any data on output streams, false otherwise
         virtual void Work()
         {            
             R res;
