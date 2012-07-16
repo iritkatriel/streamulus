@@ -23,12 +23,10 @@
 
 // Transforms for streamulus grammar
 
-#include "engine.h"
 #include "stream.h"
 #include "strop.h"
 #include "strop_const.h"
 #include "strop_func.h"
-#include "engine_api.h"
 #include "input_stream.h"
 #include "strop_return_type.h"
 
@@ -70,8 +68,8 @@ namespace streamulus
             typedef StropType type;
         };
         
-        template<typename StropType>
-        const StropType operator()(StropType strop, EngineApi* engine)
+        template<typename StropType, class State>
+        const StropType operator()(StropType strop, State engine)
         {
             if (engine->IsVerbose())
                 std::cout << "AddStropToGraph: strop=" << strop << std::endl;

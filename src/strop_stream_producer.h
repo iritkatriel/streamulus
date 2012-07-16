@@ -21,8 +21,9 @@
 
 #pragma once
 
-#include "strop_base.h" 
+#include "engine.h" 
 #include "stream.h" 
+#include "strop_base.h" 
 
 #include <boost/make_shared.hpp>
 
@@ -43,7 +44,7 @@ namespace streamulus
         
         void Output(const R& value)
         {
-            mEngine->Output<R>(mVertexDescriptor,value);
+            GetEngine()->template Output<R>(mVertexDescriptor,value);
         }        
         
         typedef boost::shared_ptr< Stream<R> > OutputStreamPtr;

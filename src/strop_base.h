@@ -21,10 +21,9 @@
 
 #pragma once
 
-#include "engine_api.h" 
-
 namespace streamulus
 {
+    class Engine;
     
     class StropBase 
     {
@@ -60,12 +59,12 @@ namespace streamulus
             return mTopSortIndex;
         }
         
-        EngineApi* GetEngine()
+        Engine* GetEngine()
         {
             return mEngine;
         }
         
-        void SetGraph(EngineApi* engine, const Graph::vertex_descriptor& desc, size_t top_sort_index)
+        void SetGraph(Engine* engine, const Graph::vertex_descriptor& desc, size_t top_sort_index)
         {
             assert(mEngine==NULL || engine==NULL || engine == mEngine);
             mEngine = engine; 
@@ -102,7 +101,7 @@ namespace streamulus
 
     protected:
         
-        EngineApi* mEngine; // no ownership. Do not delete. 
+        Engine* mEngine; // no ownership. Do not delete. 
         Graph::vertex_descriptor mVertexDescriptor;
         size_t mTopSortIndex;
         bool mIsActive;

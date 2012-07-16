@@ -25,6 +25,7 @@
 #include "strop.h"
 #include "grammar.h"
 #include "subscription.h"
+#include "stream.h"
 
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/depth_first_search.hpp>
@@ -35,9 +36,7 @@
 namespace streamulus
 {
     
-    class Engine 
-        : public EngineApi
-        , public boost::noncopyable
+    class Engine : public boost::noncopyable
     {
     public:
         
@@ -83,6 +82,25 @@ namespace streamulus
             GraphChanged();
         }
         
+        
+        template<typename T>
+        void Output(const BoostGraph::vertex_descriptor& source, const T& value)
+        {
+            BoostGraph::out_edge_iterator it, it_end;
+            
+            for (boost::tie(it,it_end) = boost::out_edges(source, mGraph); it != it_end; ++it)
+            {
+                BoostGraph::edge_descriptor edge(*it);
+                
+                // Put the data on the edge's stream 
+                StreamPtr stream(mGraph[edge]);
+                static_cast<Stream<T>*>(stream.get())->Append(value);
+                
+                ActivateVertex(boost::target(edge, mGraph));
+            }
+            Work();
+        }
+
         
         void Work()
         {
@@ -176,7 +194,7 @@ namespace streamulus
         struct TopologicalSortVisitor : public boost::default_dfs_visitor
         {  // Reset descriptors and recompute topological order labels in the graph:
         public:
-            TopologicalSortVisitor(Graph & g, EngineApi* engine)
+            TopologicalSortVisitor(Graph & g, Engine* engine)
             : mIndex(boost::num_vertices(g))
             , mGraph(g)
             , mEngine(engine)
@@ -197,7 +215,7 @@ namespace streamulus
         private:
             size_t mIndex;
             Graph& mGraph;
-            EngineApi* mEngine;
+            Engine* mEngine;
         };
         
         void GraphChanged()
@@ -260,6 +278,7 @@ namespace streamulus
             file.close();
         }
 
+        Graph mGraph;
         std::set<QueueEntry> mQueue;
         TimestampT mCurrentTime;
         bool mWorking;    
@@ -267,5 +286,6 @@ namespace streamulus
         bool mVerbose;
 
     };
+        
     
 } // ns streamulus

@@ -40,11 +40,7 @@ namespace streamulus
             ss << "Const" << mValue;
             StropStreamProducer<T>::SetDisplayName(ss.str());
         }
-        
-        virtual ~Const()
-        {
-        }
-                
+                        
         virtual void Work()
         {
             StropStreamProducer<T>::Output(mValue);
