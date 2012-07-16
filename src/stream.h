@@ -65,19 +65,15 @@ namespace streamulus
             return !(mBuffer.empty() && mHistory.empty());
         }
         
-        bool Current(T& value)
+        const T& Current()
         {
             if (!mBuffer.empty())
-            {
-                value = Top();
-                return true;
-            }
-            // No new data - return last (if exists)
-            if (mHistory.empty())
-                return false;
+                return Top();
+
+            assert(! mHistory.empty());
             
-            value = mHistory.back();
-            return true;
+            // No new data - return last
+            return mHistory.back();
         }
         
         const T& Top()

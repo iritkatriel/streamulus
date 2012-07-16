@@ -49,9 +49,9 @@ namespace streamulus
         }
         
         template<typename Tinput, int I>
-        boost::shared_ptr<Stream<Tinput> > Input()
+        Stream<Tinput>* const Input()
         {
-            return boost::fusion::at_c<I>(mInputs);
+            return boost::fusion::at_c<I>(mInputs).get();
         }
         
                         
