@@ -83,13 +83,21 @@ namespace streamulus
             mIsActive = isActive;
         }
         
-        virtual std::string DisplayName() const=0;
+        virtual const std::string& DisplayName() const
+        {
+            return mDisplayName;
+        }
         
+        virtual void SetDisplayName(const std::string& name)
+        {
+            mDisplayName = name;
+        }
+
         virtual void Work()=0;
         
         friend std::ostream& operator<<(std::ostream& os, const StropBase& strop)
         {
-            return os << strop.mDisplayName;    
+            return os << strop.DisplayName();    
         }
 
     protected:

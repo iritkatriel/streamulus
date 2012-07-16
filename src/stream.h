@@ -45,11 +45,7 @@ namespace streamulus
         {
             assert(history>0);
         }
-        
-        virtual ~Stream()
-        {
-        }
-        
+                
         void Append(const T& item)
         {
             mBuffer.push_back(item);

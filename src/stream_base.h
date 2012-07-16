@@ -33,11 +33,7 @@ namespace streamulus
         , mIsFeedbackEdge(false)
         {
         }
-        
-        virtual ~StreamBase()
-        {
-        }
-        
+                 
         const Graph::edge_descriptor& Descriptor() const
         {
             return mEdgeDescriptor;

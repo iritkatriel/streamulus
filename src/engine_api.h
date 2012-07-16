@@ -50,7 +50,7 @@ namespace streamulus
                 
                 // Put the data on the edge's stream 
                 StreamPtr stream(mGraph[edge]);
-                dynamic_cast<Stream<T>*>(stream.get())->Append(value);
+                static_cast<Stream<T>*>(stream.get())->Append(value);
                 
                 ActivateVertex(boost::target(edge, mGraph));
             }

@@ -36,10 +36,10 @@ namespace streamulus
         typedef R result_type;
         
         DataSource(const char* name, bool verbose)
-        : mName(name)
-        , mIsValid(false)
+        : mIsValid(false)
         , mIsVerbose(verbose)
         {
+            StropStreamProducer<R>::SetDisplayName(name);
         }
                 
         virtual void Work()
@@ -57,20 +57,15 @@ namespace streamulus
         void Tick(const R& value)
         {
             if (IsVerbose())
-                std::cout << "-------------   " << mName << " <-- " << value << "   -------------" << std::endl;
+                std::cout << "-------------   " 
+                          << StropStreamProducer<R>::DisplayName() << " <-- " 
+                          << value << "   -------------" << std::endl;
             StropStreamProducer<R>::Output(value); 
             mLastValue = value;
             mIsValid = true;
         }
-        
-        virtual std::string DisplayName() const
-        {
-            return mName;
-        }
-        
-        
+                
     private:
-        std::string mName; 
         R           mLastValue;
         bool        mIsValid;
         bool        mIsVerbose;

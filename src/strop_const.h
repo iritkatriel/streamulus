@@ -36,6 +36,9 @@ namespace streamulus
         Const(const T& v)
 		: mValue(v)
         {
+            std::stringstream ss;
+            ss << "Const" << mValue;
+            StropStreamProducer<T>::SetDisplayName(ss.str());
         }
         
         virtual ~Const()
@@ -45,13 +48,6 @@ namespace streamulus
         virtual void Work()
         {
             StropStreamProducer<T>::Output(mValue);
-        }
-
-        virtual std::string DisplayName() const
-        {
-            std::stringstream ss;
-            ss << "Const" << mValue;
-            return ss.str();
         }
         
 

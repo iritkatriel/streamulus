@@ -34,11 +34,11 @@ namespace streamulus
     class FuncBase : public Strop<Sig>
     {
     public:
-        virtual std::string DisplayName() const
+        FuncBase()
         {
             std::stringstream ss;
             ss << "Func_" << "F";
-            return ss.str();
+            Strop<Sig>::SetDisplayName(ss.str());
         }
     };
     
