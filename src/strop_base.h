@@ -82,12 +82,12 @@ namespace streamulus
             mIsActive = isActive;
         }
         
-        virtual const std::string& DisplayName() const
+        const std::string& DisplayName() const
         {
             return mDisplayName;
         }
         
-        virtual void SetDisplayName(const std::string& name)
+        void SetDisplayName(const std::string& name)
         {
             mDisplayName = name;
         }
