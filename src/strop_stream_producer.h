@@ -30,14 +30,14 @@ namespace streamulus
 {
     
     template<typename R> 
-    class StropStreamGenerator
+    class StropStreamProducer
     : public StropBase
     {
     public:
         
         typedef R result_type;
         
-        virtual ~StropStreamGenerator() 
+        virtual ~StropStreamProducer() 
         {
         }
 

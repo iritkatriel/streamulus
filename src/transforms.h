@@ -96,7 +96,7 @@ namespace streamulus
         struct result<This(T,State)>
         {
             typedef typename boost::remove_const<typename boost::remove_reference<T>::type>::type ConstType;
-            typedef const boost::shared_ptr<StropStreamGenerator<ConstType> > type;
+            typedef const boost::shared_ptr<StropStreamProducer<ConstType> > type;
         };
         
         template<typename T, class State>

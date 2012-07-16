@@ -23,13 +23,13 @@
 
 #include <iostream>
 
-#include "strop_stream_generator.h"
+#include "strop_stream_producer.h"
 
 namespace streamulus
 {    
     
     template<typename R>
-    class DataSource : public StropStreamGenerator<R>  
+    class DataSource : public StropStreamProducer<R>  
     {
     public:
         
@@ -42,7 +42,7 @@ namespace streamulus
         {
         }
                 
-        bool Compute(R& result)
+        virtual bool Compute(R& result)
         {
             // Return the last tick's value. 
             if (mIsValid)
@@ -59,7 +59,7 @@ namespace streamulus
         {
             if (IsVerbose())
                 std::cout << "-------------   " << mName << " <-- " << value << "   -------------" << std::endl;
-            StropStreamGenerator<R>::Output(value); 
+            StropStreamProducer<R>::Output(value); 
             mLastValue = value;
             mIsValid = true;
         }

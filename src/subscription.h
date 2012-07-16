@@ -21,12 +21,14 @@
 
 #pragma once 
 
+#include "strop_stream_producer.h"
+
 namespace streamulus {
     
 template<typename T>
 struct Subscription
 {
-    typedef const boost::shared_ptr<StropStreamGenerator<T> > strop_type;
+    typedef const boost::shared_ptr<StropStreamProducer<T> > strop_type;
     typedef const boost::proto::literal<strop_type> type;
 };
 

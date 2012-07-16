@@ -23,13 +23,13 @@
 
 #include <sstream>
 
-#include "strop_stream_generator.h"
+#include "strop_stream_producer.h"
 
 namespace streamulus
 {    
         
     template<typename T>
-    class Const : public StropStreamGenerator<T> 
+    class Const : public StropStreamProducer<T> 
     {
     public:
         
@@ -42,7 +42,7 @@ namespace streamulus
         {
         }
                 
-        bool Compute(T& result)
+        virtual bool Compute(T& result)
         {
             result = mValue;
             return true;

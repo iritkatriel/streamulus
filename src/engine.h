@@ -24,7 +24,6 @@
 #include "graph.h"
 #include "strop.h"
 #include "grammar.h"
-#include "strop_stream_generator.h"
 #include "subscription.h"
 
 #include <boost/graph/graphviz.hpp>

@@ -27,14 +27,14 @@
 #include <boost/proto/proto.hpp>
 
 
-#include "strop_stream_generator.h" 
+#include "strop_stream_producer.h" 
 
 namespace streamulus
 {
     
     template<typename F> // F = function signature
     class Strop 
-        : public StropStreamGenerator<typename boost::function_types::result_type<F>::type>
+        : public StropStreamProducer<typename boost::function_types::result_type<F>::type>
     {
     public:
         

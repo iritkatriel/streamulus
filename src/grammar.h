@@ -23,7 +23,6 @@
 
 #include "transforms.h"
 #include "operators.h"
-#include "strop_stream_generator.h"
 
 
 #include <boost/proto/proto.hpp>
