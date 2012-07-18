@@ -22,7 +22,7 @@
 #pragma once
 
 #include "graph.h"
-#include "strop.h"
+#include "strop_base.h"
 #include "grammar.h"
 #include "subscription.h"
 #include "stream.h"
