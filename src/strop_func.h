@@ -53,6 +53,7 @@ namespace streamulus
 
         Func1(const F& f)
             : mFunction(f)
+            , mInputExists(false)
         {
         }
         
@@ -60,22 +61,20 @@ namespace streamulus
         {
             Stream<A1>* const input1(Strop<R(A1)>::template Input<A1,0>());
             
-            bool input_exists = true;            
-            input_exists &= input1->IsValid();
+            mInputExists |= input1->IsValid();
             
-            if (input_exists)
+            if (mInputExists)
             {   
                 const A1& a1(input1->Current());
                 
                 if (ApplyFilter(mFunction, a1))
-                    StropStreamProducer<R>::Output(mFunction(a1));
-                
-                input1->Pop();
+                    StropStreamProducer<R>::Output(mFunction(a1));                
             }            
         }
         
     private:
         F mFunction;
+        bool mInputExists;
     };
     
     template<class F, 
@@ -87,7 +86,8 @@ namespace streamulus
     public:
 
         Func2(const F& f)
-        : mFunction(f)
+            : mFunction(f)
+            , mInputExists(false)
         {
         }
 
@@ -96,25 +96,21 @@ namespace streamulus
             Stream<A1>* const input1(Strop<R(A1,A2)>::template Input<A1,0>());
             Stream<A2>* const input2(Strop<R(A1,A2)>::template Input<A2,1>());
             
-            bool input_exists = true;
-            input_exists &= input1->IsValid();
-            input_exists &= input2->IsValid();
+            mInputExists |= (input1->IsValid() && input2->IsValid());
             
-            if (input_exists)
+            if (mInputExists)
             {   
                 const A1& a1(input1->Current());
                 const A2& a2(input2->Current());
                 
                 if (ApplyFilter(mFunction,a1,a2))
                     StropStreamProducer<R>::Output(mFunction(a1,a2));
-                
-                input1->Pop();
-                input2->Pop();
             }            
         }
                 
     private:
         F mFunction;
+        bool mInputExists;        
     };
     
     template<class F, 
@@ -127,7 +123,8 @@ namespace streamulus
     public: 
         
         Func3(const F& f)
-        : mFunction(f)
+            : mFunction(f)
+            , mInputExists(false)
         {
         }
         
@@ -137,12 +134,9 @@ namespace streamulus
             Stream<A2>* const input2(Strop<R(A1,A2,A3)>::template Input<A2,1>());
             Stream<A3>* const input3(Strop<R(A1,A2,A3)>::template Input<A3,2>());
             
-            bool input_exists = true;
-            input_exists &= input1->IsValid();
-            input_exists &= input2->IsValid();
-            input_exists &= input3->IsValid();
+            mInputExists |= (input1->IsValid() && input2->IsValid() && input3->IsValid());
             
-            if (input_exists)
+            if (mInputExists)
             {   
                 const A1& a1(input1->Current());
                 const A2& a2(input2->Current());
@@ -150,15 +144,12 @@ namespace streamulus
                 
                 if (ApplyFilter(mFunction,a1,a2,a3))
                     StropStreamProducer<R>::Output(mFunction(a1,a2,a3));
-                
-                input1->Pop();
-                input2->Pop();
-                input3->Pop();
             }            
         }
         
     private:
         F mFunction;
+        bool mInputExists;        
     };
     
     template<class F, 
@@ -172,7 +163,8 @@ namespace streamulus
     public:  
         
         Func4(const F& f)
-        : mFunction(f)
+            : mFunction(f)
+            , mInputExists(false)
         {
         }
 
@@ -183,13 +175,10 @@ namespace streamulus
             Stream<A3>* const input3(Strop<R(A1,A2,A3,A4)>::template Input<A3,2>());
             Stream<A4>* const input4(Strop<R(A1,A2,A3,A4)>::template Input<A4,3>());
             
-            bool input_exists = true;
-            input_exists &= input1->IsValid();
-            input_exists &= input2->IsValid();
-            input_exists &= input3->IsValid();
-            input_exists &= input4->IsValid();
+            mInputExists |= 
+                (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid());
             
-            if (input_exists)
+            if (mInputExists)
             {   
                 const A1& a1(input1->Current());
                 const A2& a2(input2->Current());
@@ -198,16 +187,12 @@ namespace streamulus
                 
                 if (ApplyFilter(mFunction,a1,a2,a3,a4))
                     StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4));
-                
-                input1->Pop();
-                input2->Pop();
-                input3->Pop();
-                input4->Pop();
             }            
         }
         
     private:
         F mFunction;
+        bool mInputExists;        
     };
 
     template<class F, 
@@ -222,7 +207,8 @@ namespace streamulus
     public:       
         
         Func5(const F& f)
-        : mFunction(f)
+            : mFunction(f)
+            , mInputExists(false)
         {
         }
 
@@ -233,15 +219,11 @@ namespace streamulus
             Stream<A3>* const input3(Strop<R(A1,A2,A3,A4,A5)>::template Input<A3,2>());
             Stream<A4>* const input4(Strop<R(A1,A2,A3,A4,A5)>::template Input<A4,3>());
             Stream<A5>* const input5(Strop<R(A1,A2,A3,A4,A5)>::template Input<A5,4>());
-                        
-            bool input_exists = true;
-            input_exists &= input1->IsValid();
-            input_exists &= input2->IsValid();
-            input_exists &= input3->IsValid();
-            input_exists &= input4->IsValid();
-            input_exists &= input5->IsValid();
+
+            mInputExists |= 
+                (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid() && input5->IsValid());
             
-            if (input_exists)
+            if (mInputExists)
             {   
                 const A1& a1(input1->Current());
                 const A2& a2(input2->Current());
@@ -251,17 +233,12 @@ namespace streamulus
                 
                 if (ApplyFilter(mFunction,a1,a2,a3,a4,a5))
                     StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4,a5));
-                
-                input1->Pop();
-                input2->Pop();
-                input3->Pop();
-                input4->Pop();
-                input5->Pop();
             }            
         }
 
     private:
         F mFunction;
+        bool mInputExists;
     };
     
     
