@@ -27,6 +27,7 @@
 #include "strop.h"
 #include "strop_const.h"
 #include "strop_func.h"
+#include "strop_sliding_window.h"
 #include "input_stream.h"
 #include "strop_return_type.h"
 
@@ -42,6 +43,7 @@ namespace streamulus
     
     using namespace boost;
         
+    //////////////////////////// Utilities ////////////////////////////
     template<typename SharedPtrType>
     struct BaseType;
     
@@ -51,13 +53,14 @@ namespace streamulus
         typedef Type type;
     };
     
-    
     template<typename Sig>
     struct MakeStropPtrType
     {  
         typedef boost::shared_ptr<Strop<Sig> > type;    
     };
+     
     
+    //////////////////////////// Transforms ////////////////////////////
     struct AddStropToGraph : proto::callable  
     {
         template<class Sig> struct result;
@@ -71,17 +74,13 @@ namespace streamulus
         template<typename StropType, class State>
         const StropType operator()(StropType strop, State engine)
         {
-            if (engine->IsVerbose())
-                std::cout << "AddStropToGraph: strop=" << strop << std::endl;
             if (!strop->GetEngine())
             {
-                if (engine->IsVerbose())
-                    std::cout << "AddStropToGraph::operator()" << std::endl;
                 engine->AddVertexToGraph(strop);
                 engine->AddSource(strop);
             }
             if (engine->IsVerbose())
-                std::cout << "returning " << strop->GetDescriptor() << std::endl;
+                std::cout << "AddStropToGraph: " << strop << " returning " << strop->GetDescriptor() << std::endl; 
             return strop;
         }
     };
@@ -103,11 +102,10 @@ namespace streamulus
             typedef typename result<AddConstToGraph(T,State)>::ConstType ConstType;
             if (engine->IsVerbose())
                 std::cout << "Add const to graph " << value <<std::endl;
-            boost::shared_ptr<Const<ConstType> > strop(new Const<ConstType>(value));
-            return AddStropToGraph()(strop,engine);
+            return AddStropToGraph()(boost::make_shared<Const<ConstType> >(value),engine);
         }
     };
-
+    
     struct generic_func : proto::callable
     {
         template<typename Sig> struct result;
@@ -131,9 +129,9 @@ namespace streamulus
                    const Arg1Strop arg1, 
                    State engine)
         {  
-            if (engine->IsVerbose())             
+            if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
-            typedef result<generic_func(F&,Arg1Strop,State)> Result;        
+            typedef result<generic_func(F&,Arg1Strop,State)> Result;
             typedef Func1<F
             ,typename Result::Arg1Type
             > FuncStropType; 
@@ -394,5 +392,36 @@ namespace streamulus
             return gf(func,left,right,engine);
         }
     };
+    
+    struct SlidingWindow : proto::callable
+    {
+        template<typename Sig> struct result;
         
+        template<typename ArgStrop, typename State>
+        struct result<SlidingWindow(const int&,ArgStrop,State)> 
+        {
+            typedef typename StropReturnType<const ArgStrop>::type input_type;
+            typedef typename WindowUpdateType<input_type>::type result_type;
+            typedef const boost::shared_ptr<StropStreamProducer<result_type> > type;            
+        };
+        
+        template<typename ArgStrop, typename State>
+        typename result<SlidingWindow(const int&,ArgStrop,State)>::type
+        operator()(const int& size, const ArgStrop arg, State engine)
+        {
+            typedef Window<typename StropReturnType<const ArgStrop>::type> WindowStropType;
+            boost::shared_ptr<WindowStropType> strop(new WindowStropType(size));
+
+            typename BaseType<ArgStrop>::type::OutputStreamPtr argStream(arg->MakeOutputStream());
+            strop->SetInputs(boost::fusion::make_vector(argStream));
+            
+            engine->AddVertexToGraph(strop);
+            engine->AddEdgeToGraph(arg->GetDescriptor(), strop->GetDescriptor(), argStream);
+            return strop;
+        }        
+    };
+    
+        
+    
+    
 } // ns streamulus
