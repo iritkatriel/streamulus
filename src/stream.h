@@ -31,16 +31,17 @@ namespace streamulus
     class Stream : public StreamBase
     {
     public:	
-        
-        Stream()
-        {
-        }
-                        
+
         void Append(const T& item)
         {
             mBuffer.push_back(item);
         }
-                
+
+        bool HasMore()
+        {
+            return !mBuffer.empty();
+        }
+        
         bool IsValid()
         {
             return mLastValue || !mBuffer.empty();

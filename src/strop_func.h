@@ -65,10 +65,13 @@ namespace streamulus
             
             if (mInputExists)
             {   
-                const A1& a1(input1->Current());
+                while (input1->HasMore())
+                {
+                    const A1& a1(input1->Current());
                 
-                if (ApplyFilter(mFunction, a1))
-                    StropStreamProducer<R>::Output(mFunction(a1));                
+                    if (ApplyFilter(mFunction, a1))
+                        StropStreamProducer<R>::Output(mFunction(a1));   
+                }
             }            
         }
         
@@ -100,11 +103,16 @@ namespace streamulus
             
             if (mInputExists)
             {   
-                const A1& a1(input1->Current());
-                const A2& a2(input2->Current());
+                while (input1->HasMore() || 
+                       input2->HasMore() )
+                {
+
+                    const A1& a1(input1->Current());
+                    const A2& a2(input2->Current());
                 
-                if (ApplyFilter(mFunction,a1,a2))
-                    StropStreamProducer<R>::Output(mFunction(a1,a2));
+                    if (ApplyFilter(mFunction,a1,a2))
+                        StropStreamProducer<R>::Output(mFunction(a1,a2));
+                }
             }            
         }
                 
@@ -138,12 +146,17 @@ namespace streamulus
             
             if (mInputExists)
             {   
-                const A1& a1(input1->Current());
-                const A2& a2(input2->Current());
-                const A3& a3(input3->Current());
+                while (input1->HasMore() || 
+                       input2->HasMore() || 
+                       input3->HasMore() )
+                {
+                    const A1& a1(input1->Current());
+                    const A2& a2(input2->Current());
+                    const A3& a3(input3->Current());
                 
-                if (ApplyFilter(mFunction,a1,a2,a3))
-                    StropStreamProducer<R>::Output(mFunction(a1,a2,a3));
+                    if (ApplyFilter(mFunction,a1,a2,a3))
+                        StropStreamProducer<R>::Output(mFunction(a1,a2,a3));
+                }
             }            
         }
         
@@ -180,13 +193,19 @@ namespace streamulus
             
             if (mInputExists)
             {   
-                const A1& a1(input1->Current());
-                const A2& a2(input2->Current());
-                const A3& a3(input3->Current());
-                const A4& a4(input4->Current());
+                while (input1->HasMore() || 
+                       input2->HasMore() || 
+                       input3->HasMore() || 
+                       input4->HasMore() )
+                {
+                    const A1& a1(input1->Current());
+                    const A2& a2(input2->Current());
+                    const A3& a3(input3->Current());
+                    const A4& a4(input4->Current());
                 
-                if (ApplyFilter(mFunction,a1,a2,a3,a4))
-                    StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4));
+                    if (ApplyFilter(mFunction,a1,a2,a3,a4))
+                        StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4));
+                }
             }            
         }
         
@@ -225,14 +244,21 @@ namespace streamulus
             
             if (mInputExists)
             {   
-                const A1& a1(input1->Current());
-                const A2& a2(input2->Current());
-                const A3& a3(input3->Current());
-                const A4& a4(input4->Current());
-                const A5& a5(input5->Current());
+                while (input1->HasMore() || 
+                       input2->HasMore() || 
+                       input3->HasMore() || 
+                       input4->HasMore() || 
+                       input5->HasMore() )
+                {
+                    const A1& a1(input1->Current());
+                    const A2& a2(input2->Current());
+                    const A3& a3(input3->Current());
+                    const A4& a4(input4->Current());
+                    const A5& a5(input5->Current());
                 
-                if (ApplyFilter(mFunction,a1,a2,a3,a4,a5))
-                    StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4,a5));
+                    if (ApplyFilter(mFunction,a1,a2,a3,a4,a5))
+                        StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4,a5));
+                }
             }            
         }
 
