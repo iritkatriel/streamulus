@@ -189,6 +189,7 @@ namespace streamulus
                 std::cout << "Activate sources: mSources.size() = " << mSources.size() << std::endl;
             for (std::vector<StropPtr>::iterator it = mSources.begin(); it != mSources.end(); ++it)
                 ActivateVertex(*it);
+            mSources.clear();
         }        
 
         struct TopologicalSortVisitor : public boost::default_dfs_visitor
