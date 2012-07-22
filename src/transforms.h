@@ -30,6 +30,7 @@
 #include "strop_sliding_window.h"
 #include "input_stream.h"
 #include "strop_return_type.h"
+#include "funcs.h"
 
 #include <boost/fusion/include/make_vector.hpp>
 #include <boost/fusion/include/algorithm.hpp>
@@ -59,6 +60,24 @@ namespace streamulus
         typedef boost::shared_ptr<Strop<Sig> > type;    
     };
      
+    struct MakeConstFunc : proto::callable
+    {
+        template<class Sig> struct result;
+        
+        template<class This, class T>
+        struct result<This(T)>
+        {
+            typedef typename boost::remove_const<typename boost::remove_reference<T>::type>::type CleanT;
+            typedef ConstFunc<CleanT> type;
+        };
+        
+        template<typename T>
+        typename result<MakeConstFunc(T)>::type
+        operator()(T value)
+        {
+            return typename result<MakeConstFunc(T)>::type(value);
+        }
+    };
     
     //////////////////////////// Transforms ////////////////////////////
     struct AddStropToGraph : proto::callable  
@@ -85,30 +104,33 @@ namespace streamulus
         }
     };
     
-    struct AddConstToGraph : proto::callable  
-    {
-        template<class Sig> struct result;
-        
-        template<class This, typename T, class State>
-        struct result<This(T,State)>
-        {
-            typedef typename boost::remove_const<typename boost::remove_reference<T>::type>::type ConstType;
-            typedef const boost::shared_ptr<StropStreamProducer<ConstType> > type;
-        };
-        
-        template<typename T, class State>
-        typename result<AddConstToGraph(T,State)>::type operator()(T& value, State engine)
-        {
-            typedef typename result<AddConstToGraph(T,State)>::ConstType ConstType;
-            if (engine->IsVerbose())
-                std::cout << "Add const to graph " << value <<std::endl;
-            return AddStropToGraph()(boost::make_shared<Const<ConstType> >(value),engine);
-        }
-    };
-    
     struct generic_func : proto::callable
     {
         template<typename Sig> struct result;
+        
+        // Arity = 0
+        template<typename FArg, typename State>
+        struct result<generic_func(FArg,State)>
+        {
+            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
+            typedef typename F::template result<F()>::type R; 
+            typedef const boost::shared_ptr<Strop<R()> > type;         
+        };
+        
+        template<typename F, typename State>
+        typename result<generic_func(const F&,State)>::type
+        operator()(const F& f, State engine)
+        {  
+            if (engine->IsVerbose())
+                std::cout << "generic_func" << std::endl;
+            typedef result<generic_func(F&,State)> Result;
+            typedef Func0<F> FuncStropType; 
+            
+            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));                         
+            engine->AddVertexToGraph(funcStropPtr);
+            engine->AddSource(funcStropPtr);
+            return funcStropPtr;
+        }        
         
         // Arity = 1
         template<typename FArg, 

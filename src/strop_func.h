@@ -57,6 +57,27 @@ namespace streamulus
     
     
     template<class F, 
+    typename R =typename F::template result<F(void)>::type>
+    class Func0 : public FuncBase<F, R(void)>
+    {
+    public:
+        
+        typedef FuncBase<F, R(void)> BaseType;
+        
+        Func0(const F& f)
+        : BaseType(f)
+        {
+        }
+        
+        virtual void Work()
+        {
+            R value = BaseType::mFunction();
+            StropStreamProducer<R>::Output(value);   
+        }
+    };
+
+    
+    template<class F, 
     typename A1, 
     typename R =typename F::template result<F(A1)>::type>
     class Func1 : public FuncBase<F, R(A1)>
