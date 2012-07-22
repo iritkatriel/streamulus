@@ -25,7 +25,6 @@
 
 #include "stream.h"
 #include "strop.h"
-#include "strop_const.h"
 #include "strop_func.h"
 #include "strop_sliding_window.h"
 #include "input_stream.h"
