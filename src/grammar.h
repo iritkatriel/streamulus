@@ -153,15 +153,15 @@ namespace streamulus
         struct case_
         : proto::or_<
              proto::when<unary_op_rule,
-                        lib_unary_func<functor_of<TAG> >(smls_grammar(proto::_child), proto::_state)> 
+                        generic_func(functor_of<TAG>(), smls_grammar(proto::_child), proto::_state)>
 
            , proto::when<binary_op_rule,
-                        lib_binary_func<functor_of<TAG> >(smls_grammar(proto::_left), 
-                                                          smls_grammar(proto::_right), proto::_state)> 
+                        generic_func(functor_of<TAG>(), smls_grammar(proto::_left), 
+                                                        smls_grammar(proto::_right), proto::_state)> 
            , proto::when<ternary_op_rule,
-                         lib_binary_func<functor_of<TAG> >(smls_grammar(proto::_child0), 
-                                                           smls_grammar(proto::_child1),  
-                                                           smls_grammar(proto::_child2), proto::_state)> 
+                        generic_func(functor_of<TAG>(), smls_grammar(proto::_child0), 
+                                                        smls_grammar(proto::_child1),  
+                                                        smls_grammar(proto::_child2), proto::_state)> 
          >
         {};
     };

@@ -111,11 +111,12 @@ namespace streamulus
         template<typename Sig> struct result;
         
         // Arity = 1
-        template<typename F, 
+        template<typename FArg, 
         typename Arg1Strop, 
         typename State>
-        struct result<generic_func(F&,Arg1Strop,State)>
+        struct result<generic_func(FArg,Arg1Strop,State)>
         {
+            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
             typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
             typedef typename F::template result<F(Arg1Type)>::type R; 
             typedef const boost::shared_ptr<Strop<R(Arg1Type)> > type;         
@@ -124,7 +125,7 @@ namespace streamulus
         template<typename F, 
         typename Arg1Strop, 
         typename State>
-        typename result<generic_func(F&,Arg1Strop,State)>::type
+        typename result<generic_func(const F&,Arg1Strop,State)>::type
         operator()(const F& f,
                    const Arg1Strop arg1, 
                    State engine)
@@ -147,9 +148,10 @@ namespace streamulus
         }
 
         // Arity = 2
-        template<typename F, typename Arg1Strop, typename Arg2Strop, typename State>
-        struct result<generic_func(F&,Arg1Strop,Arg2Strop,State)>
+        template<typename FArg, typename Arg1Strop, typename Arg2Strop, typename State>
+        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,State)>
         {
+            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
             typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
             typedef typename StropReturnType<const Arg2Strop>::type Arg2Type;
             typedef typename F::template result<F(Arg1Type,Arg2Type)>::type R; 
@@ -157,7 +159,7 @@ namespace streamulus
         };
         
         template<typename F, typename Arg1Strop, typename Arg2Strop, typename State>
-        typename result<generic_func(F&,Arg1Strop,Arg2Strop, State)>::type
+        typename result<generic_func(const F&,Arg1Strop,Arg2Strop, State)>::type
         operator()(const F& f,const Arg1Strop arg1, const Arg2Strop arg2, State engine)
         {   
             if (engine->IsVerbose())
@@ -177,13 +179,14 @@ namespace streamulus
         }
 
         // Arity = 3
-        template<typename F, 
+        template<typename FArg, 
         typename Arg1Strop, 
         typename Arg2Strop, 
         typename Arg3Strop, 
         typename State>
-        struct result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,State)>
+        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,State)>
         {
+            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
             typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
             typedef typename StropReturnType<const Arg2Strop>::type Arg2Type;
             typedef typename StropReturnType<const Arg3Strop>::type Arg3Type;
@@ -196,7 +199,7 @@ namespace streamulus
         typename Arg2Strop, 
         typename Arg3Strop, 
         typename State>
-        typename result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,State)>::type
+        typename result<generic_func(const F&,Arg1Strop,Arg2Strop,Arg3Strop,State)>::type
         operator()(const F& f,
                    const Arg1Strop arg1, 
                    const Arg2Strop arg2, 
@@ -227,14 +230,15 @@ namespace streamulus
         }
         
         // Arity = 4
-        template<typename F, 
+        template<typename FArg, 
         typename Arg1Strop, 
         typename Arg2Strop, 
         typename Arg3Strop, 
         typename Arg4Strop, 
         typename State>
-        struct result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>
+        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>
         {
+            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
             typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
             typedef typename StropReturnType<const Arg2Strop>::type Arg2Type;
             typedef typename StropReturnType<const Arg3Strop>::type Arg3Type;
@@ -249,7 +253,7 @@ namespace streamulus
         typename Arg3Strop, 
         typename Arg4Strop, 
         typename State>
-        typename result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>::type
+        typename result<generic_func(const F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>::type
         operator()(const F& f,
                    const Arg1Strop arg1, 
                    const Arg2Strop arg2, 
@@ -284,15 +288,16 @@ namespace streamulus
         }
         
         // Arity = 5
-        template<typename F, 
+        template<typename FArg, 
                  typename Arg1Strop, 
                  typename Arg2Strop, 
                  typename Arg3Strop, 
                  typename Arg4Strop, 
                  typename Arg5Strop, 
                  typename State>
-        struct result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>
+        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>
         {
+            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
             typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
             typedef typename StropReturnType<const Arg2Strop>::type Arg2Type;
             typedef typename StropReturnType<const Arg3Strop>::type Arg3Type;
@@ -348,51 +353,7 @@ namespace streamulus
         }
 
     };
-    
-    template<typename F, typename CallableDummy = proto::callable>
-    struct lib_unary_func : proto::callable
-    {
-        template<typename Sig> struct result;
         
-        template<typename ArgStrop, typename State>
-        struct result<lib_unary_func(ArgStrop,State)> 
-        : generic_func::result<generic_func(F&,ArgStrop,State)> 
-        {};    
-        
-        template<typename ArgStrop, typename State>
-        typename result<lib_unary_func(ArgStrop,State)>::type
-        operator()(const ArgStrop arg, State engine)
-        {
-            generic_func gf;
-            F func;
-            if (engine->IsVerbose())            
-                std::cout << "builtin func: " << typeid(func).name() << std::endl;
-            return gf(func,arg,engine);
-        }
-    };
-
-    template<typename F, typename CallableDummy = proto::callable>
-    struct lib_binary_func : proto::callable
-    {
-        template<typename Sig> struct result;
-        
-        template<typename LhsStrop, typename RhsStrop, typename State>
-        struct result<lib_binary_func(LhsStrop,RhsStrop,State)> 
-        : generic_func::result<generic_func(F&,LhsStrop,RhsStrop,State)> 
-        {};    
-        
-        template<typename LhsStrop, typename RhsStrop, typename State>
-        typename result<lib_binary_func(LhsStrop,RhsStrop,State)>::type
-        operator()(const LhsStrop left, const RhsStrop right, State engine)
-        {
-            generic_func gf;
-            F func;
-            if (engine->IsVerbose())
-                std::cout << "builtin func: " << typeid(func).name() << std::endl;
-            return gf(func,left,right,engine);
-        }
-    };
-    
     struct SlidingWindow : proto::callable
     {
         template<typename Sig> struct result;
