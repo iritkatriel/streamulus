@@ -216,7 +216,7 @@ namespace streamulus
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
-            typename BaseType<Arg2Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
+            typename BaseType<Arg3Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream));
             
             engine->AddVertexToGraph(funcStropPtr);
@@ -271,8 +271,8 @@ namespace streamulus
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
-            typename BaseType<Arg2Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
-            typename BaseType<Arg2Strop>::type::OutputStreamPtr arg4Stream(arg4->MakeOutputStream());
+            typename BaseType<Arg3Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
+            typename BaseType<Arg4Strop>::type::OutputStreamPtr arg4Stream(arg4->MakeOutputStream());
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream, arg4Stream));
             
             engine->AddVertexToGraph(funcStropPtr);
