@@ -30,30 +30,43 @@
 
 namespace streamulus
 {    
-    template<typename Sig>
+    template<class F, typename Sig>
     class FuncBase : public Strop<Sig>
     {
     public:
-        FuncBase()
+        typedef F function_type;
+        
+        FuncBase(const F& f)
+            : mFunction(f)
+            , mInputExists(false)
         {
             std::stringstream ss;
             ss << "Func_" << "F";
             Strop<Sig>::SetDisplayName(ss.str());
         }
+        
+        inline const F& GetFunction() const
+        {
+            return mFunction;
+        }
+
+    protected:
+        F mFunction;
+        bool mInputExists;
     };
     
-
     
     template<class F, 
     typename A1, 
     typename R =typename F::template result<F(A1)>::type>
-    class Func1 : public FuncBase<R(A1)>
+    class Func1 : public FuncBase<F, R(A1)>
     {
     public:
 
+        typedef FuncBase<F, R(A1)> BaseType;
+        
         Func1(const F& f)
-            : mFunction(f)
-            , mInputExists(false)
+            : BaseType(f)
         {
         }
         
@@ -61,36 +74,33 @@ namespace streamulus
         {
             Stream<A1>* const input1(Strop<R(A1)>::template Input<A1,0>());
             
-            mInputExists |= input1->IsValid();
+            BaseType::mInputExists |= input1->IsValid();
             
-            if (mInputExists)
+            if (BaseType::mInputExists)
             {   
                 while (input1->HasMore())
                 {
                     const A1& a1(input1->Current());
                 
-                    if (ApplyFilter(mFunction, a1))
-                        StropStreamProducer<R>::Output(mFunction(a1));   
+                    if (ApplyFilter(BaseType::mFunction, a1))
+                        StropStreamProducer<R>::Output(BaseType::mFunction(a1));   
                 }
             }            
         }
-        
-    private:
-        F mFunction;
-        bool mInputExists;
     };
     
     template<class F, 
     typename A1, 
     typename A2, 
     typename R =typename F::template result<F(A1,A2)>::type>
-    class Func2 : public FuncBase<R(A1,A2)>
+    class Func2 : public FuncBase<F, R(A1,A2)>
     {
     public:
+        
+        typedef FuncBase<F, R(A1,A2)> BaseType;
 
         Func2(const F& f)
-            : mFunction(f)
-            , mInputExists(false)
+            : BaseType(f)
         {
         }
 
@@ -99,9 +109,9 @@ namespace streamulus
             Stream<A1>* const input1(Strop<R(A1,A2)>::template Input<A1,0>());
             Stream<A2>* const input2(Strop<R(A1,A2)>::template Input<A2,1>());
             
-            mInputExists |= (input1->IsValid() && input2->IsValid());
+            BaseType::mInputExists |= (input1->IsValid() && input2->IsValid());
             
-            if (mInputExists)
+            if (BaseType::mInputExists)
             {   
                 while (input1->HasMore() || 
                        input2->HasMore() )
@@ -110,15 +120,11 @@ namespace streamulus
                     const A1& a1(input1->Current());
                     const A2& a2(input2->Current());
                 
-                    if (ApplyFilter(mFunction,a1,a2))
-                        StropStreamProducer<R>::Output(mFunction(a1,a2));
+                    if (ApplyFilter(BaseType::mFunction,a1,a2))
+                        StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2));
                 }
             }            
         }
-                
-    private:
-        F mFunction;
-        bool mInputExists;        
     };
     
     template<class F, 
@@ -126,13 +132,14 @@ namespace streamulus
     typename A2, 
     typename A3, 
     typename R =typename F::template result<F(A1,A2,A3)>::type>
-    class Func3 : public FuncBase<R(A1,A2,A3)>
+    class Func3 : public FuncBase<F, R(A1,A2,A3)>
     {
-    public: 
+    public:
+        
+        typedef FuncBase<F, R(A1,A2,A3)> BaseType;
         
         Func3(const F& f)
-            : mFunction(f)
-            , mInputExists(false)
+            : BaseType(f)
         {
         }
         
@@ -142,9 +149,9 @@ namespace streamulus
             Stream<A2>* const input2(Strop<R(A1,A2,A3)>::template Input<A2,1>());
             Stream<A3>* const input3(Strop<R(A1,A2,A3)>::template Input<A3,2>());
             
-            mInputExists |= (input1->IsValid() && input2->IsValid() && input3->IsValid());
+            BaseType::mInputExists |= (input1->IsValid() && input2->IsValid() && input3->IsValid());
             
-            if (mInputExists)
+            if (BaseType::mInputExists)
             {   
                 while (input1->HasMore() || 
                        input2->HasMore() || 
@@ -154,15 +161,11 @@ namespace streamulus
                     const A2& a2(input2->Current());
                     const A3& a3(input3->Current());
                 
-                    if (ApplyFilter(mFunction,a1,a2,a3))
-                        StropStreamProducer<R>::Output(mFunction(a1,a2,a3));
+                    if (ApplyFilter(BaseType::mFunction,a1,a2,a3))
+                        StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3));
                 }
             }            
         }
-        
-    private:
-        F mFunction;
-        bool mInputExists;        
     };
     
     template<class F, 
@@ -171,13 +174,14 @@ namespace streamulus
     typename A3, 
     typename A4, 
     typename R =typename F::template result<F(A1,A2,A3,A4)>::type>
-    class Func4 : public FuncBase<R(A1,A2,A3,A4)>
+    class Func4 : public FuncBase<F, R(A1,A2,A3,A4)>
     {
     public:  
         
+        typedef FuncBase<F, R(A1,A2,A3,A4)> BaseType;
+
         Func4(const F& f)
-            : mFunction(f)
-            , mInputExists(false)
+            : BaseType(f)
         {
         }
 
@@ -188,10 +192,10 @@ namespace streamulus
             Stream<A3>* const input3(Strop<R(A1,A2,A3,A4)>::template Input<A3,2>());
             Stream<A4>* const input4(Strop<R(A1,A2,A3,A4)>::template Input<A4,3>());
             
-            mInputExists |= 
+            BaseType::mInputExists |= 
                 (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid());
             
-            if (mInputExists)
+            if (BaseType::mInputExists)
             {   
                 while (input1->HasMore() || 
                        input2->HasMore() || 
@@ -203,15 +207,11 @@ namespace streamulus
                     const A3& a3(input3->Current());
                     const A4& a4(input4->Current());
                 
-                    if (ApplyFilter(mFunction,a1,a2,a3,a4))
-                        StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4));
+                    if (ApplyFilter(BaseType::mFunction,a1,a2,a3,a4))
+                        StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3,a4));
                 }
             }            
-        }
-        
-    private:
-        F mFunction;
-        bool mInputExists;        
+        }        
     };
 
     template<class F, 
@@ -221,13 +221,14 @@ namespace streamulus
     typename A4, 
     typename A5, 
     typename R =typename F::template result<F(A1,A2,A3,A4,A5)>::type>
-    class Func5 : public FuncBase<R(A1,A2,A3,A4,A5)>
+    class Func5 : public FuncBase<F, R(A1,A2,A3,A4,A5)>
     {
     public:       
         
+        typedef FuncBase<F, R(A1,A2,A3,A4,A5)> BaseType;
+
         Func5(const F& f)
-            : mFunction(f)
-            , mInputExists(false)
+            : BaseType(f)
         {
         }
 
@@ -239,10 +240,10 @@ namespace streamulus
             Stream<A4>* const input4(Strop<R(A1,A2,A3,A4,A5)>::template Input<A4,3>());
             Stream<A5>* const input5(Strop<R(A1,A2,A3,A4,A5)>::template Input<A5,4>());
 
-            mInputExists |= 
+            BaseType::mInputExists |= 
                 (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid() && input5->IsValid());
             
-            if (mInputExists)
+            if (BaseType::mInputExists)
             {   
                 while (input1->HasMore() || 
                        input2->HasMore() || 
@@ -256,15 +257,11 @@ namespace streamulus
                     const A4& a4(input4->Current());
                     const A5& a5(input5->Current());
                 
-                    if (ApplyFilter(mFunction,a1,a2,a3,a4,a5))
-                        StropStreamProducer<R>::Output(mFunction(a1,a2,a3,a4,a5));
+                    if (ApplyFilter(BaseType::mFunction,a1,a2,a3,a4,a5))
+                        StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3,a4,a5));
                 }
             }            
         }
-
-    private:
-        F mFunction;
-        bool mInputExists;
     };
     
     
