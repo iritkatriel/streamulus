@@ -21,6 +21,9 @@
 
 #pragma once
 
+#include "boost/tuple/tuple.hpp"
+#include "boost/tuple/tuple_io.hpp"
+
 namespace streamulus
 {
     struct WindowCount
@@ -29,6 +32,12 @@ namespace streamulus
         WindowCount() : mCount(0)
         {
         }
+        
+        template<typename Sig>
+        struct value_type
+        {
+            typedef long type;    
+        };
         
         template<typename T>
         void Insert(const T& value)
@@ -60,6 +69,12 @@ namespace streamulus
         {
         }
     
+        template<typename Sig>
+        struct value_type
+        {
+            typedef T type;    
+        };
+
         void Insert(const T& value)
         {
             mSum += value;
@@ -79,5 +94,45 @@ namespace streamulus
         T mSum;
     };
 
+    template<typename T>
+    struct WindowAvg
+    {
+    public:
+        WindowAvg() 
+        {
+        }
+
+        typedef boost::tuple<double,double,long> OutputType;
+        
+        template<typename Sig>
+        struct value_type
+        {
+            typedef OutputType type;    
+        };
+
+        void Insert(const T& value)
+        {
+            mSum.Insert(value);
+            mCount.Insert(value);
+        }
+        
+        void Remove(const T& value)
+        {
+            mSum.Remove(value);
+            mCount.Remove(value);
+        }
+        
+        const OutputType Value() const
+        {
+            long count(mCount.Value());
+            double sum(sum);
+            double avg(count ? sum/count : 0);
+            return boost::make_tuple(avg,sum,count);
+        }
+        
+    private:
+        WindowSum<T> mSum;
+        WindowCount mCount;
+    };
     
 } // ns streamulus

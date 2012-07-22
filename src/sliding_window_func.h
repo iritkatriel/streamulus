@@ -43,7 +43,7 @@ namespace streamulus
         template<class This,typename WA> 
         struct result<This(WA)>
         {
-            typedef typename WindowBaseType<WA>::type type; 
+            typedef typename F::template value_type<F(typename WindowBaseType<WA>::type)>::type type; 
         };
         
         template<typename WA>
