@@ -177,19 +177,16 @@ public:
         typedef T type; 
     };
     
-    bool Filter(const T& value) 
+    boost::optional<T> operator()(const T& value) 
     {
-        bool have_output(mFirst || (value != mPrev));
-        mFirst = false;
-        mPrev = value;
-        return have_output;
+        if (mFirst || (value != mPrev))
+        {
+            mFirst = false;
+            return mPrev = value;
+        }
+        return boost::none;
     }
-    
-    T operator()(const T& value) const 
-    { 
-        return mPrev;
-    }
-    
+        
 private:
     bool mFirst; 
     T mPrev;

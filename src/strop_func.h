@@ -24,9 +24,9 @@
 
 #include <sstream>
 
-#include "strop.h"
+#include <boost/optional.hpp>
 
-#include "apply_filter.h"
+#include "strop.h"
 
 namespace streamulus
 {    
@@ -102,9 +102,9 @@ namespace streamulus
                 while (input1->HasMore())
                 {
                     const A1& a1(input1->Current());
-                
-                    if (ApplyFilter(BaseType::mFunction, a1))
-                        StropStreamProducer<R>::Output(BaseType::mFunction(a1));   
+                    boost::optional<R> res = BaseType::mFunction(a1);
+                    if (res)
+                        StropStreamProducer<R>::Output(*res);   
                 }
             }            
         }
@@ -137,12 +137,12 @@ namespace streamulus
                 while (input1->HasMore() || 
                        input2->HasMore() )
                 {
-
                     const A1& a1(input1->Current());
                     const A2& a2(input2->Current());
-                
-                    if (ApplyFilter(BaseType::mFunction,a1,a2))
-                        StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2));
+
+                    boost::optional<R> res = BaseType::mFunction(a1,a2);
+                    if (res)
+                        StropStreamProducer<R>::Output(*res);   
                 }
             }            
         }
@@ -182,8 +182,9 @@ namespace streamulus
                     const A2& a2(input2->Current());
                     const A3& a3(input3->Current());
                 
-                    if (ApplyFilter(BaseType::mFunction,a1,a2,a3))
-                        StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3));
+                    boost::optional<R> res = BaseType::mFunction(a1,a2,a3);
+                    if (res)
+                        StropStreamProducer<R>::Output(*res);   
                 }
             }            
         }
@@ -228,8 +229,9 @@ namespace streamulus
                     const A3& a3(input3->Current());
                     const A4& a4(input4->Current());
                 
-                    if (ApplyFilter(BaseType::mFunction,a1,a2,a3,a4))
-                        StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3,a4));
+                    boost::optional<R> res = BaseType::mFunction(a1,a2,a3,a4);
+                    if (res)
+                        StropStreamProducer<R>::Output(*res);   
                 }
             }            
         }        
@@ -278,8 +280,9 @@ namespace streamulus
                     const A4& a4(input4->Current());
                     const A5& a5(input5->Current());
                 
-                    if (ApplyFilter(BaseType::mFunction,a1,a2,a3,a4,a5))
-                        StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3,a4,a5));
+                    boost::optional<R> res = BaseType::mFunction(a1,a2,a3,a4,a5);
+                    if (res)
+                        StropStreamProducer<R>::Output(*res);   
                 }
             }            
         }
