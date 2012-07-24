@@ -24,6 +24,7 @@
 #include "transforms.h"
 #include "operators.h"
 
+#include "composed_func.h"
 
 #include <boost/proto/proto.hpp>
 
@@ -131,14 +132,14 @@ namespace streamulus
     struct unsupported_op_rule : proto::switch_<UnsupportedOpCases> {};
 
     struct window_rule       : proto::function<proto::terminal<window_>, proto::terminal<int>, smls_grammar> {};
-        
-    struct function_0_rule   : proto::function<proto::terminal<proto::_> > {};
-    struct function_1_rule   : proto::function<proto::terminal<proto::_>,smls_grammar> {};
-    struct function_2_rule   : proto::function<proto::terminal<proto::_>,smls_grammar,smls_grammar> {};
-    struct function_3_rule   : proto::function<proto::terminal<proto::_>,smls_grammar,smls_grammar,smls_grammar> {};
-    struct function_4_rule   : proto::function<proto::terminal<proto::_>,smls_grammar,smls_grammar,smls_grammar,smls_grammar> {};
-    struct function_5_rule   : proto::function<proto::terminal<proto::_>,smls_grammar,smls_grammar,smls_grammar,smls_grammar,smls_grammar> {};
-    
+            
+    struct func_terminal     : proto::and_<proto::terminal<proto::_>,proto::not_<proto::terminal<window_> > > {};
+    struct function_0_rule   : proto::function<func_terminal> {};
+    struct function_1_rule   : proto::function<func_terminal,smls_grammar> {};
+    struct function_2_rule   : proto::function<func_terminal,smls_grammar,smls_grammar> {};
+    struct function_3_rule   : proto::function<func_terminal,smls_grammar,smls_grammar,smls_grammar> {};
+    struct function_4_rule   : proto::function<func_terminal,smls_grammar,smls_grammar,smls_grammar,smls_grammar> {};
+    struct function_5_rule   : proto::function<func_terminal,smls_grammar,smls_grammar,smls_grammar,smls_grammar,smls_grammar> {};
     
     
     // ************************************** GRAMMAR **************************************
