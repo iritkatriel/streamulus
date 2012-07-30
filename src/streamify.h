@@ -26,6 +26,8 @@
 namespace streamulus
 {    
     
+    namespace bp = boost::proto;
+    
     // Streamify template - turns a function object into a streamulus function.
     //
     // There are two variants for Streamify - one that gets a function object
@@ -40,48 +42,48 @@ namespace streamulus
     
     // From object: Copies the function object into a terminal.
     template <typename F>
-    typename boost::proto::terminal<F>::type  const
+    typename bp::terminal<F>::type  const
     Streamify(F const& f)
     {   
-        typename boost::proto::terminal<F>::type that = {f};
+        typename bp::terminal<F>::type that = {f};
         return that;           
     }
 
     // From type: Constructs the function object    
     // We have one Streamify function for each arity of F. 
     template <typename F, typename A1>
-    typename boost::proto::result_of::make_expr<
-    boost::proto::tag::function  // Tag type
+    typename bp::result_of::make_expr<
+    bp::tag::function  // Tag type
     , F                          // First child (by value)
     , A1 const &                 // Second child (by reference)
     >::type const
     Streamify(const A1& a1)
     {    
-        return proto::make_expr<proto::tag::function>(
-                                                      F()                // First child (by value)
-                                                      , boost::ref(a1)   // Second child (by reference)
-                                                      );    
-    }
+        return bp::make_expr<bp::tag::function>(
+                                                                   F()                // First child (by value)
+                                                                  , boost::ref(a1)   // Second child (by reference)
+                                                                  );    
+    } 
     
     template <typename F, typename A1, typename A2>
-    typename boost::proto::result_of::make_expr<
-    boost::proto::tag::function  // Tag type
+    typename bp::result_of::make_expr<
+    bp::tag::function  // Tag type
     , F                          // First child (by value)
     , A1 const &                 // Second child (by reference)
     , A2 const &                 // Third child (by reference)
     >::type const
     Streamify(const A1& a1, const A2& a2)
     {    
-        return proto::make_expr<proto::tag::function>(
-                                                      F()                // First child (by value)
-                                                      , boost::ref(a1)   // Second child (by reference)
-                                                      , boost::ref(a2)   // Third child (by reference)
-                                                      );    
+        return bp::make_expr<bp::tag::function>(
+                                                             F()                // First child (by value)
+                                                            , boost::ref(a1)   // Second child (by reference)
+                                                            , boost::ref(a2)   // Third child (by reference)
+                                                            );    
     }
     
     template <typename F, typename A1, typename A2, typename A3>
-    typename boost::proto::result_of::make_expr<
-    boost::proto::tag::function  // Tag type
+    typename bp::result_of::make_expr<
+    bp::tag::function  // Tag type
     , F                          // First child (by value)
     , A1 const &                 // Second child (by reference)
     , A2 const &                 // Third child (by reference)
@@ -89,17 +91,17 @@ namespace streamulus
     >::type const
     Streamify(const A1& a1, const A2& a2, const A3& a3)
     {    
-        return proto::make_expr<proto::tag::function>(
-                                                      F()                // First child (by value)
-                                                      , boost::ref(a1)   // Second child (by reference)
-                                                      , boost::ref(a2)   // Third child (by reference)
-                                                      , boost::ref(a3)   // Fourth child (by reference)
-                                                      );    
+        return bp::make_expr<bp::tag::function>(
+                                                            F()                // First child (by value)
+                                                            , boost::ref(a1)   // Second child (by reference)
+                                                            , boost::ref(a2)   // Third child (by reference)
+                                                            , boost::ref(a3)   // Fourth child (by reference)
+                                                            );    
     }
     
     template <typename F, typename A1, typename A2, typename A3, typename A4>
-    typename boost::proto::result_of::make_expr<
-    boost::proto::tag::function  // Tag type
+    typename bp::result_of::make_expr<
+    bp::tag::function  // Tag type
     , F                          // First child (by value)
     , A1 const &                 // Second child (by reference)
     , A2 const &                 // Third child (by reference)
@@ -108,18 +110,18 @@ namespace streamulus
     >::type const
     Streamify(const A1& a1, const A2& a2, const A3& a3, const A4& a4)
     {    
-        return proto::make_expr<proto::tag::function>(
-                                                      F()                // First child (by value)
-                                                      , boost::ref(a1)   // Second child (by reference)
-                                                      , boost::ref(a2)   // Third child (by reference)
-                                                      , boost::ref(a3)   // Fourth child (by reference)
-                                                      , boost::ref(a4)   // Fifth child (by reference)
-                                                      );    
+        return bp::make_expr<bp::tag::function>(
+                                                            F()                // First child (by value)
+                                                            , boost::ref(a1)   // Second child (by reference)
+                                                            , boost::ref(a2)   // Third child (by reference)
+                                                            , boost::ref(a3)   // Fourth child (by reference)
+                                                            , boost::ref(a4)   // Fifth child (by reference)
+                                                            );    
     }
     
     template <typename F, typename A1, typename A2, typename A3, typename A4, typename A5>
-    typename boost::proto::result_of::make_expr<
-    boost::proto::tag::function  // Tag type
+    typename bp::result_of::make_expr<
+    bp::tag::function  // Tag type
     , F                          // First child (by value)
     , A1 const &                 // Second child (by reference)
     , A2 const &                 // Third child (by reference)
@@ -129,14 +131,14 @@ namespace streamulus
     >::type const
     Streamify(const A1& a1, const A2& a2, const A3& a3, const A4& a4, const A5& a5)
     {    
-        return proto::make_expr<proto::tag::function>(
-                                                      F()                // First child (by value)
-                                                      , boost::ref(a1)   // Second child (by reference)
-                                                      , boost::ref(a2)   // Third child (by reference)
-                                                      , boost::ref(a3)   // Fourth child (by reference)
-                                                      , boost::ref(a4)   // Fifth child (by reference)
-                                                      , boost::ref(a5)   // Sixth child (by reference)
-                                                      );    
+        return bp::make_expr<bp::tag::function>(
+                                                            F()                // First child (by value)
+                                                            , boost::ref(a1)   // Second child (by reference)
+                                                            , boost::ref(a2)   // Third child (by reference)
+                                                            , boost::ref(a3)   // Fourth child (by reference)
+                                                            , boost::ref(a4)   // Fifth child (by reference)
+                                                            , boost::ref(a5)   // Sixth child (by reference)
+                                                            );    
     }
     
 } // ns streamulus
