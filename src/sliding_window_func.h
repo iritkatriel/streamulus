@@ -19,6 +19,8 @@
 // along with Streamulus.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#include <boost/optional.hpp>
+
 #include "strop_sliding_window.h"
 
 namespace streamulus
@@ -45,24 +47,17 @@ namespace streamulus
         {
             typedef typename F::template value_type<F(typename WindowBaseType<WA>::type)>::type type; 
         };
-        
+                
         template<typename WA>
-        bool Filter(const WA& window_update)
-        {
+        boost::optional<typename result<WindowFunc(WA)>::type>
+        operator()(const WA& window_update) 
+        { 
             if (window_update.first == DATA_OUT)
             {
                 mFunction.Remove(window_update.second);
-                return false;
+                return boost::none;
             }
-            
             mFunction.Insert(window_update.second);
-            return true;
-        }
-        
-        template<typename WA>
-        typename result<WindowFunc(WA)>::type
-        operator()(const WA& window_update) const 
-        { 
             return mFunction.Value();
         }
         
