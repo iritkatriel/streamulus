@@ -74,11 +74,15 @@ namespace streamulus
             return true;
         }
         
-        void AddEdgeToGraph(const BoostGraph::vertex_descriptor& source, 
-                                    const BoostGraph::vertex_descriptor& target,
-                                    const StreamPtr& stream)
+        template<typename StreamPtrType>
+        void AddEdgeToGraph(const StropPtr& source, 
+                            const StropPtr& target,
+                            const StreamPtrType& stream)
         {
-            Graph::edge_descriptor desc = boost::add_edge(source, target, stream, mGraph).first;
+            StreamPtr stream_ptr(stream);
+            Graph::edge_descriptor desc = boost::add_edge(source->GetDescriptor(), target->GetDescriptor(), stream_ptr, mGraph).first;
+            if (stream->IsValid())
+                mSources.push_back(target);
             GraphChanged();
         }
         

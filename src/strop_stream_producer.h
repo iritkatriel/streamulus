@@ -45,14 +45,21 @@ namespace streamulus
         void Output(const R& value)
         {
             GetEngine()->template Output<R>(mVertexDescriptor,value);
+            mCurrentValue = value;
         }        
         
         typedef boost::shared_ptr< Stream<R> > OutputStreamPtr;
         
-        OutputStreamPtr MakeOutputStream() const
+        OutputStreamPtr MakeOutputStream()
         {
-            return boost::make_shared< Stream<R> > ();
-        }        
+            OutputStreamPtr stream = boost::make_shared< Stream<R> >();
+            if (mCurrentValue)
+                stream->Append(*mCurrentValue);
+            return stream;
+        }
+        
+    private:
+        boost::optional<R> mCurrentValue;
     };
     
     
