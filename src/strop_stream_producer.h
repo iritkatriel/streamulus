@@ -44,6 +44,9 @@ namespace streamulus
         
         void Output(const R& value)
         {
+            if (!GetEngine())
+                return;
+            
             GetEngine()->template Output<R>(mVertexDescriptor,value);
             mCurrentValue = value;
         }        
