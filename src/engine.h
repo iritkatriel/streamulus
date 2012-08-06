@@ -157,11 +157,57 @@ namespace streamulus
             typedef typename Subscription<R>::strop_type ResultStropType;
             ResultStropType result = smls_grammar()(expr, this);
                      
+            result->AddExternalReference();
+            
             StartEngine();
             return proto::lit(result);
         }
         
+        template<typename StropType>
+        void UnSubscribe(const boost::proto::literal<StropType>& subscription)
+        {
+            const StropType& strop(boost::proto::value(subscription));
+            strop->RemoveExternalReference();
+            RemoveVertexFromGraph(strop);
+        }
+        
     private:
+        
+        bool IsRemoveable(const StropPtr& strop)
+        {
+            // A node is removeable if it does not have an external reference or an 
+            // unremoved successor
+
+            if (strop->HasExternalReference())
+                return false;
+
+            BoostGraph::out_edge_iterator it, it_end;
+
+            for (boost::tie(it,it_end) = boost::out_edges(strop->GetDescriptor(), mGraph); it != it_end; ++it)
+            {
+                BoostGraph::edge_descriptor edge(*it);                
+                if (! mGraph[boost::target(edge, mGraph)]->IsDeleted())
+                    return false;
+            }
+            
+            return true;
+        }
+        
+        void RemoveVertexFromGraph(const StropPtr& strop)
+        {
+            if (!IsRemoveable(strop))
+                return;
+            
+            strop->MarkAsDeleted();
+            BoostGraph::in_edge_iterator it, it_end;
+            
+            for (boost::tie(it,it_end) = boost::in_edges(strop->GetDescriptor(), mGraph); it != it_end; ++it)
+            {
+                BoostGraph::edge_descriptor edge(*it);
+                const StropPtr& pred(mGraph[boost::source(edge, mGraph)]);
+                RemoveVertexFromGraph(pred);
+            }
+        }
         
         void StartEngine()
         {
@@ -178,11 +224,10 @@ namespace streamulus
         void ActivateVertex(const StropPtr& strop)
         {
             assert(strop->GetEngine());
-            if (!strop->GetEngine())
-                return;
             
-            if (strop->IsActive())
+            if (strop->IsActive() || strop->IsDeleted())
                 return;
+
             mQueue.insert(QueueEntry(mCurrentTime++, strop->GetTopSortIndex(), strop->GetDescriptor()));
             strop->SetIsActive(true);
         }

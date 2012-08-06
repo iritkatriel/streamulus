@@ -30,21 +30,26 @@ namespace streamulus
     public:
         
         StropBase()
-        : mEngine(NULL)
-        , mVertexDescriptor(0)
-        , mIsActive(false)
-        , mDisplayName("unnamed")
         {    
+            Init("unnamed");
         }
         
         StropBase(const std::string& display_name)
-        : mEngine(NULL)
-        , mVertexDescriptor(0)
-        , mIsActive(false)
-        , mDisplayName(display_name)
-        {    
+        {   
+            Init(display_name);
         }
         
+    private:
+        void Init(const std::string& display_name)
+        {
+            mEngine = NULL;
+            mVertexDescriptor = 0;
+            mIsActive = false;
+            mIsDeleted = false;
+            mDisplayName = display_name;
+        }
+        
+    public:
         virtual ~StropBase()
         {
         }
@@ -99,13 +104,43 @@ namespace streamulus
             return os << strop.DisplayName();    
         }
 
+        void MarkAsDeleted()
+        {
+            mIsDeleted = true;
+        }
+        
+        bool IsDeleted()
+        {
+            return mIsDeleted;
+        }
+        
+        void AddExternalReference()
+        {
+            assert(!mExternalReference);
+            mExternalReference = true;
+        }
+        
+        bool RemoveExternalReference()
+        {
+            assert(mExternalReference);
+            if (!mExternalReference)
+                return false;
+            mExternalReference = false;
+            return true;
+        }
+        
+        bool HasExternalReference()
+        {
+            return mExternalReference;
+        }
     protected:
         
         Engine* mEngine; // no ownership. Do not delete. 
         Graph::vertex_descriptor mVertexDescriptor;
         size_t mTopSortIndex;
-        bool mIsActive;
-        
+        bool mIsActive;  // is it in the "active" queue
+        bool mIsDeleted; // Was deleted from the graph by the user (to be garbage collected). 
+        bool mExternalReference; // The user has a handle to this strop (so it can be used in future expressions).
         std::string mDisplayName;
     };
     
