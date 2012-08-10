@@ -58,22 +58,7 @@ namespace streamulus
         {
             mSources.push_back(strop);
         }
-        
-        bool ReplaceStrop(const StropPtr& strop, const StropPtr& new_strop)
-        {
-            if (strop->GetEngine() != this)
-                return false;
-            
-            new_strop->SetGraph(strop->GetEngine(), 
-                                strop->GetDescriptor(), 
-                                strop->GetTopSortIndex());
-            
-            mGraph[strop->GetDescriptor()] = new_strop;
-            
-            strop->SetGraph(NULL, 0, 0); 
-            return true;
-        }
-        
+                
         template<typename StreamPtrType>
         void AddEdgeToGraph(const StropPtr& source, 
                             const StropPtr& target,
@@ -119,7 +104,7 @@ namespace streamulus
                 std::set<QueueEntry>::iterator it = mQueue.begin();
                 mCurrentTime = std::max(mCurrentTime,it->mTime);
                 
-                StropPtr strop(mGraph[it->mVertexDescriptor]);
+                StropPtr& strop(it->mStrop);
                 strop->Work();
                 strop->SetIsActive(false);
                 mQueue.erase(it);
@@ -221,14 +206,14 @@ namespace streamulus
             ActivateVertex(mGraph[vertex]);
         }
         
-        void ActivateVertex(const StropPtr& strop)
+        void ActivateVertex(StropPtr& strop)
         {
             assert(strop->GetEngine());
             
             if (strop->IsActive() || strop->IsDeleted())
                 return;
 
-            mQueue.insert(QueueEntry(mCurrentTime++, strop->GetTopSortIndex(), strop->GetDescriptor()));
+            mQueue.insert(QueueEntry(mCurrentTime++, strop->GetTopSortIndex(), strop));
             strop->SetIsActive(true);
         }
         
@@ -281,10 +266,10 @@ namespace streamulus
         {
             QueueEntry(TimestampT time,
                        size_t top_sort_index, 
-                       BoostGraph::vertex_descriptor desc)
+                       StropPtr& strop)
             : mTime(time)
             , mTopSortIndex(top_sort_index)
-            , mVertexDescriptor(desc)
+            , mStrop(strop)
             {
             }
             
@@ -295,9 +280,9 @@ namespace streamulus
                     (this->mTime==rhs.mTime && this->mTopSortIndex<rhs.mTopSortIndex);
             }
             
-            TimestampT       mTime;
-            size_t           mTopSortIndex;
-            BoostGraph::vertex_descriptor mVertexDescriptor;
+            TimestampT mTime;
+            size_t     mTopSortIndex;
+            StropPtr&  mStrop;
         };
         
         
