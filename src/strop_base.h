@@ -46,6 +46,7 @@ namespace streamulus
             mVertexDescriptor = 0;
             mIsActive = false;
             mIsDeleted = false;
+            mExternalReference = false;
             mDisplayName = display_name;
         }
         
