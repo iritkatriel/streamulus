@@ -44,6 +44,7 @@ namespace streamulus
             : mWorking(false)
             , mCurrentTime(0)
             , mVerbose(false)
+            , mNumRemovedVertices(0)
         {
         };
         
@@ -154,46 +155,11 @@ namespace streamulus
             const StropType& strop(boost::proto::value(subscription));
             strop->RemoveExternalReference();
             RemoveVertexFromGraph(strop);
+            GarbageCollect();
         }
         
     private:
-        
-        bool IsRemoveable(const StropPtr& strop)
-        {
-            // A node is removeable if it does not have an external reference or an 
-            // unremoved successor
-
-            if (strop->HasExternalReference())
-                return false;
-
-            BoostGraph::out_edge_iterator it, it_end;
-
-            for (boost::tie(it,it_end) = boost::out_edges(strop->GetDescriptor(), mGraph); it != it_end; ++it)
-            {
-                BoostGraph::edge_descriptor edge(*it);                
-                if (! mGraph[boost::target(edge, mGraph)]->IsDeleted())
-                    return false;
-            }
-            
-            return true;
-        }
-        
-        void RemoveVertexFromGraph(const StropPtr& strop)
-        {
-            if (!IsRemoveable(strop))
-                return;
-            
-            strop->MarkAsDeleted();
-            BoostGraph::in_edge_iterator it, it_end;
-            
-            for (boost::tie(it,it_end) = boost::in_edges(strop->GetDescriptor(), mGraph); it != it_end; ++it)
-            {
-                BoostGraph::edge_descriptor edge(*it);
-                const StropPtr& pred(mGraph[boost::source(edge, mGraph)]);
-                RemoveVertexFromGraph(pred);
-            }
-        }
-        
+                
         void StartEngine()
         {
             WriteGraph("TsGraph.vis");
@@ -226,6 +192,88 @@ namespace streamulus
             mSources.clear();
         }        
 
+        bool IsRemoveable(const StropPtr& strop)
+        {
+            // A node is removeable if it does not have an external reference or an 
+            // unremoved successor
+            
+            if (strop->HasExternalReference())
+                return false;
+            
+            BoostGraph::out_edge_iterator it, it_end;
+            
+            for (boost::tie(it,it_end) = boost::out_edges(strop->GetDescriptor(), mGraph); it != it_end; ++it)
+            {
+                BoostGraph::edge_descriptor edge(*it);                
+                if (! mGraph[boost::target(edge, mGraph)]->IsDeleted())
+                    return false;
+            }
+            
+            return true;
+        }
+        
+        void RemoveVertexFromGraph(const StropPtr& strop)
+        {
+            if (!IsRemoveable(strop))
+                return;
+            
+            strop->MarkAsDeleted();
+            mNumRemovedVertices++;
+            BoostGraph::in_edge_iterator it, it_end;
+            
+            for (boost::tie(it,it_end) = boost::in_edges(strop->GetDescriptor(), mGraph); it != it_end; ++it)
+            {
+                BoostGraph::edge_descriptor edge(*it);
+                const StropPtr& pred(mGraph[boost::source(edge, mGraph)]);
+                RemoveVertexFromGraph(pred);
+            }
+        }
+        
+        void GarbageCollect()
+        {
+            if ( 2*mNumRemovedVertices < boost::num_vertices(mGraph) )
+                return;
+            
+            DoGarbageCollection();
+            mNumRemovedVertices=0;
+        }
+
+        void DoGarbageCollection()
+        {
+            Graph new_graph;
+            
+            std::map<BoostGraph::vertex_descriptor, BoostGraph::vertex_descriptor> descriptors_old2new;
+            
+            // copy live nodes
+            BoostGraph::vertex_iterator vit, vit_end;            
+            for (boost::tie(vit,vit_end) = boost::vertices(mGraph); vit != vit_end; ++vit)
+            {
+                const StropPtr& strop(mGraph[*vit]);
+                if (! strop->IsDeleted())
+                    descriptors_old2new[strop->GetDescriptor()] = boost::add_vertex(strop, new_graph);
+            }
+            
+            // copy live edges
+            BoostGraph::edge_iterator eit, eit_end;            
+            for (boost::tie(eit,eit_end) = boost::edges(mGraph); eit != eit_end; ++eit)
+            {
+                BoostGraph::edge_descriptor edge(*eit);
+                const StropPtr& source(mGraph[boost::source(edge, mGraph)]);
+                const StropPtr& target(mGraph[boost::target(edge, mGraph)]);
+                
+                if (! (source->IsDeleted() || target->IsDeleted()))
+                {
+                    boost::add_edge(descriptors_old2new[source->GetDescriptor()], 
+                                    descriptors_old2new[target->GetDescriptor()], 
+                                    mGraph[*eit], 
+                                    new_graph);                    
+                }
+            }
+            
+            mGraph.swap(new_graph);
+            GraphChanged();
+        }
+        
         struct TopologicalSortVisitor : public boost::default_dfs_visitor
         {  // Reset descriptors and recompute topological order labels in the graph:
         public:
@@ -284,8 +332,7 @@ namespace streamulus
             size_t     mTopSortIndex;
             StropPtr&  mStrop;
         };
-        
-        
+    
         
         class VertexPropertyWriter
         {
@@ -319,6 +366,7 @@ namespace streamulus
         bool mWorking;    
         std::vector<StropPtr> mSources;
         bool mVerbose;
+        unsigned int mNumRemovedVertices;
 
     };
         
