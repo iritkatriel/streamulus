@@ -86,7 +86,7 @@ namespace streamulus
         template<class This, class StropType, class State>
         struct result<This(StropType,State)>
         {
-            typedef StropType type;
+            typedef typename boost::remove_reference<StropType>::type type;
         };
         
         template<typename StropType, class State>
