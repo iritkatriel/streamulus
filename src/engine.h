@@ -146,12 +146,18 @@ namespace streamulus
             result->AddExternalReference();
             
             StartEngine();
-            return proto::lit(result);
+            
+            // typedef const boost::shared_ptr<StropStreamProducer<T> > strop_type;
+            // const streamulus_expr<typename boost::proto::terminal<strop_type>::type>
+            
+            typename Subscription<R>::terminal_type terminal = {result};
+            return terminal;
         }
         
-        template<typename StropType>
-        void UnSubscribe(const boost::proto::literal<StropType>& subscription)
+        template<typename T>
+        void UnSubscribe(const typename Subscription<T>::type& subscription)
         {
+            typedef typename Subscription<T>::strop_type StropType;
             const StropType& strop(boost::proto::value(subscription));
             strop->RemoveExternalReference();
             RemoveVertexFromGraph(strop);

@@ -29,7 +29,8 @@ template<typename T>
 struct Subscription
 {
     typedef const boost::shared_ptr<StropStreamProducer<T> > strop_type;
-    typedef const boost::proto::literal<strop_type> type;
+    typedef typename boost::proto::terminal<strop_type>::type terminal_type;
+    typedef const terminal_type type;
 };
 
 } // ns streamulus

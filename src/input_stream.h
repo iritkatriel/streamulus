@@ -33,21 +33,23 @@ namespace streamulus
     struct InputStream
     {
         typedef boost::shared_ptr<DataSource<T> > data_source_t;
-        typedef const boost::proto::literal<data_source_t> type;
+        typedef typename boost::proto::terminal<data_source_t>::type proto_expression;
+        typedef const proto_expression type;
     };
 
     // Create a new stream
     template<typename T>
     typename InputStream<T>::type NewInputStream(const char* name, bool verbose)
     {
-        return boost::proto::lit(boost::make_shared<DataSource<T> >(name, verbose));
+        typename InputStream<T>::proto_expression expr = {boost::make_shared<DataSource<T> >(name, verbose)};
+        return expr;
     }
 
     // Add an input to the stream
     template<typename T>
-    void InputStreamPut(typename InputStream<T>::type literal, const T& value)
+    void InputStreamPut(typename InputStream<T>::type terminal, const T& value)
     {
-        boost::proto::value(literal)->Tick(value);
+        boost::proto::value(terminal)->Tick(value);
     }
     
         
