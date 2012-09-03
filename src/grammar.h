@@ -170,10 +170,7 @@ namespace streamulus
     // Terminal expressions 
     template<>
     struct smls_grammar_cases::case_<proto::tag::terminal>
-        : proto::or_<
-              proto::when<strop_terminal_rule, AddStropToGraph(proto::_value,proto::_state)>  
-            , proto::when<const_terminal_rule, generic_func(MakeConstFunc(proto::_value),proto::_state)>
-          >
+        : proto::when<proto::_, HandleTerminal(proto::_value,proto::_state)>  
     {};
     
     

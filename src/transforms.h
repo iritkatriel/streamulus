@@ -44,12 +44,16 @@ namespace streamulus
     using namespace boost;
         
     //////////////////////////// Utilities ////////////////////////////
-    template<typename SharedPtrType>
-    struct BaseType;
+    template<typename T>
+    struct BaseType
+    {
+        static const bool value = false;
+    };
     
     template<typename Type>
     struct BaseType<boost::shared_ptr<Type> >
     {
+        static const bool value = true;
         typedef Type type;
     };
     
@@ -58,27 +62,9 @@ namespace streamulus
     {  
         typedef boost::shared_ptr<Strop<Sig> > type;    
     };
-     
-    struct MakeConstFunc : proto::callable
-    {
-        template<class Sig> struct result;
-        
-        template<class This, class T>
-        struct result<This(T)>
-        {
-            typedef typename boost::remove_const<typename boost::remove_reference<T>::type>::type CleanT;
-            typedef ConstFunc<CleanT> type;
-        };
-        
-        template<typename T>
-        typename result<MakeConstFunc(T)>::type
-        operator()(T value)
-        {
-            return typename result<MakeConstFunc(T)>::type(value);
-        }
-    };
-    
+         
     //////////////////////////// Transforms ////////////////////////////
+    
     struct AddStropToGraph : proto::callable  
     {
         template<class Sig> struct result;
@@ -102,6 +88,7 @@ namespace streamulus
             return strop;
         }
     };
+
     
     struct generic_func : proto::callable
     {
@@ -374,7 +361,51 @@ namespace streamulus
         }
 
     };
+      
+
+    struct HandleTerminal : proto::callable  
+    {
+        template<class Sig> struct result;
         
+        // Case 1: terminal is a shared_ptr to a strop 
+        template<class This, class StropType, class State>
+        struct result<This(const boost::shared_ptr<StropType>&,State)>
+        {
+            typedef const boost::shared_ptr<StropType>& StropPtrType;
+            typedef typename AddStropToGraph::result<AddStropToGraph(StropPtrType,State)>::type type;
+        };
+        
+        template<class This, class StropType, class State>
+        struct result<This(boost::shared_ptr<StropType>,State)>
+        : result<This(const boost::shared_ptr<StropType>&,State)>
+        {};
+        
+        template<typename StropType, class State>
+        typename boost::enable_if<BaseType<StropType>, typename result<HandleTerminal(StropType ,State)>::type>::type
+        operator()(StropType strop, State engine)
+        {
+            return AddStropToGraph()(strop, engine);
+        }
+        
+        // Final case: Terminal is any other constant
+        template<class This, class ConstType, class State>
+        struct result<This(ConstType,State)>
+        {
+            typedef typename ConstFunc<ConstType>::template result<ConstFunc<ConstType>(ConstType)>::type ConstFuncResultType;
+            typedef const boost::shared_ptr<Strop<ConstFuncResultType()> > type;
+        };
+        
+        template<typename ConstType, class State>
+        typename boost::disable_if<BaseType<ConstType>, typename result<HandleTerminal(ConstType ,State)>::type>::type
+        operator()(ConstType const_value, State engine)
+        {
+            typedef typename result<HandleTerminal(ConstType ,State)>::ConstFuncResultType T;
+            return generic_func()(ConstFunc<T>(const_value),engine);
+        }
+         
+    };
+
+    
     struct SlidingWindow : proto::callable
     {
         template<typename Sig> struct result;
