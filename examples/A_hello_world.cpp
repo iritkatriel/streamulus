@@ -97,10 +97,10 @@ void hello_stream()
     InputStreamPut<std::string>(s, "Streamulus");    
 }
 
-/*
+#if defined(USE_MAIN)
 int main()
 {
     hello_stream();
     return 0;
 }
-*/
+#endif
