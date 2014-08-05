@@ -368,8 +368,8 @@ namespace streamulus
 
         Graph mGraph;
         std::set<QueueEntry> mQueue;
-        TimestampT mCurrentTime;
         bool mWorking;    
+        TimestampT mCurrentTime;
         std::vector<StropPtr> mSources;
         bool mVerbose;
         unsigned int mNumRemovedVertices;

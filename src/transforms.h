@@ -109,7 +109,7 @@ namespace streamulus
         {  
             if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
-            typedef result<generic_func(F&,State)> Result;
+            //typedef result<generic_func(F&,State)> Result;
             typedef Func0<F> FuncStropType; 
             
             boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));                         
