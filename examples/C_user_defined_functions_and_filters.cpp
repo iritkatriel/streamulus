@@ -292,10 +292,10 @@ void cross_alert_example()
         InputStreamPut(ts, TimeValue(i, i % 5));
 }
 
-/*
+#if defined(USE_MAIN)
 int main()
 {
     cross_alert_example();
     return 0;
 }
-*/
+#endif

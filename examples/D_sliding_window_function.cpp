@@ -106,10 +106,10 @@ void sliding_window_function_example()
         InputStreamPut(ts, double(i % 5));
 }
 
-/*
- int main()
- {
- cross_alert_example();
- return 0;
- }
- */
+#if defined(USE_MAIN)
+int main()
+{
+    sliding_window_function_example();
+    return 0;
+}
+#endif
