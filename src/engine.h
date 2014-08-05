@@ -168,7 +168,9 @@ namespace streamulus
                 
         void StartEngine()
         {
+#if defined(WRITE_GRAPH)
             WriteGraph("TsGraph.vis");
+#endif
             ActivateSources();
             Work();            
         }
