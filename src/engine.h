@@ -122,7 +122,7 @@ namespace streamulus
         struct ExpressionResultType
         {
             // Get the type of the strop created by the expression
-            typedef typename boost::result_of<smls_grammar(const Expr&, Engine*)>::type result_strop_type;
+            typedef typename std::result_of<smls_grammar(const Expr&, Engine*)>::type result_strop_type;
             // Extract the output type
             typedef typename StropReturnType<result_strop_type>::type type;            
         };

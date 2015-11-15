@@ -56,8 +56,8 @@ namespace streamulus
         template<typename This, typename Arg>
         struct result<This(Arg)>
         {
-            typedef typename boost::result_of<G(Arg)>::type G_result_type;
-            typedef typename boost::result_of<F(G_result_type)>::type F_result_type;
+            typedef typename std::result_of<G(Arg)>::type G_result_type;
+            typedef typename std::result_of<F(G_result_type)>::type F_result_type;
             typedef F_result_type type;
         };
             
