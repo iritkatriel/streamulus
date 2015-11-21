@@ -71,8 +71,10 @@ namespace streamulus
         
         virtual void Work()
         {
-            R value = BaseType::mFunction();
-            StropStreamProducer<R>::Output(value);   
+            boost::optional<R> res = BaseType::mFunction();
+            if (res) {
+                StropStreamProducer<R>::Output(*res);
+            }
         }
     };
 
