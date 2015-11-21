@@ -26,6 +26,7 @@
 #include "strop_base.h" 
 
 #include <boost/make_shared.hpp>
+#include <boost/optional.hpp>
 
 namespace streamulus
 {
@@ -42,15 +43,17 @@ namespace streamulus
         {
         }
         
-        void Output(const R& value)
+        void Output(const boost::optional<R>& value)
         {
             if (!GetEngine())
                 return;
-            
-            GetEngine()->template Output<R>(mVertexDescriptor,value);
+
+            if(value) {
+                GetEngine()->template Output<R>(mVertexDescriptor, *value);
+            }
             mCurrentValue = value;
-        }        
-        
+        }
+
         typedef boost::shared_ptr< Stream<R> > OutputStreamPtr;
         
         OutputStreamPtr MakeOutputStream()
