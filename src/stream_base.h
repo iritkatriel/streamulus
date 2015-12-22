@@ -29,7 +29,7 @@ namespace streamulus
     {
     public:
         StreamBase()
-        : mGraph(NULL)
+        : mGraph(nullptr)
         , mIsFeedbackEdge(false)
         {
         }

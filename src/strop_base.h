@@ -42,7 +42,7 @@ namespace streamulus
     private:
         void Init(const std::string& display_name)
         {
-            mEngine = NULL;
+            mEngine = nullptr;
             mVertexDescriptor = 0;
             mIsActive = false;
             mIsDeleted = false;
@@ -72,7 +72,7 @@ namespace streamulus
         
         void SetGraph(Engine* engine, const Graph::vertex_descriptor& desc, size_t top_sort_index)
         {
-            assert(mEngine==NULL || engine==NULL || engine == mEngine);
+            assert(mEngine==nullptr || engine==nullptr || engine == mEngine);
             mEngine = engine; 
             mVertexDescriptor = desc;
             mTopSortIndex = top_sort_index;
