@@ -31,7 +31,7 @@ namespace streamulus
     template<typename T>
     struct WindowUpdateType
     {
-        typedef std::pair<WindowInOut,T> type;
+        using type = std::pair<WindowInOut,T>;
     };
 
     template<typename T>
@@ -40,14 +40,14 @@ namespace streamulus
     template<typename T>
     struct WindowBaseType<std::pair<WindowInOut,T> >
     {
-        typedef T type;
+        using type = T;
     };
     
     template<typename T>
     class Window : public Strop<typename WindowUpdateType<T>::type(T)>
     {
     public:
-        typedef typename WindowUpdateType<T>::type R;
+        using R = typename WindowUpdateType<T>::type;
         
         Window(size_t size)
             : mBuffer(size)

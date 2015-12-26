@@ -26,27 +26,27 @@
 namespace streamulus
 {
     
-    struct StropTag { typedef boost::vertex_property_tag kind; };
-    struct StreamTag { typedef boost::edge_property_tag kind; };
+    struct StropTag { using kind = boost::vertex_property_tag; };
+    struct StreamTag { using kind = boost::edge_property_tag; };
     
     class StropBase;
     class StreamBase;
     
-    typedef boost::shared_ptr<StropBase> StropPtr;
-    typedef boost::shared_ptr<StreamBase> StreamPtr;
+    using StropPtr = boost::shared_ptr<StropBase>;
+    using StreamPtr = boost::shared_ptr<StreamBase>;
     
     
-    typedef boost::adjacency_list<boost::vecS 
+    using BoostGraph = boost::adjacency_list<boost::vecS
     , boost::vecS
     , boost::bidirectionalS 
     , boost::property<StropTag, StropPtr>
     , boost::property<StreamTag, StreamPtr>
-    > BoostGraph;
+    >;
     
     class Graph : public BoostGraph 
     {
     public:
-        typedef BoostGraph type;
+        using type = BoostGraph;
         
         StropPtr& operator[](const BoostGraph::vertex_descriptor& d)
         {

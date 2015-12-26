@@ -42,7 +42,7 @@ namespace streamulus
     template <typename F>
     struct reference {
       // output type is same as wrapped object output type
-      template <class Sig> struct result { typedef typename F::template result<F>::type type; };
+      template <class Sig> struct result { using type = typename F::template result<F>::type; };
 
       // construct using a supplied object, initialize our reference wrapper
       inline reference<F>(F &internal) : mInternal(internal) {      

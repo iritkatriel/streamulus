@@ -36,7 +36,7 @@ namespace streamulus
         template<typename Sig>
         struct value_type
         {
-            typedef long type;    
+            using type = long;
         };
         
         template<typename T>
@@ -72,7 +72,7 @@ namespace streamulus
         template<typename Sig>
         struct value_type
         {
-            typedef T type;    
+            using type = T;
         };
 
         void Insert(const T& value)
@@ -102,12 +102,12 @@ namespace streamulus
         {
         }
 
-        typedef boost::tuple<double,double,long> OutputType;
+        using OutputType = boost::tuple<double,double,long>;
         
         template<typename Sig>
         struct value_type
         {
-            typedef OutputType type;    
+            using type = OutputType;
         };
 
         void Insert(const T& value)

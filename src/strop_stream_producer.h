@@ -36,8 +36,8 @@ namespace streamulus
     : public StropBase
     {
     public:
-        
-        typedef R result_type;
+
+        using result_type = R;
         
         virtual ~StropStreamProducer() 
         {
@@ -54,7 +54,7 @@ namespace streamulus
             mCurrentValue = value;
         }
 
-        typedef boost::shared_ptr< Stream<R> > OutputStreamPtr;
+        using OutputStreamPtr = boost::shared_ptr<Stream<R>>;
         
         OutputStreamPtr MakeOutputStream()
         {

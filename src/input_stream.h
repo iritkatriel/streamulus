@@ -32,9 +32,9 @@ namespace streamulus
     template<typename T>
     struct InputStream
     {
-        typedef boost::shared_ptr<DataSource<T> > data_source_t;
-        typedef typename boost::proto::terminal<data_source_t>::type proto_expression;
-        typedef const proto_expression type;
+        using data_source_t = boost::shared_ptr<DataSource<T> >;
+        using proto_expression = typename boost::proto::terminal<data_source_t>::type;
+        using type = const proto_expression;
     };
 
     // Create a new stream
