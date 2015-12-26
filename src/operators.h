@@ -21,8 +21,10 @@
 
 #pragma once
 
+#include "cpp14_utils.h"
+
 #include <boost/type_traits.hpp> 
-#include <boost/proto/proto.hpp> 
+#include <boost/proto/proto.hpp>
 
 namespace streamulus
 {       
@@ -75,7 +77,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            using type = typename boost::remove_pointer<A>::type;
+            using type = remove_pointer_t<A>;
         };
         
         template<typename A>
@@ -159,8 +161,8 @@ namespace streamulus
         template<typename A>
         typename result<functor_of<boost::proto::tag::pre_inc>(A)>::type
         operator()(A& value) const
-        { 
-            typename boost::remove_const<A>::type res(value);
+        {
+            remove_const_t<A> res(value);
             return ++res; 
         }
     };
@@ -180,7 +182,7 @@ namespace streamulus
         typename result<functor_of<boost::proto::tag::pre_dec>(A)>::type
         operator()(A& value) const
         { 
-            typename boost::remove_const<A>::type res(value);
+            remove_const_t<A> res(value);
             return --res; 
         }
     };
@@ -199,8 +201,8 @@ namespace streamulus
         template<typename A>
         typename result<functor_of<boost::proto::tag::post_inc>(A)>::type
         operator()(A& value) const 
-        { 
-            typename boost::remove_const<A>::type res(value);            
+        {
+            remove_const_t<A> res(value);
             return res++; 
         }
     };
@@ -219,8 +221,8 @@ namespace streamulus
         template<typename A>
         typename result<functor_of<boost::proto::tag::post_dec>(A)>::type
         operator()(A& value) const
-        { 
-            typename boost::remove_const<A>::type res(value);            
+        {
+            remove_const_t<A> res(value);
             return res--; 
         }
     };
@@ -602,8 +604,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy=rhs; 
         }
     };
@@ -622,8 +624,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::shift_left_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy <<= rhs; 
         }
     };
@@ -642,8 +644,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::shift_right_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);            
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy >>= rhs; 
         }
     };
@@ -662,8 +664,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::multiplies_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy*=rhs; 
         }
     };
@@ -682,8 +684,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::divides_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy/=rhs; 
         }
     };
@@ -702,8 +704,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::modulus_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy%=rhs; 
         }
     };
@@ -722,8 +724,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::plus_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy+=rhs; 
         }
     };
@@ -743,7 +745,7 @@ namespace streamulus
         typename result<functor_of<boost::proto::tag::minus_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
         {
-            typename boost::remove_const<A>::type dummy(lhs);
+            remove_const_t<A> dummy(lhs);
             return dummy-=rhs; 
         }
     };
@@ -762,8 +764,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::bitwise_and_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy&=rhs; 
         }
     };
@@ -782,8 +784,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::bitwise_or_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy|=rhs; 
         }
     };
@@ -803,8 +805,8 @@ namespace streamulus
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::bitwise_xor_assign>(A,B)>::type
         operator()(A& lhs, const B& rhs) const
-        { 
-            typename boost::remove_const<A>::type dummy(lhs);
+        {
+            remove_const_t<A> dummy(lhs);
             return dummy^=rhs; 
         }
     };
@@ -819,7 +821,7 @@ namespace streamulus
         struct result<This(A,B)>
         {
             // TODO: this will work for arrays but not in general. fix or remove.
-            using type = typename boost::remove_pointer<A>::type;
+            using type = remove_pointer_t<A>;
         };
         
         template<typename A, typename B>
