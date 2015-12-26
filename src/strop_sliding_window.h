@@ -29,10 +29,7 @@ namespace streamulus
     enum WindowInOut { DATA_IN, DATA_OUT };
     
     template<typename T>
-    struct WindowUpdateType
-    {
-        using type = std::pair<WindowInOut,T>;
-    };
+    using WindowUpdateType = std::pair<WindowInOut,T>;
 
     template<typename T>
     struct WindowBaseType;
@@ -44,10 +41,10 @@ namespace streamulus
     };
     
     template<typename T>
-    class Window : public Strop<typename WindowUpdateType<T>::type(T)>
+    class Window : public Strop<WindowUpdateType<T>(T)>
     {
     public:
-        using R = typename WindowUpdateType<T>::type;
+        using R = WindowUpdateType<T>;
         
         Window(size_t size)
             : mBuffer(size)

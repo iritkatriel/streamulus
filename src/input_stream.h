@@ -30,24 +30,25 @@ namespace streamulus
     // Convenience utilities for defining input streams    
     
     template<typename T>
-    struct InputStream
-    {
-        using data_source_t = std::shared_ptr<DataSource<T> >;
-        using proto_expression = typename boost::proto::terminal<data_source_t>::type;
-        using type = const proto_expression;
-    };
+    using input_stream_data_source_t = std::shared_ptr<DataSource<T>>;
+
+    template<typename T>
+    using input_stream_proto_expression_t = typename boost::proto::terminal<input_stream_data_source_t<T>>::type;
+
+    template<typename T>
+    using InputStream = const input_stream_proto_expression_t<T>;
 
     // Create a new stream
     template<typename T>
-    typename InputStream<T>::type NewInputStream(const char* name, bool verbose)
+    InputStream<T> NewInputStream(const char* name, bool verbose)
     {
-        typename InputStream<T>::proto_expression expr = {std::make_shared<DataSource<T> >(name, verbose)};
+        input_stream_proto_expression_t<T> expr = {std::make_shared<DataSource<T> >(name, verbose)};
         return expr;
     }
 
     // Add an input to the stream
     template<typename T>
-    void InputStreamPut(typename InputStream<T>::type terminal, const T& value)
+    void InputStreamPut(InputStream<T> terminal, const T& value)
     {
         boost::proto::value(terminal)->Tick(value);
     }

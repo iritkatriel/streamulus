@@ -412,7 +412,7 @@ namespace streamulus
         struct result<SlidingWindow(const int&,ArgStrop,State)>
         {
             using input_type = typename StropReturnType<const ArgStrop>::type;
-            using result_type = typename WindowUpdateType<input_type>::type;
+            using result_type = WindowUpdateType<input_type>;
             using type = const std::shared_ptr<StropStreamProducer<result_type> >;
         };
         
