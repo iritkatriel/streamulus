@@ -30,6 +30,7 @@
 #include "input_stream.h"
 #include "strop_return_type.h"
 #include "funcs.h"
+#include "cpp14_utils.h"
 
 #include <boost/fusion/include/make_vector.hpp>
 #include <boost/fusion/include/algorithm.hpp>
@@ -72,7 +73,7 @@ namespace streamulus
         template<class This, class StropType, class State>
         struct result<This(StropType,State)>
         {
-            using type = typename boost::remove_reference<StropType>::type;
+            using type = remove_reference_t<StropType>;
         };
         
         template<typename StropType, class State>
@@ -98,7 +99,7 @@ namespace streamulus
         template<typename FArg, typename State>
         struct result<generic_func(FArg,State)>
         {
-            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using F = remove_const_t<remove_reference_t<FArg>>;
             using R = typename F::template result<F()>::type;
             using type = const boost::shared_ptr<Strop<R()>>;
         };
@@ -123,7 +124,7 @@ namespace streamulus
         typename State>
         struct result<generic_func(FArg,Arg1Strop,State)>
         {
-            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using  R = typename F::template result<F(Arg1Type)>::type;
             using type = const boost::shared_ptr<Strop<R(Arg1Type)>>;
@@ -156,7 +157,7 @@ namespace streamulus
         template<typename FArg, typename Arg1Strop, typename Arg2Strop, typename State>
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,State)>
         {
-            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
             using R = typename F::template result<F(Arg1Type,Arg2Type)>::type;
@@ -191,7 +192,7 @@ namespace streamulus
         typename State>
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,State)>
         {
-            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
             using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
@@ -243,7 +244,7 @@ namespace streamulus
         typename State>
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>
         {
-            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
             using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
@@ -302,7 +303,7 @@ namespace streamulus
                  typename State>
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>
         {
-            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
             using Arg3Type = typename StropReturnType<const Arg3Strop>::type ;
