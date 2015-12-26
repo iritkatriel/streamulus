@@ -112,7 +112,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             using FuncStropType = Func0<F>;
 
-            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
+            std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddSource(funcStropPtr);
             return funcStropPtr;
@@ -143,7 +143,7 @@ namespace streamulus
             using Result = result<generic_func(F&,Arg1Strop,State)>;
             using FuncStropType = Func1<F,typename Result::Arg1Type>;
 
-            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
+            std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream));
@@ -172,7 +172,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             using Result = result<generic_func(F&,Arg1Strop,Arg2Strop, State)>;
             using FuncStropType = Func2<F, typename Result::Arg1Type, typename Result::Arg2Type>;
-            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
+            std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -221,7 +221,7 @@ namespace streamulus
             ,typename Result::Arg3Type
             >;
 
-            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
+            std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -277,7 +277,7 @@ namespace streamulus
             ,typename Result::Arg4Type
             >;
 
-            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
+            std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -340,7 +340,7 @@ namespace streamulus
                         ,typename Result::Arg5Type
                         >;
 
-            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
+            std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -409,7 +409,7 @@ namespace streamulus
         template<typename Sig> struct result;
         
         template<typename ArgStrop, typename State>
-        struct result<SlidingWindow(const int&,ArgStrop,State)> 
+        struct result<SlidingWindow(const int&,ArgStrop,State)>
         {
             using input_type = typename StropReturnType<const ArgStrop>::type;
             using result_type = typename WindowUpdateType<input_type>::type;
@@ -421,7 +421,7 @@ namespace streamulus
         operator()(const int& size, const ArgStrop arg, State engine)
         {
             using WindowStropType = Window<typename StropReturnType<const ArgStrop>::type>;
-            std::shared_ptr<WindowStropType> strop(new WindowStropType(size));
+            std::shared_ptr<WindowStropType> strop = std::make_shared<WindowStropType>(size);
 
             typename BaseType<ArgStrop>::type::OutputStreamPtr argStream(arg->MakeOutputStream());
             strop->SetInputs(boost::fusion::make_vector(argStream));
