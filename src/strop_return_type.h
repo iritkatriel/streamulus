@@ -29,25 +29,25 @@ namespace streamulus
     struct StropReturnType;
     
     template<typename StropType>
-    struct StropReturnType<boost::shared_ptr<StropType> >
+    struct StropReturnType<std::shared_ptr<StropType> >
     {
         using type = typename StropType::result_type;
     };
     
     template<typename StropType>
-    struct StropReturnType<const boost::shared_ptr<StropType> >
+    struct StropReturnType<const std::shared_ptr<StropType> >
     {
         using type = typename StropType::result_type;
     };
     
     template<typename StropType>
-    struct StropReturnType<const boost::shared_ptr<StropType>& >
+    struct StropReturnType<const std::shared_ptr<StropType>& >
     {
         using type = typename StropType::result_type;
     };
     
     template<typename StropType>
-    struct StropReturnType<boost::shared_ptr<StropType>& >
+    struct StropReturnType<std::shared_ptr<StropType>& >
     {
         using type = typename StropType::result_type;
     };

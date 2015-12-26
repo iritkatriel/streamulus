@@ -52,7 +52,7 @@ namespace streamulus
     };
     
     template<typename Type>
-    struct BaseType<boost::shared_ptr<Type> >
+    struct BaseType<std::shared_ptr<Type> >
     {
         static const bool value = true;
         using type = Type;
@@ -61,7 +61,7 @@ namespace streamulus
     template<typename Sig>
     struct MakeStropPtrType
     {  
-        using type = boost::shared_ptr<Strop<Sig> >;
+        using type = std::shared_ptr<Strop<Sig> >;
     };
          
     //////////////////////////// Transforms ////////////////////////////
@@ -101,7 +101,7 @@ namespace streamulus
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using R = typename F::template result<F()>::type;
-            using type = const boost::shared_ptr<Strop<R()>>;
+            using type = const std::shared_ptr<Strop<R()>>;
         };
         
         template<typename F, typename State>
@@ -111,8 +111,8 @@ namespace streamulus
             if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
             using FuncStropType = Func0<F>;
-            
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));                         
+
+            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddSource(funcStropPtr);
             return funcStropPtr;
@@ -127,7 +127,7 @@ namespace streamulus
             using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using  R = typename F::template result<F(Arg1Type)>::type;
-            using type = const boost::shared_ptr<Strop<R(Arg1Type)>>;
+            using type = const std::shared_ptr<Strop<R(Arg1Type)>>;
         };
         
         template<typename F, 
@@ -142,8 +142,8 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             using Result = result<generic_func(F&,Arg1Strop,State)>;
             using FuncStropType = Func1<F,typename Result::Arg1Type>;
-            
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
+
+            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream));
@@ -161,7 +161,7 @@ namespace streamulus
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
             using R = typename F::template result<F(Arg1Type,Arg2Type)>::type;
-            using type = const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type)>>;
+            using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type)>>;
         };
         
         template<typename F, typename Arg1Strop, typename Arg2Strop, typename State>
@@ -172,7 +172,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             using Result = result<generic_func(F&,Arg1Strop,Arg2Strop, State)>;
             using FuncStropType = Func2<F, typename Result::Arg1Type, typename Result::Arg2Type>;
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
+            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -197,7 +197,7 @@ namespace streamulus
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
             using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
             using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type)>::type;
-            using type = const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> >;
+            using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> >;
         };
         
         template<typename F, 
@@ -220,8 +220,8 @@ namespace streamulus
             ,typename Result::Arg2Type
             ,typename Result::Arg3Type
             >;
-            
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
+
+            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -250,7 +250,7 @@ namespace streamulus
             using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
             using Arg4Type = typename StropReturnType<const Arg4Strop>::type;
             using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type;
-            using type = const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> >;
+            using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> >;
         };
         
         template<typename F, 
@@ -276,8 +276,8 @@ namespace streamulus
             ,typename Result::Arg3Type
             ,typename Result::Arg4Type
             >;
-            
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
+
+            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -310,7 +310,7 @@ namespace streamulus
             using Arg4Type = typename StropReturnType<const Arg4Strop>::type ;
             using Arg5Type = typename StropReturnType<const Arg5Strop>::type;
             using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type;
-            using type = const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>>;
+            using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>>;
         };
         
         template<typename F, 
@@ -339,8 +339,8 @@ namespace streamulus
                         ,typename Result::Arg4Type
                         ,typename Result::Arg5Type
                         >;
-            
-            boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
+
+            std::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
@@ -367,15 +367,15 @@ namespace streamulus
         
         // Case 1: terminal is a shared_ptr to a strop 
         template<class This, class StropType, class State>
-        struct result<This(const boost::shared_ptr<StropType>&,State)>
+        struct result<This(const std::shared_ptr<StropType>&,State)>
         {
-            using StropPtrType = const boost::shared_ptr<StropType>&;
+            using StropPtrType = const std::shared_ptr<StropType>&;
             using type = typename AddStropToGraph::result<AddStropToGraph(StropPtrType,State)>::type;
         };
         
         template<class This, class StropType, class State>
-        struct result<This(boost::shared_ptr<StropType>,State)>
-        : result<This(const boost::shared_ptr<StropType>&,State)>
+        struct result<This(std::shared_ptr<StropType>,State)>
+        : result<This(const std::shared_ptr<StropType>&,State)>
         {};
         
         template<typename StropType, class State>
@@ -390,7 +390,7 @@ namespace streamulus
         struct result<This(ConstType,State)>
         {
             using ConstFuncResultType = typename ConstFunc<ConstType>::template result<ConstFunc<ConstType>(ConstType)>::type;
-            using type = const boost::shared_ptr<Strop<ConstFuncResultType()>>;
+            using type = const std::shared_ptr<Strop<ConstFuncResultType()>>;
         };
         
         template<typename ConstType, class State>
@@ -413,7 +413,7 @@ namespace streamulus
         {
             using input_type = typename StropReturnType<const ArgStrop>::type;
             using result_type = typename WindowUpdateType<input_type>::type;
-            using type = const boost::shared_ptr<StropStreamProducer<result_type> >;
+            using type = const std::shared_ptr<StropStreamProducer<result_type> >;
         };
         
         template<typename ArgStrop, typename State>
@@ -421,7 +421,7 @@ namespace streamulus
         operator()(const int& size, const ArgStrop arg, State engine)
         {
             using WindowStropType = Window<typename StropReturnType<const ArgStrop>::type>;
-            boost::shared_ptr<WindowStropType> strop(new WindowStropType(size));
+            std::shared_ptr<WindowStropType> strop(new WindowStropType(size));
 
             typename BaseType<ArgStrop>::type::OutputStreamPtr argStream(arg->MakeOutputStream());
             strop->SetInputs(boost::fusion::make_vector(argStream));
