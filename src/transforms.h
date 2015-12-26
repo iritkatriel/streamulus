@@ -54,13 +54,13 @@ namespace streamulus
     struct BaseType<boost::shared_ptr<Type> >
     {
         static const bool value = true;
-        typedef Type type;
+        using type = Type;
     };
     
     template<typename Sig>
     struct MakeStropPtrType
     {  
-        typedef boost::shared_ptr<Strop<Sig> > type;    
+        using type = boost::shared_ptr<Strop<Sig> >;
     };
          
     //////////////////////////// Transforms ////////////////////////////
@@ -72,7 +72,7 @@ namespace streamulus
         template<class This, class StropType, class State>
         struct result<This(StropType,State)>
         {
-            typedef typename boost::remove_reference<StropType>::type type;
+            using type = typename boost::remove_reference<StropType>::type;
         };
         
         template<typename StropType, class State>
@@ -98,9 +98,9 @@ namespace streamulus
         template<typename FArg, typename State>
         struct result<generic_func(FArg,State)>
         {
-            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
-            typedef typename F::template result<F()>::type R; 
-            typedef const boost::shared_ptr<Strop<R()> > type;         
+            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using R = typename F::template result<F()>::type;
+            using type = const boost::shared_ptr<Strop<R()>>;
         };
         
         template<typename F, typename State>
@@ -109,8 +109,7 @@ namespace streamulus
         {  
             if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
-            //typedef result<generic_func(F&,State)> Result;
-            typedef Func0<F> FuncStropType; 
+            using FuncStropType = Func0<F>;
             
             boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f));                         
             engine->AddVertexToGraph(funcStropPtr);
@@ -124,10 +123,10 @@ namespace streamulus
         typename State>
         struct result<generic_func(FArg,Arg1Strop,State)>
         {
-            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
-            typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
-            typedef typename F::template result<F(Arg1Type)>::type R; 
-            typedef const boost::shared_ptr<Strop<R(Arg1Type)> > type;         
+            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
+            using  R = typename F::template result<F(Arg1Type)>::type;
+            using type = const boost::shared_ptr<Strop<R(Arg1Type)>>;
         };
         
         template<typename F, 
@@ -140,10 +139,8 @@ namespace streamulus
         {  
             if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
-            typedef result<generic_func(F&,Arg1Strop,State)> Result;
-            typedef Func1<F
-            ,typename Result::Arg1Type
-            > FuncStropType; 
+            using Result = result<generic_func(F&,Arg1Strop,State)>;
+            using FuncStropType = Func1<F,typename Result::Arg1Type>;
             
             boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
@@ -159,11 +156,11 @@ namespace streamulus
         template<typename FArg, typename Arg1Strop, typename Arg2Strop, typename State>
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,State)>
         {
-            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
-            typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
-            typedef typename StropReturnType<const Arg2Strop>::type Arg2Type;
-            typedef typename F::template result<F(Arg1Type,Arg2Type)>::type R; 
-            typedef const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type)> > type;         
+            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
+            using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
+            using R = typename F::template result<F(Arg1Type,Arg2Type)>::type;
+            using type = const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type)>>;
         };
         
         template<typename F, typename Arg1Strop, typename Arg2Strop, typename State>
@@ -172,8 +169,8 @@ namespace streamulus
         {   
             if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
-            typedef result<generic_func(F&,Arg1Strop,Arg2Strop, State)> Result;        
-            typedef Func2<F, typename Result::Arg1Type, typename Result::Arg2Type> FuncStropType; 
+            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop, State)>;
+            using FuncStropType = Func2<F, typename Result::Arg1Type, typename Result::Arg2Type>;
             boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
@@ -194,12 +191,12 @@ namespace streamulus
         typename State>
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,State)>
         {
-            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
-            typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
-            typedef typename StropReturnType<const Arg2Strop>::type Arg2Type;
-            typedef typename StropReturnType<const Arg3Strop>::type Arg3Type;
-            typedef typename F::template result<F(Arg1Type,Arg2Type,Arg3Type)>::type R; 
-            typedef const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> > type;         
+            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
+            using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
+            using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
+            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type)>::type;
+            using type = const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> >;
         };
         
         template<typename F, 
@@ -216,12 +213,12 @@ namespace streamulus
         {   
             if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
-            typedef result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,State)> Result;        
-            typedef Func3<F
+            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,State)>;
+            using FuncStropType = Func3<F
             ,typename Result::Arg1Type
             ,typename Result::Arg2Type
             ,typename Result::Arg3Type
-            > FuncStropType; 
+            >;
             
             boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
@@ -246,13 +243,13 @@ namespace streamulus
         typename State>
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>
         {
-            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
-            typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
-            typedef typename StropReturnType<const Arg2Strop>::type Arg2Type;
-            typedef typename StropReturnType<const Arg3Strop>::type Arg3Type;
-            typedef typename StropReturnType<const Arg4Strop>::type Arg4Type;
-            typedef typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type R; 
-            typedef const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> > type;         
+            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
+            using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
+            using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
+            using Arg4Type = typename StropReturnType<const Arg4Strop>::type;
+            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type;
+            using type = const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> >;
         };
         
         template<typename F, 
@@ -271,13 +268,13 @@ namespace streamulus
         {   
             if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
-            typedef result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)> Result;        
-            typedef Func4<F
+            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>;
+            using FuncStropType = Func4<F
             ,typename Result::Arg1Type
             ,typename Result::Arg2Type
             ,typename Result::Arg3Type
             ,typename Result::Arg4Type
-            > FuncStropType; 
+            >;
             
             boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
@@ -305,14 +302,14 @@ namespace streamulus
                  typename State>
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>
         {
-            typedef typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type F;
-            typedef typename StropReturnType<const Arg1Strop>::type Arg1Type;
-            typedef typename StropReturnType<const Arg2Strop>::type Arg2Type;
-            typedef typename StropReturnType<const Arg3Strop>::type Arg3Type;
-            typedef typename StropReturnType<const Arg4Strop>::type Arg4Type;
-            typedef typename StropReturnType<const Arg5Strop>::type Arg5Type;
-            typedef typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type R; 
-            typedef const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)> > type;         
+            using F = typename boost::remove_const<typename boost::remove_reference<FArg>::type>::type;
+            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
+            using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
+            using Arg3Type = typename StropReturnType<const Arg3Strop>::type ;
+            using Arg4Type = typename StropReturnType<const Arg4Strop>::type ;
+            using Arg5Type = typename StropReturnType<const Arg5Strop>::type;
+            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type;
+            using type = const boost::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>>;
         };
         
         template<typename F, 
@@ -333,14 +330,14 @@ namespace streamulus
         {   
             if (engine->IsVerbose())
                 std::cout << "generic_func" << std::endl;
-            typedef result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)> Result;        
-            typedef Func5<F
+            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>;
+            using FuncStropType = Func5<F
                         ,typename Result::Arg1Type
                         ,typename Result::Arg2Type
                         ,typename Result::Arg3Type
                         ,typename Result::Arg4Type
                         ,typename Result::Arg5Type
-                        > FuncStropType; 
+                        >;
             
             boost::shared_ptr<FuncStropType> funcStropPtr(new FuncStropType(f)); 
             
@@ -371,8 +368,8 @@ namespace streamulus
         template<class This, class StropType, class State>
         struct result<This(const boost::shared_ptr<StropType>&,State)>
         {
-            typedef const boost::shared_ptr<StropType>& StropPtrType;
-            typedef typename AddStropToGraph::result<AddStropToGraph(StropPtrType,State)>::type type;
+            using StropPtrType = const boost::shared_ptr<StropType>&;
+            using type = typename AddStropToGraph::result<AddStropToGraph(StropPtrType,State)>::type;
         };
         
         template<class This, class StropType, class State>
@@ -391,15 +388,15 @@ namespace streamulus
         template<class This, class ConstType, class State>
         struct result<This(ConstType,State)>
         {
-            typedef typename ConstFunc<ConstType>::template result<ConstFunc<ConstType>(ConstType)>::type ConstFuncResultType;
-            typedef const boost::shared_ptr<Strop<ConstFuncResultType()> > type;
+            using ConstFuncResultType = typename ConstFunc<ConstType>::template result<ConstFunc<ConstType>(ConstType)>::type;
+            using type = const boost::shared_ptr<Strop<ConstFuncResultType()>>;
         };
         
         template<typename ConstType, class State>
         typename boost::disable_if<BaseType<ConstType>, typename result<HandleTerminal(ConstType ,State)>::type>::type
         operator()(ConstType const_value, State engine)
         {
-            typedef typename result<HandleTerminal(ConstType ,State)>::ConstFuncResultType T;
+            using T = typename result<HandleTerminal(ConstType ,State)>::ConstFuncResultType;
             return generic_func()(ConstFunc<T>(const_value),engine);
         }
          
@@ -413,16 +410,16 @@ namespace streamulus
         template<typename ArgStrop, typename State>
         struct result<SlidingWindow(const int&,ArgStrop,State)> 
         {
-            typedef typename StropReturnType<const ArgStrop>::type input_type;
-            typedef typename WindowUpdateType<input_type>::type result_type;
-            typedef const boost::shared_ptr<StropStreamProducer<result_type> > type;            
+            using input_type = typename StropReturnType<const ArgStrop>::type;
+            using result_type = typename WindowUpdateType<input_type>::type;
+            using type = const boost::shared_ptr<StropStreamProducer<result_type> >;
         };
         
         template<typename ArgStrop, typename State>
         typename result<SlidingWindow(const int&,ArgStrop,State)>::type
         operator()(const int& size, const ArgStrop arg, State engine)
         {
-            typedef Window<typename StropReturnType<const ArgStrop>::type> WindowStropType;
+            using WindowStropType = Window<typename StropReturnType<const ArgStrop>::type>;
             boost::shared_ptr<WindowStropType> strop(new WindowStropType(size));
 
             typename BaseType<ArgStrop>::type::OutputStreamPtr argStream(arg->MakeOutputStream());

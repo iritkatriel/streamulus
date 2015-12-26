@@ -37,7 +37,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A>
@@ -56,7 +56,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A>
@@ -75,7 +75,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef typename boost::remove_pointer<A>::type type; 
+            using type = typename boost::remove_pointer<A>::type;
         };
         
         template<typename A>
@@ -95,7 +95,8 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef A type; 
+            using type = A;
+
         };
         
         template<typename A>
@@ -114,7 +115,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef typename boost::add_pointer<A>::type type; 
+            using type = typename boost::add_pointer<A>::type;
         };
         
         template<typename A>
@@ -133,7 +134,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A>
@@ -152,7 +153,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A>
@@ -172,7 +173,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A>
@@ -192,7 +193,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A>
@@ -212,7 +213,7 @@ namespace streamulus
         template<class This,typename A> 
         struct result<This(A)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A>
@@ -233,7 +234,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -252,7 +253,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type;
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -271,7 +272,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B>
@@ -290,7 +291,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B>
@@ -309,7 +310,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B>
@@ -328,7 +329,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B>
@@ -347,7 +348,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B>
@@ -366,7 +367,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A, typename B>
@@ -385,7 +386,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A, typename B>
@@ -404,7 +405,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A, typename B>
@@ -423,7 +424,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A, typename B>
@@ -442,7 +443,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A, typename B>
@@ -461,7 +462,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A, typename B>
@@ -480,7 +481,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A, typename B>
@@ -499,7 +500,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename A, typename B>
@@ -518,7 +519,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B>
@@ -537,7 +538,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B>
@@ -556,7 +557,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B>
@@ -575,7 +576,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef B type; 
+            using type = B;
         };
         
         template<typename A, typename B>
@@ -595,7 +596,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -615,7 +616,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -635,7 +636,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -655,7 +656,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -675,7 +676,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -695,7 +696,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -715,7 +716,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -735,7 +736,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -755,7 +756,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -775,7 +776,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -796,7 +797,7 @@ namespace streamulus
         template<class This,typename A, typename B> 
         struct result<This(A,B)>
         {
-            typedef A type; 
+            using type = A;
         };
         
         template<typename A, typename B>
@@ -818,7 +819,7 @@ namespace streamulus
         struct result<This(A,B)>
         {
             // TODO: this will work for arrays but not in general. fix or remove.
-            typedef typename boost::remove_pointer<A>::type type; 
+            using type = typename boost::remove_pointer<A>::type;
         };
         
         template<typename A, typename B>
@@ -838,7 +839,7 @@ namespace streamulus
         template<class This,typename A, typename B, typename C> 
         struct result<This(A,B,C)>
         {
-            typedef typename boost::common_type<A,B>::type type; 
+            using type = typename boost::common_type<A,B>::type;
         };
         
         template<typename A, typename B, typename C>

@@ -35,7 +35,7 @@ namespace streamulus
         template<class Sig> 
         struct result
         {
-            typedef typename boost::remove_const<typename boost::remove_reference<T>::type>::type type; 
+            using type = typename boost::remove_const<typename boost::remove_reference<T>::type>::type;
         };
     
         typename result<ConstFunc(T)>::type

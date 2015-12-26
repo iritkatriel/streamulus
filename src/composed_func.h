@@ -56,9 +56,9 @@ namespace streamulus
         template<typename This, typename Arg>
         struct result<This(Arg)>
         {
-            typedef typename std::result_of<G(Arg)>::type G_result_type;
-            typedef typename std::result_of<F(G_result_type)>::type F_result_type;
-            typedef F_result_type type;
+            using G_result_type = typename std::result_of<G(Arg)>::type;
+            using F_result_type = typename std::result_of<F(G_result_type)>::type;
+            using type = F_result_type;
         };
             
         template<typename Arg>

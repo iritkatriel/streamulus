@@ -31,5 +31,5 @@
 
 namespace streamulus
 {
-    typedef Engine Streamulus;    
+    using Streamulus = Engine;
 } // ns streamulus

@@ -44,7 +44,7 @@ namespace streamulus
         template<class This,typename T1, typename T2>
         struct result<This(T1, T2)>
         {
-            typedef bool type; 
+            using type = bool;
         };
         
         template<typename T1, typename T2>

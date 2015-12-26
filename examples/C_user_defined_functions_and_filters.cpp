@@ -133,7 +133,7 @@ public:
     template<class Sig> 
     struct result 
     {
-        typedef double type; 
+        using type = double;
     };
     
     double operator()(const TimeValue& tick) 
@@ -174,7 +174,7 @@ public:
     template<class Sig> 
     struct result 
     {
-        typedef T type; 
+        using type = T;
     };
     
     boost::optional<T> operator()(const T& value) 
@@ -200,7 +200,7 @@ struct cross_alert
     template<class Sig> 
     struct result 
     {
-        typedef bool type; 
+        using type = bool;
     };
     
     
@@ -226,7 +226,7 @@ struct print
     template<class This,typename T>
     struct result<This(T)>
     {
-        typedef T type; 
+        using type = T;
     };
     
     template<typename T>
@@ -249,7 +249,7 @@ struct as_string
     template<class This,typename T>
     struct result<This(T)>
     {
-        typedef std::string type; 
+        using type = std::string;
     };
     
     template<typename T>

@@ -122,16 +122,16 @@ namespace streamulus
         struct ExpressionResultType
         {
             // Get the type of the strop created by the expression
-            typedef typename std::result_of<smls_grammar(const Expr&, Engine*)>::type result_strop_type;
+            using result_strop_type = typename std::result_of<smls_grammar(const Expr&, Engine*)>::type;
             // Extract the output type
-            typedef typename StropReturnType<result_strop_type>::type type;            
+            using type = typename StropReturnType<result_strop_type>::type;
         };
 
         template<typename Expr>
         const typename Subscription<typename ExpressionResultType<Expr>::type>::type
         Subscribe(const Expr &expr)
         {
-            typedef typename ExpressionResultType<Expr>::type R;
+            using R = typename ExpressionResultType<Expr>::type;
                         
             if (IsVerbose())
                 boost::proto::display_expr(expr);
@@ -140,14 +140,14 @@ namespace streamulus
             BOOST_MPL_ASSERT(( boost::proto::matches<Expr, smls_grammar> ));
             
             // add the expression to the graph
-            typedef typename Subscription<R>::strop_type ResultStropType;
+            using ResultStropType = typename Subscription<R>::strop_type;
             ResultStropType result = smls_grammar()(expr, this);
                      
             result->AddExternalReference();
             
             StartEngine();
             
-            // typedef const boost::shared_ptr<StropStreamProducer<T> > strop_type;
+            // using strop_type = const boost::shared_ptr<StropStreamProducer<T> >;
             // const streamulus_expr<typename boost::proto::terminal<strop_type>::type>
             
             typename Subscription<R>::terminal_type terminal = {result};
@@ -157,7 +157,7 @@ namespace streamulus
         template<typename T>
         void UnSubscribe(const typename Subscription<T>::type& subscription)
         {
-            typedef typename Subscription<T>::strop_type StropType;
+            using StropType = typename Subscription<T>::strop_type;
             const StropType& strop(boost::proto::value(subscription));
             strop->RemoveExternalReference();
             RemoveVertexFromGraph(strop);
@@ -314,9 +314,9 @@ namespace streamulus
             TopologicalSortVisitor vis(mGraph, this);
             boost::depth_first_search(mGraph, boost::visitor(vis));
         }
-        
-        
-        typedef long TimestampT;
+
+
+        using TimestampT = long;
 
         struct QueueEntry
         {

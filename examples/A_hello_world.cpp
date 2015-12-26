@@ -53,7 +53,7 @@ struct print
     template<class This,typename T>
     struct result<This(T)>
     {
-        typedef T type; 
+        using type = T;
     };
     
     // The actual function

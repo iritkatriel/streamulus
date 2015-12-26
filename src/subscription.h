@@ -28,9 +28,9 @@ namespace streamulus {
 template<typename T>
 struct Subscription
 {
-    typedef const boost::shared_ptr<StropStreamProducer<T> > strop_type;
-    typedef typename boost::proto::terminal<strop_type>::type terminal_type;
-    typedef const terminal_type type;
+    using strop_type = const boost::shared_ptr<StropStreamProducer<T>>;
+    using terminal_type = typename boost::proto::terminal<strop_type>::type;
+    using type = const terminal_type;
 };
 
 } // ns streamulus
