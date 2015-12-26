@@ -122,7 +122,7 @@ namespace streamulus
     // ************************************** RULES **************************************
     
     // terminals
-    struct strop_terminal_rule        : proto::terminal<boost::shared_ptr<proto::_> > {};
+    struct strop_terminal_rule        : proto::terminal<std::shared_ptr<proto::_> > {};
     struct const_terminal_rule        : proto::terminal<proto::_>                     {};
     
     

@@ -32,8 +32,8 @@ namespace streamulus
     class StropBase;
     class StreamBase;
     
-    using StropPtr = boost::shared_ptr<StropBase>;
-    using StreamPtr = boost::shared_ptr<StreamBase>;
+    using StropPtr = std::shared_ptr<StropBase>;
+    using StreamPtr = std::shared_ptr<StreamBase>;
     
     
     using BoostGraph = boost::adjacency_list<boost::vecS

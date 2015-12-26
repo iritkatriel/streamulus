@@ -147,7 +147,7 @@ namespace streamulus
             
             StartEngine();
             
-            // using strop_type = const boost::shared_ptr<StropStreamProducer<T> >;
+            // using strop_type = const std::shared_ptr<StropStreamProducer<T> >;
             // const streamulus_expr<typename boost::proto::terminal<strop_type>::type>
             
             typename Subscription<R>::terminal_type terminal = {result};

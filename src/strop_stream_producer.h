@@ -54,11 +54,11 @@ namespace streamulus
             mCurrentValue = value;
         }
 
-        using OutputStreamPtr = boost::shared_ptr<Stream<R>>;
+        using OutputStreamPtr = std::shared_ptr<Stream<R>>;
         
         OutputStreamPtr MakeOutputStream()
         {
-            OutputStreamPtr stream = boost::make_shared< Stream<R> >();
+            OutputStreamPtr stream = std::make_shared< Stream<R> >();
             if (mCurrentValue)
                 stream->Append(*mCurrentValue);
             return stream;

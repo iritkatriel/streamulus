@@ -59,7 +59,7 @@ namespace streamulus
         template<typename T>
         struct MakeStreamPtrType 
         {
-            using type = boost::shared_ptr<Stream<T>>;
+            using type = std::shared_ptr<Stream<T>>;
         };
         using param_types =  boost::function_types::parameter_types<F>;
         using input_types = typename boost::mpl::transform<param_types,MakeStreamPtrType<boost::mpl::_1> >::type;
