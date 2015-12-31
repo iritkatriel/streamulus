@@ -95,7 +95,7 @@ void sliding_window_function_example()
 {
     using namespace streamulus;
     
-    InputStream<double>::type ts = NewInputStream<double>("TS", true /* verbose */);
+    InputStream<double> ts = NewInputStream<double>("TS", true /* verbose */);
     Streamulus engine;
     
     boost::proto::terminal<window_>::type window = {};
