@@ -15,23 +15,28 @@ endif()
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories("src/")
 
-add_definitions(-DUSE_MAIN)
+add_definitions(-DUSE_MAIN -U__STRICT_ANSI__)
 
 
 set(TEST_SOURCES
     test/operator_functors_test.cpp
     test/operator_subscribe_test.cpp
     test/tests.cpp)
+add_executable(tests ${TEST_SOURCES})
+target_link_libraries(tests ${Boost_LIBRARIES})
+
+set(BOOST_TEST_SOURCES
+        boost_test/stream_test.cpp)
+add_executable(boost_tests ${BOOST_TEST_SOURCES})
+target_link_libraries(boost_tests ${Boost_LIBRARIES})
+
 
 add_executable(example_a examples/A_hello_world.cpp)
 add_executable(example_b examples/B_common_subexpression.cpp)
 add_executable(example_c examples/C_user_defined_functions_and_filters.cpp)
 add_executable(example_d examples/D_sliding_window_function.cpp)
 
-add_executable(tests ${TEST_SOURCES})
-
 target_link_libraries(example_a ${Boost_LIBRARIES})
 target_link_libraries(example_b ${Boost_LIBRARIES})
 target_link_libraries(example_c ${Boost_LIBRARIES})
 target_link_libraries(example_d ${Boost_LIBRARIES})
-target_link_libraries(tests ${Boost_LIBRARIES})

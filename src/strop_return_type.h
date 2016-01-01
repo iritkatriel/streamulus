@@ -39,16 +39,4 @@ namespace streamulus
     {
         using type = typename StropType::result_type;
     };
-    
-    template<typename StropType>
-    struct StropReturnType<const std::shared_ptr<StropType>& >
-    {
-        using type = typename StropType::result_type;
-    };
-    
-    template<typename StropType>
-    struct StropReturnType<std::shared_ptr<StropType>& >
-    {
-        using type = typename StropType::result_type;
-    };
 } // ns streamulus
