@@ -23,16 +23,7 @@ set(TEST_SOURCES
 add_executable(tests ${TEST_SOURCES})
 target_link_libraries(tests ${Boost_LIBRARIES})
 
-
-add_executable(example_a examples/A_hello_world.cpp)
-add_executable(example_b examples/B_common_subexpression.cpp)
-add_executable(example_c examples/C_user_defined_functions_and_filters.cpp)
-add_executable(example_d examples/D_sliding_window_function.cpp)
-
-target_link_libraries(example_a ${Boost_LIBRARIES})
-target_link_libraries(example_b ${Boost_LIBRARIES})
-target_link_libraries(example_c ${Boost_LIBRARIES})
-target_link_libraries(example_d ${Boost_LIBRARIES})
+add_subdirectory(examples)
 
 ENABLE_TESTING()
 add_subdirectory(boost_test)
