@@ -1,10 +1,10 @@
 //
-//  operator_functor_tests.hpp
+// unary_ops_on_terminals_test.cpp
 //
-// Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
+// Streamulus Copyright (c) 2015 Irit Katriel. All rights reserved.
 //
 // This file is part of Streamulus.
-// 
+//
 // Streamulus is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -14,21 +14,29 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with Streamulus.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include <iostream>
+#include "streamulus.h"
 
-#include "unit_test_api.h"
+#define BOOST_TEST_MODULE operator_subscribe
+#include <boost/test/included/unit_test.hpp>
 
-namespace streamulus
-{   
-    
-    struct operator_functors_unit_tests : unit_test_api
-    {
-        void Run();
-    };
-    
-} // ns streamulus
+#include "op_subscribe_values_fixture.h"
+
+BOOST_FIXTURE_TEST_SUITE(operator_subscribe_test, ValuesFixture)
+
+    BOOST_AUTO_TEST_CASE(unary_operators_between_terminals) {
+        RunTest(-t1, -v1);
+        RunTest(*p1, v1);
+        RunTest(~t1, ~v1);
+        RunTest(!t1, !v1);
+        RunTest(++t1, ++v1);
+        RunTest(--t1, --v1);
+        RunTest(t1++, v1++);
+        RunTest(t1--, v1--);
+    }
+
+BOOST_AUTO_TEST_SUITE_END()

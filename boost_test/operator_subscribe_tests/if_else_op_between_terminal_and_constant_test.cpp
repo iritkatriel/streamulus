@@ -1,10 +1,10 @@
 //
-//  unit_test_api.h
+// if_else_ops_between_terminal_and_constant_test.cpp
 //
-// Streamulus Copyright (c) 2012 Irit Katriel. All rights reserved.
+// Streamulus Copyright (c) 2015 Irit Katriel. All rights reserved.
 //
 // This file is part of Streamulus.
-// 
+//
 // Streamulus is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -14,32 +14,29 @@
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with Streamulus.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#pragma once
+#include "streamulus.h"
 
-#include <exception>
+#define BOOST_TEST_MODULE operator_subscribe
+#include <boost/test/included/unit_test.hpp>
 
-namespace streamulus
-{
-    struct unit_test_api
-    {
-        struct unit_test_failed : public std::exception
-        {};
+#include "op_subscribe_values_fixture.h"
 
-        virtual void Check(bool condition) throw(unit_test_failed)
-        {
-            if (!condition)
-            {
-                throw unit_test_failed();
-            }
-        }
+BOOST_FIXTURE_TEST_SUITE(operator_subscribe_test, ValuesFixture)
 
-        virtual void Run()=0;
+    BOOST_AUTO_TEST_CASE(if_else_operator_between_terminals) {
+        // TODO: make this work
+        /*
+        RunTest(true ? t1 : 2, true ? v1 : 2);
+        RunTest(true ? 2 : t1, true ? 2 : v1);
 
-    };
+        RunTest(false ? t1 : 2, false ? v1 : 2);
+        RunTest(false ? 2 : t1, false ? 2 : v1);
+         */
+    }
 
-} // ns streamulus
+BOOST_AUTO_TEST_SUITE_END()
