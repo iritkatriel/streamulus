@@ -21,11 +21,10 @@
 
 #include "stream.h"
 
-using namespace streamulus;
-
-
 #define BOOST_TEST_MODULE stream
 #include <boost/test/included/unit_test.hpp>
+
+using namespace streamulus;
 
 BOOST_AUTO_TEST_CASE(int_stream_append_one_value) {
     Stream<int> stream;

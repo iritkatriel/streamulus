@@ -17,12 +17,6 @@ include_directories("src/")
 
 add_definitions(-DUSE_MAIN -U__STRICT_ANSI__)
 
-set(TEST_SOURCES
-    test/operator_subscribe_test.cpp
-    test/tests.cpp)
-add_executable(tests ${TEST_SOURCES})
-target_link_libraries(tests ${Boost_LIBRARIES})
-
 add_subdirectory(examples)
 
 ENABLE_TESTING()
