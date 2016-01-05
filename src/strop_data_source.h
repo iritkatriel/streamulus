@@ -35,7 +35,7 @@ namespace streamulus
 
         using result_type = R;
         
-        DataSource(const char* name, bool verbose)
+        DataSource(const std::string& name, bool verbose)
         : mIsValid(false)
         , mIsVerbose(verbose)
         {

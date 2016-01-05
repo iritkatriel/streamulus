@@ -43,7 +43,7 @@ namespace streamulus
 
     // Create a new stream
     template<typename T>
-    InputStream<T> NewInputStream(const char* name, bool verbose)
+    InputStream<T> NewInputStream(const std::string& name, bool verbose)
     {
         detail::input_stream_proto_expression_t<T> expr = {std::make_shared<DataSource<T> >(name, verbose)};
         return expr;
