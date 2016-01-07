@@ -82,14 +82,12 @@ namespace streamulus {
         }
 
         virtual void Work() {
-            Stream<A1> *const input1 = StropType::template Input<0>();
-
             BaseType::mInputExists |= StropType::IsValid();
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    const A1 &a1(input1->Current());
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1));
+                    Stream<A1> *const input1 = StropType::template Input<0>();
+                    StropStreamProducer<R>::Output(BaseType::mFunction(input1->Current()));
                 }
             }
         }
@@ -110,17 +108,17 @@ namespace streamulus {
         }
 
         virtual void Work() {
-            Stream<A1> *const input1 = StropType::template Input<0>();
-            Stream<A2> *const input2 = StropType::template Input<1>();
-
             BaseType::mInputExists |= StropType::IsValid();
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    const A1 &a1(input1->Current());
-                    const A2 &a2(input2->Current());
+                    Stream<A1> *const input1 = StropType::template Input<0>();
+                    Stream<A2> *const input2 = StropType::template Input<1>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1, a2));
+                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                            input1->Current(),
+                            input2->Current()
+                    ));
                 }
             }
         }
@@ -142,19 +140,19 @@ namespace streamulus {
         }
 
         virtual void Work() {
-            Stream<A1> *const input1 = StropType::template Input<0>();
-            Stream<A2> *const input2 = StropType::template Input<1>();
-            Stream<A3> *const input3 = StropType::template Input<2>();
-
             BaseType::mInputExists |= StropType::IsValid();
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    const A1 &a1(input1->Current());
-                    const A2 &a2(input2->Current());
-                    const A3 &a3(input3->Current());
+                    Stream<A1> *const input1 = StropType::template Input<0>();
+                    Stream<A2> *const input2 = StropType::template Input<1>();
+                    Stream<A3> *const input3 = StropType::template Input<2>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1, a2, a3));
+                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                            input1->Current(),
+                            input2->Current(),
+                            input3->Current()
+                    ));
                 }
             }
         }
@@ -177,21 +175,21 @@ namespace streamulus {
         }
 
         virtual void Work() {
-            Stream<A1> *const input1 = StropType::template Input<0>();
-            Stream<A2> *const input2 = StropType::template Input<1>();
-            Stream<A3> *const input3 = StropType::template Input<2>();
-            Stream<A4> *const input4 = StropType::template Input<3>();
-
             BaseType::mInputExists |= StropType::IsValid();
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    const A1 &a1(input1->Current());
-                    const A2 &a2(input2->Current());
-                    const A3 &a3(input3->Current());
-                    const A4 &a4(input4->Current());
+                    Stream<A1> *const input1 = StropType::template Input<0>();
+                    Stream<A2> *const input2 = StropType::template Input<1>();
+                    Stream<A3> *const input3 = StropType::template Input<2>();
+                    Stream<A4> *const input4 = StropType::template Input<3>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1, a2, a3, a4));
+                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                            input1->Current(),
+                            input2->Current(),
+                            input3->Current(),
+                            input4->Current()
+                    ));
                 }
             }
         }
@@ -215,23 +213,24 @@ namespace streamulus {
         }
 
         virtual void Work() {
-            Stream<A1> *const input1 = StropType::template Input<0>();
-            Stream<A2> *const input2 = StropType::template Input<1>();
-            Stream<A3> *const input3 = StropType::template Input<2>();
-            Stream<A4> *const input4 = StropType::template Input<3>();
-            Stream<A5> *const input5 = StropType::template Input<4>();
 
             BaseType::mInputExists |= StropType::IsValid();
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    const A1 &a1(input1->Current());
-                    const A2 &a2(input2->Current());
-                    const A3 &a3(input3->Current());
-                    const A4 &a4(input4->Current());
-                    const A5 &a5(input5->Current());
+                    Stream<A1> *const input1 = StropType::template Input<0>();
+                    Stream<A2> *const input2 = StropType::template Input<1>();
+                    Stream<A3> *const input3 = StropType::template Input<2>();
+                    Stream<A4> *const input4 = StropType::template Input<3>();
+                    Stream<A5> *const input5 = StropType::template Input<4>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1, a2, a3, a4, a5));
+                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                            input1->Current(),
+                            input2->Current(),
+                            input3->Current(),
+                            input4->Current(),
+                            input5->Current()
+                    ));
                 }
             }
         }
