@@ -60,9 +60,9 @@ namespace streamulus {
         }
 
         /**
-         * returns true if any of the inputs has more data, false otherwise
+         * HasMore() returns true if any of the inputs has more data, false otherwise
          */
-        struct has_more_function {
+        struct has_more_fold_function {
             template<typename T>
             bool operator()(const bool &state, const T &t) const {
                 return state || t->HasMore();
@@ -70,7 +70,21 @@ namespace streamulus {
         };
 
         bool HasMore() {
-            return boost::fusion::fold(mInputs, false, has_more_function());
+            return boost::fusion::fold(mInputs, false, has_more_fold_function());
+        }
+
+        /**
+         * IsValid() returns true if all inputs are valid, false otherwise
+         */
+        struct is_valid_fold_function {
+            template<typename T>
+            bool operator()(const bool &state, const T &t) const {
+                return state && t->IsValid();
+            }
+        };
+
+        bool IsValid() {
+            return boost::fusion::fold(mInputs, true, is_valid_fold_function());
         }
 
     private:

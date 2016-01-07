@@ -83,7 +83,7 @@ namespace streamulus {
         virtual void Work() {
             Stream<A1> *const input1 = Strop<R(A1)>::template Input<0>();
 
-            BaseType::mInputExists |= input1->IsValid();
+            BaseType::mInputExists |= Strop<R(A1)>::IsValid();
 
             if (BaseType::mInputExists) {
                 while (Strop<R(A1)>::HasMore()) {
@@ -111,7 +111,7 @@ namespace streamulus {
             Stream<A1> *const input1 = Strop<R(A1, A2)>::template Input<0>();
             Stream<A2> *const input2 = Strop<R(A1, A2)>::template Input<1>();
 
-            BaseType::mInputExists |= (input1->IsValid() && input2->IsValid());
+            BaseType::mInputExists |= Strop<R(A1, A2)>::IsValid();
 
             if (BaseType::mInputExists) {
                 while (Strop<R(A1, A2)>::HasMore()) {
@@ -143,7 +143,7 @@ namespace streamulus {
             Stream<A2> *const input2 = Strop<R(A1, A2, A3)>::template Input<1>();
             Stream<A3> *const input3 = Strop<R(A1, A2, A3)>::template Input<2>();
 
-            BaseType::mInputExists |= (input1->IsValid() && input2->IsValid() && input3->IsValid());
+            BaseType::mInputExists |= Strop<R(A1, A2, A3)>::IsValid();
 
             if (BaseType::mInputExists) {
                 while (Strop<R(A1, A2, A3)>::HasMore()) {
@@ -178,8 +178,7 @@ namespace streamulus {
             Stream<A3> *const input3 = Strop<R(A1, A2, A3, A4)>::template Input<2>();
             Stream<A4> *const input4 = Strop<R(A1, A2, A3, A4)>::template Input<3>();
 
-            BaseType::mInputExists |=
-                    (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid());
+            BaseType::mInputExists |= Strop<R(A1, A2, A3, A4)>::IsValid();
 
             if (BaseType::mInputExists) {
                 while (Strop<R(A1, A2, A3, A4)>::HasMore()) {
@@ -217,9 +216,7 @@ namespace streamulus {
             Stream<A4> *const input4 = Strop<R(A1, A2, A3, A4, A5)>::template Input<3>();
             Stream<A5> *const input5 = Strop<R(A1, A2, A3, A4, A5)>::template Input<4>();
 
-            BaseType::mInputExists |=
-                    (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid() &&
-                     input5->IsValid());
+            BaseType::mInputExists |= Strop<R(A1, A2, A3, A4, A5)>::IsValid();
 
             if (BaseType::mInputExists) {
                 while (Strop<R(A1, A2, A3, A4, A5)>::HasMore()) {
