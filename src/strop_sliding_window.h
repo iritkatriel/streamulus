@@ -53,7 +53,7 @@ namespace streamulus
         
         virtual void Work()
         {
-            Stream<T>* const input(Strop<R(T)>::template Input<T,0>());
+            Stream<T>* const input = Strop<R(T)>::template Input<0>();
             
             assert(input->IsValid());
             
