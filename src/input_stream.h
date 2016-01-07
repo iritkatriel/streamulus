@@ -28,21 +28,24 @@
 namespace streamulus
 {
     // Convenience utilities for defining input streams    
-    
-    template<typename T>
-    using input_stream_data_source_t = std::shared_ptr<DataSource<T>>;
+
+    namespace detail {
+
+        template<typename T>
+        using input_stream_data_source_t = std::shared_ptr<DataSource<T>>;
+
+        template<typename T>
+        using input_stream_proto_expression_t = typename boost::proto::terminal<input_stream_data_source_t<T>>::type;
+    }
 
     template<typename T>
-    using input_stream_proto_expression_t = typename boost::proto::terminal<input_stream_data_source_t<T>>::type;
-
-    template<typename T>
-    using InputStream = const input_stream_proto_expression_t<T>;
+    using InputStream = const detail::input_stream_proto_expression_t<T>;
 
     // Create a new stream
     template<typename T>
-    InputStream<T> NewInputStream(const char* name, bool verbose)
+    InputStream<T> NewInputStream(const std::string& name, bool verbose)
     {
-        input_stream_proto_expression_t<T> expr = {std::make_shared<DataSource<T> >(name, verbose)};
+        detail::input_stream_proto_expression_t<T> expr = {std::make_shared<DataSource<T> >(name, verbose)};
         return expr;
     }
 

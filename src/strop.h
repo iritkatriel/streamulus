@@ -29,42 +29,40 @@
 
 #include "strop_stream_producer.h" 
 
-namespace streamulus
-{
-    
+namespace streamulus {
+
     template<typename F> // F = function signature
-    class Strop 
-        : public StropStreamProducer<typename boost::function_types::result_type<F>::type>
-    {
-    public:
-        
-        virtual ~Strop() 
-        {
-        }
-        
-        template<typename Inputs> // a fusion sequence of the inputs
-        void SetInputs(const Inputs& inputs)
-        {
-            mInputs=inputs;
-        }
-        
-        template<typename Tinput, int I>
-        Stream<Tinput>* const Input()
-        {
-            return boost::fusion::at_c<I>(mInputs).get();
-        }
-        
-                        
+    class Strop
+            : public StropStreamProducer<typename boost::function_types::result_type<F>::type> {
+
     private:
         template<typename T>
-        struct MakeStreamPtrType 
-        {
+        struct MakeStreamPtrType {
             using type = std::shared_ptr<Stream<T>>;
         };
         using param_types =  boost::function_types::parameter_types<F>;
-        using input_types = typename boost::mpl::transform<param_types,MakeStreamPtrType<boost::mpl::_1> >::type;
+        using input_types = typename boost::mpl::transform<param_types, MakeStreamPtrType<boost::mpl::_1> >::type;
+
+    public:
+
+        virtual ~Strop() {
+        }
+
+        template<typename Inputs>
+        // a fusion sequence of the inputs
+        void SetInputs(const Inputs &inputs) {
+            mInputs = inputs;
+        }
+
+        template<int I>
+        Stream<typename boost::mpl::at_c<param_types, I>::type> *const Input() {
+            return boost::fusion::at_c<I>(mInputs).get();
+        }
+
+    private:
         typename boost::fusion::result_of::as_vector<typename input_types::type>::type mInputs;
+
     };
-    
-    
+
+
 } // ns streamulus
