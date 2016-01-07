@@ -28,25 +28,20 @@
 
 #include "strop.h"
 
-namespace streamulus
-{    
+namespace streamulus {
     template<class F, typename Sig>
-    class FuncBase : public Strop<Sig>
-    {
+    class FuncBase : public Strop<Sig> {
     public:
         using function_type = F;
-        
-        FuncBase(const F& f)
-            : mFunction(f)
-            , mInputExists(false)
-        {
+
+        FuncBase(const F &f)
+                : mFunction(f), mInputExists(false) {
             std::stringstream ss;
             ss << "Func_" << "F";
             Strop<Sig>::SetDisplayName(ss.str());
         }
-        
-        inline const F& GetFunction() const
-        {
+
+        inline const F &GetFunction() const {
             return mFunction;
         }
 
@@ -54,228 +49,191 @@ namespace streamulus
         F mFunction;
         bool mInputExists;
     };
-    
-    
-    template<class F, 
-    typename R =typename F::template result<F(void)>::type>
-    class Func0 : public FuncBase<F, R(void)>
-    {
+
+
+    template<class F,
+            typename R =typename F::template result<F(void)>::type>
+    class Func0 : public FuncBase<F, R(void)> {
     public:
-        
+
         using BaseType = FuncBase<F, R(void)>;
-        
-        Func0(const F& f)
-        : BaseType(f)
-        {
+
+        Func0(const F &f)
+                : BaseType(f) {
         }
-        
-        virtual void Work()
-        {
+
+        virtual void Work() {
             StropStreamProducer<R>::Output(BaseType::mFunction());
         }
     };
 
-    
-    template<class F, 
-    typename A1, 
-    typename R =typename F::template result<F(A1)>::type>
-    class Func1 : public FuncBase<F, R(A1)>
-    {
+
+    template<class F,
+            typename A1,
+            typename R =typename F::template result<F(A1)>::type>
+    class Func1 : public FuncBase<F, R(A1)> {
     public:
 
         using BaseType = FuncBase<F, R(A1)>;
-        
-        Func1(const F& f)
-            : BaseType(f)
-        {
+
+        Func1(const F &f)
+                : BaseType(f) {
         }
-        
-        virtual void Work()
-        {
-            Stream<A1>* const input1 = Strop<R(A1)>::template Input<0>();
-            
+
+        virtual void Work() {
+            Stream<A1> *const input1 = Strop<R(A1)>::template Input<0>();
+
             BaseType::mInputExists |= input1->IsValid();
-            
-            if (BaseType::mInputExists)
-            {   
-                while (input1->HasMore())
-                {
+
+            if (BaseType::mInputExists) {
+                while (Strop<R(A1)>::HasMore()) {
                     const A1 &a1(input1->Current());
                     StropStreamProducer<R>::Output(BaseType::mFunction(a1));
                 }
             }
         }
     };
-    
-    template<class F, 
-    typename A1, 
-    typename A2, 
-    typename R =typename F::template result<F(A1,A2)>::type>
-    class Func2 : public FuncBase<F, R(A1,A2)>
-    {
-    public:
-        
-        using BaseType = FuncBase<F, R(A1,A2)>;
 
-        Func2(const F& f)
-            : BaseType(f)
-        {
+    template<class F,
+            typename A1,
+            typename A2,
+            typename R =typename F::template result<F(A1, A2)>::type>
+    class Func2 : public FuncBase<F, R(A1, A2)> {
+    public:
+
+        using BaseType = FuncBase<F, R(A1, A2)>;
+
+        Func2(const F &f)
+                : BaseType(f) {
         }
 
-        virtual void Work()
-        {            
-            Stream<A1>* const input1 = Strop<R(A1,A2)>::template Input<0>();
-            Stream<A2>* const input2 = Strop<R(A1,A2)>::template Input<1>();
-            
+        virtual void Work() {
+            Stream<A1> *const input1 = Strop<R(A1, A2)>::template Input<0>();
+            Stream<A2> *const input2 = Strop<R(A1, A2)>::template Input<1>();
+
             BaseType::mInputExists |= (input1->IsValid() && input2->IsValid());
-            
-            if (BaseType::mInputExists)
-            {   
-                while (input1->HasMore() || 
-                       input2->HasMore() )
-                {
-                    const A1& a1(input1->Current());
-                    const A2& a2(input2->Current());
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2));
+            if (BaseType::mInputExists) {
+                while (Strop<R(A1, A2)>::HasMore()) {
+                    const A1 &a1(input1->Current());
+                    const A2 &a2(input2->Current());
+
+                    StropStreamProducer<R>::Output(BaseType::mFunction(a1, a2));
                 }
-            }            
+            }
         }
     };
-    
-    template<class F, 
-    typename A1, 
-    typename A2, 
-    typename A3, 
-    typename R =typename F::template result<F(A1,A2,A3)>::type>
-    class Func3 : public FuncBase<F, R(A1,A2,A3)>
-    {
+
+    template<class F,
+            typename A1,
+            typename A2,
+            typename A3,
+            typename R =typename F::template result<F(A1, A2, A3)>::type>
+    class Func3 : public FuncBase<F, R(A1, A2, A3)> {
     public:
-        
-        using BaseType = FuncBase<F, R(A1,A2,A3)>;
-        
-        Func3(const F& f)
-            : BaseType(f)
-        {
+
+        using BaseType = FuncBase<F, R(A1, A2, A3)>;
+
+        Func3(const F &f)
+                : BaseType(f) {
         }
-        
-        virtual void Work()
-        {
-            Stream<A1>* const input1 = Strop<R(A1,A2,A3)>::template Input<0>();
-            Stream<A2>* const input2 = Strop<R(A1,A2,A3)>::template Input<1>();
-            Stream<A3>* const input3 = Strop<R(A1,A2,A3)>::template Input<2>();
-            
+
+        virtual void Work() {
+            Stream<A1> *const input1 = Strop<R(A1, A2, A3)>::template Input<0>();
+            Stream<A2> *const input2 = Strop<R(A1, A2, A3)>::template Input<1>();
+            Stream<A3> *const input3 = Strop<R(A1, A2, A3)>::template Input<2>();
+
             BaseType::mInputExists |= (input1->IsValid() && input2->IsValid() && input3->IsValid());
-            
-            if (BaseType::mInputExists)
-            {   
-                while (input1->HasMore() || 
-                       input2->HasMore() || 
-                       input3->HasMore() )
-                {
-                    const A1& a1(input1->Current());
-                    const A2& a2(input2->Current());
-                    const A3& a3(input3->Current());
-                
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3));
+
+            if (BaseType::mInputExists) {
+                while (Strop<R(A1, A2, A3)>::HasMore()) {
+                    const A1 &a1(input1->Current());
+                    const A2 &a2(input2->Current());
+                    const A3 &a3(input3->Current());
+
+                    StropStreamProducer<R>::Output(BaseType::mFunction(a1, a2, a3));
                 }
-            }            
+            }
         }
     };
-    
-    template<class F, 
-    typename A1, 
-    typename A2, 
-    typename A3, 
-    typename A4, 
-    typename R =typename F::template result<F(A1,A2,A3,A4)>::type>
-    class Func4 : public FuncBase<F, R(A1,A2,A3,A4)>
-    {
-    public:  
-        
-        using BaseType = FuncBase<F, R(A1,A2,A3,A4)>;
 
-        Func4(const F& f)
-            : BaseType(f)
-        {
+    template<class F,
+            typename A1,
+            typename A2,
+            typename A3,
+            typename A4,
+            typename R =typename F::template result<F(A1, A2, A3, A4)>::type>
+    class Func4 : public FuncBase<F, R(A1, A2, A3, A4)> {
+    public:
+
+        using BaseType = FuncBase<F, R(A1, A2, A3, A4)>;
+
+        Func4(const F &f)
+                : BaseType(f) {
         }
 
-        virtual void Work()
-        {
-            Stream<A1>* const input1 = Strop<R(A1,A2,A3,A4)>::template Input<0>();
-            Stream<A2>* const input2 = Strop<R(A1,A2,A3,A4)>::template Input<1>();
-            Stream<A3>* const input3 = Strop<R(A1,A2,A3,A4)>::template Input<2>();
-            Stream<A4>* const input4 = Strop<R(A1,A2,A3,A4)>::template Input<3>();
-            
-            BaseType::mInputExists |= 
-                (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid());
-            
-            if (BaseType::mInputExists)
-            {   
-                while (input1->HasMore() || 
-                       input2->HasMore() || 
-                       input3->HasMore() || 
-                       input4->HasMore() )
-                {
-                    const A1& a1(input1->Current());
-                    const A2& a2(input2->Current());
-                    const A3& a3(input3->Current());
-                    const A4& a4(input4->Current());
-                
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3,a4));
+        virtual void Work() {
+            Stream<A1> *const input1 = Strop<R(A1, A2, A3, A4)>::template Input<0>();
+            Stream<A2> *const input2 = Strop<R(A1, A2, A3, A4)>::template Input<1>();
+            Stream<A3> *const input3 = Strop<R(A1, A2, A3, A4)>::template Input<2>();
+            Stream<A4> *const input4 = Strop<R(A1, A2, A3, A4)>::template Input<3>();
+
+            BaseType::mInputExists |=
+                    (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid());
+
+            if (BaseType::mInputExists) {
+                while (Strop<R(A1, A2, A3, A4)>::HasMore()) {
+                    const A1 &a1(input1->Current());
+                    const A2 &a2(input2->Current());
+                    const A3 &a3(input3->Current());
+                    const A4 &a4(input4->Current());
+
+                    StropStreamProducer<R>::Output(BaseType::mFunction(a1, a2, a3, a4));
                 }
-            }            
-        }        
+            }
+        }
     };
 
-    template<class F, 
-    typename A1, 
-    typename A2, 
-    typename A3, 
-    typename A4, 
-    typename A5, 
-    typename R =typename F::template result<F(A1,A2,A3,A4,A5)>::type>
-    class Func5 : public FuncBase<F, R(A1,A2,A3,A4,A5)>
-    {
-    public:       
-        
-        using BaseType = FuncBase<F, R(A1,A2,A3,A4,A5)>;
+    template<class F,
+            typename A1,
+            typename A2,
+            typename A3,
+            typename A4,
+            typename A5,
+            typename R =typename F::template result<F(A1, A2, A3, A4, A5)>::type>
+    class Func5 : public FuncBase<F, R(A1, A2, A3, A4, A5)> {
+    public:
 
-        Func5(const F& f)
-            : BaseType(f)
-        {
+        using BaseType = FuncBase<F, R(A1, A2, A3, A4, A5)>;
+
+        Func5(const F &f)
+                : BaseType(f) {
         }
 
-        virtual void Work()
-        {
-            Stream<A1>* const input1 = Strop<R(A1,A2,A3,A4,A5)>::template Input<0>();
-            Stream<A2>* const input2 = Strop<R(A1,A2,A3,A4,A5)>::template Input<1>();
-            Stream<A3>* const input3 = Strop<R(A1,A2,A3,A4,A5)>::template Input<2>();
-            Stream<A4>* const input4 = Strop<R(A1,A2,A3,A4,A5)>::template Input<3>();
-            Stream<A5>* const input5 = Strop<R(A1,A2,A3,A4,A5)>::template Input<4>();
+        virtual void Work() {
+            Stream<A1> *const input1 = Strop<R(A1, A2, A3, A4, A5)>::template Input<0>();
+            Stream<A2> *const input2 = Strop<R(A1, A2, A3, A4, A5)>::template Input<1>();
+            Stream<A3> *const input3 = Strop<R(A1, A2, A3, A4, A5)>::template Input<2>();
+            Stream<A4> *const input4 = Strop<R(A1, A2, A3, A4, A5)>::template Input<3>();
+            Stream<A5> *const input5 = Strop<R(A1, A2, A3, A4, A5)>::template Input<4>();
 
-            BaseType::mInputExists |= 
-                (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid() && input5->IsValid());
-            
-            if (BaseType::mInputExists)
-            {   
-                while (input1->HasMore() || 
-                       input2->HasMore() || 
-                       input3->HasMore() || 
-                       input4->HasMore() || 
-                       input5->HasMore() )
-                {
-                    const A1& a1(input1->Current());
-                    const A2& a2(input2->Current());
-                    const A3& a3(input3->Current());
-                    const A4& a4(input4->Current());
-                    const A5& a5(input5->Current());
-                
-                    StropStreamProducer<R>::Output(BaseType::mFunction(a1,a2,a3,a4,a5));
+            BaseType::mInputExists |=
+                    (input1->IsValid() && input2->IsValid() && input3->IsValid() && input4->IsValid() &&
+                     input5->IsValid());
+
+            if (BaseType::mInputExists) {
+                while (Strop<R(A1, A2, A3, A4, A5)>::HasMore()) {
+                    const A1 &a1(input1->Current());
+                    const A2 &a2(input2->Current());
+                    const A3 &a3(input3->Current());
+                    const A4 &a4(input4->Current());
+                    const A5 &a5(input5->Current());
+
+                    StropStreamProducer<R>::Output(BaseType::mFunction(a1, a2, a3, a4, a5));
                 }
-            }            
+            }
         }
     };
-    
-    
+
+
 } // ns streamulus

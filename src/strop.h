@@ -59,6 +59,20 @@ namespace streamulus {
             return boost::fusion::at_c<I>(mInputs).get();
         }
 
+        /**
+         * returns true if any of the inputs has more data, false otherwise
+         */
+        struct has_more_function {
+            template<typename T>
+            bool operator()(const bool &state, const T &t) const {
+                return state || t->HasMore();
+            }
+        };
+
+        bool HasMore() {
+            return boost::fusion::fold(mInputs, false, has_more_function());
+        }
+
     private:
         typename boost::fusion::result_of::as_vector<typename input_types::type>::type mInputs;
 
