@@ -160,7 +160,7 @@ namespace streamulus
         
         template<typename A>
         typename result<functor_of<boost::proto::tag::pre_inc>(A)>::type
-        operator()(A& value) const
+        operator()(const A& value) const
         {
             remove_const_t<A> res(value);
             return ++res; 
@@ -180,7 +180,7 @@ namespace streamulus
         
         template<typename A>
         typename result<functor_of<boost::proto::tag::pre_dec>(A)>::type
-        operator()(A& value) const
+        operator()(const A& value) const
         { 
             remove_const_t<A> res(value);
             return --res; 
@@ -200,7 +200,7 @@ namespace streamulus
         
         template<typename A>
         typename result<functor_of<boost::proto::tag::post_inc>(A)>::type
-        operator()(A& value) const 
+        operator()(const A& value) const
         {
             remove_const_t<A> res(value);
             return res++; 
@@ -220,7 +220,7 @@ namespace streamulus
         
         template<typename A>
         typename result<functor_of<boost::proto::tag::post_dec>(A)>::type
-        operator()(A& value) const
+        operator()(const A& value) const
         {
             remove_const_t<A> res(value);
             return res--; 
@@ -603,7 +603,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy=rhs; 
@@ -623,7 +623,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::shift_left_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy <<= rhs; 
@@ -643,7 +643,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::shift_right_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy >>= rhs; 
@@ -663,7 +663,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::multiplies_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy*=rhs; 
@@ -683,7 +683,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::divides_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy/=rhs; 
@@ -703,7 +703,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::modulus_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy%=rhs; 
@@ -723,7 +723,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::plus_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy+=rhs; 
@@ -743,7 +743,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::minus_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy-=rhs; 
@@ -763,7 +763,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::bitwise_and_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy&=rhs; 
@@ -783,7 +783,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::bitwise_or_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy|=rhs; 
@@ -804,7 +804,7 @@ namespace streamulus
         
         template<typename A, typename B>
         typename result<functor_of<boost::proto::tag::bitwise_xor_assign>(A,B)>::type
-        operator()(A& lhs, const B& rhs) const
+        operator()(const A& lhs, const B& rhs) const
         {
             remove_const_t<A> dummy(lhs);
             return dummy^=rhs; 
