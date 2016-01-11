@@ -21,10 +21,14 @@
 
 #pragma once
 
+#include <boost/optional.hpp>
 #include <type_traits>
 
 namespace streamulus {
 
+    /**
+     * emulate missing c++14 shortcuts
+     */
     template<class T>
     using remove_reference_t = typename std::remove_reference<T>::type;
 
@@ -33,5 +37,24 @@ namespace streamulus {
 
     template<class T>
     using remove_const_t = typename std::remove_const<T>::type;
+
+
+
+    /**
+     * remove-optional (where should this live?)
+     */
+
+    template<typename T>
+    struct remove_optional {
+        using type = T;
+    };
+
+    template<typename T>
+    struct remove_optional<boost::optional<T>> {
+        using type = T;
+    };
+
+    template<typename T>
+    using remove_optional_t = typename remove_optional<remove_reference_t<remove_const_t<T>>>::type;
 
 }

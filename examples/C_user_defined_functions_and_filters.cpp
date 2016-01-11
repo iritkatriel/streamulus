@@ -172,9 +172,9 @@ public:
     }
     
     template<class Sig> 
-    struct result 
+    struct result
     {
-        using type = T;
+        using type = boost::optional<T>;
     };
     
     boost::optional<T> operator()(const T& value) 
