@@ -126,7 +126,7 @@ namespace streamulus
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
-            using  R = typename F::template result<F(Arg1Type)>::type;
+            using  R = typename std::result_of<F(Arg1Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type)>>;
         };
         
@@ -160,7 +160,7 @@ namespace streamulus
             using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
-            using R = typename F::template result<F(Arg1Type,Arg2Type)>::type;
+            using R = typename std::result_of<F(Arg1Type,Arg2Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type)>>;
         };
         
@@ -196,7 +196,7 @@ namespace streamulus
             using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
             using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
-            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type)>::type;
+            using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> >;
         };
         
@@ -249,7 +249,7 @@ namespace streamulus
             using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
             using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
             using Arg4Type = typename StropReturnType<const Arg4Strop>::type;
-            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type;
+            using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> >;
         };
         
@@ -309,7 +309,8 @@ namespace streamulus
             using Arg3Type = typename StropReturnType<const Arg3Strop>::type ;
             using Arg4Type = typename StropReturnType<const Arg4Strop>::type ;
             using Arg5Type = typename StropReturnType<const Arg5Strop>::type;
-            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type;
+            using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type;
+
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>>;
         };
         

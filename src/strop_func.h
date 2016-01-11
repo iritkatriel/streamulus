@@ -70,7 +70,7 @@ namespace streamulus {
 
     template<class F,
             typename A1,
-            typename R =typename F::template result<F(A1)>::type>
+            typename R = typename std::result_of<F(A1)>::type>
     class Func1 : public FuncBase<F, R(A1)> {
     public:
 
@@ -96,7 +96,7 @@ namespace streamulus {
     template<class F,
             typename A1,
             typename A2,
-            typename R =typename F::template result<F(A1, A2)>::type>
+            typename R =typename std::result_of<F(A1, A2)>::type>
     class Func2 : public FuncBase<F, R(A1, A2)> {
     public:
 
@@ -128,7 +128,7 @@ namespace streamulus {
             typename A1,
             typename A2,
             typename A3,
-            typename R =typename F::template result<F(A1, A2, A3)>::type>
+            typename R =typename std::result_of<F(A1, A2, A3)>::type>
     class Func3 : public FuncBase<F, R(A1, A2, A3)> {
     public:
 
@@ -163,7 +163,7 @@ namespace streamulus {
             typename A2,
             typename A3,
             typename A4,
-            typename R =typename F::template result<F(A1, A2, A3, A4)>::type>
+            typename R = typename std::result_of<F(A1, A2, A3, A4)>::type>
     class Func4 : public FuncBase<F, R(A1, A2, A3, A4)> {
     public:
 
@@ -201,7 +201,7 @@ namespace streamulus {
             typename A3,
             typename A4,
             typename A5,
-            typename R =typename F::template result<F(A1, A2, A3, A4, A5)>::type>
+            typename R = typename std::result_of<F(A1, A2, A3, A4, A5)>::type>
     class Func5 : public FuncBase<F, R(A1, A2, A3, A4, A5)> {
     public:
 
