@@ -76,8 +76,9 @@ namespace streamulus
                 engine->AddVertexToGraph(strop);
                 engine->AddSource(strop);
             }
-            if (engine->IsVerbose())
-                std::cout << "AddStropToGraph: " << strop << " returning " << strop->GetDescriptor() << std::endl; 
+            if (engine->IsVerbose()) {
+                std::cout << "AddStropToGraph: " << strop << " returning " << strop->GetDescriptor() << std::endl;
+            }
             return strop;
         }
     };
@@ -100,8 +101,10 @@ namespace streamulus
         typename result<generic_func(const F&,State)>::type
         operator()(const F& f, State engine)
         {  
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
+            }
+
             using FuncStropType = Func0<F>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -130,10 +133,11 @@ namespace streamulus
                    const Arg1Strop arg1, 
                    State engine)
         {  
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,State)>;
-            using FuncStropType = Func1<F,typename Result::Arg1Type>;
+            }
+
+            using FuncStropType = Func1<F,strop_return_type_t<Arg1Strop>>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
@@ -160,10 +164,11 @@ namespace streamulus
         typename result<generic_func(const F&,Arg1Strop,Arg2Strop, State)>::type
         operator()(const F& f,const Arg1Strop arg1, const Arg2Strop arg2, State engine)
         {   
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop, State)>;
-            using FuncStropType = Func2<F, typename Result::Arg1Type, typename Result::Arg2Type>;
+            }
+
+            using FuncStropType = Func2<F, strop_return_type_t<Arg1Strop>, strop_return_type_t<Arg2Strop>>;
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
@@ -204,13 +209,14 @@ namespace streamulus
                    const Arg3Strop arg3, 
                    State engine)
         {   
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,State)>;
+            }
+
             using FuncStropType = Func3<F
-            ,typename Result::Arg1Type
-            ,typename Result::Arg2Type
-            ,typename Result::Arg3Type
+            ,strop_return_type_t<Arg1Strop>
+            ,strop_return_type_t<Arg2Strop>
+            ,strop_return_type_t<Arg3Strop>
             >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -259,14 +265,15 @@ namespace streamulus
                    const Arg4Strop arg4, 
                    State engine)
         {   
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>;
+            }
+
             using FuncStropType = Func4<F
-            ,typename Result::Arg1Type
-            ,typename Result::Arg2Type
-            ,typename Result::Arg3Type
-            ,typename Result::Arg4Type
+            ,strop_return_type_t<Arg1Strop>
+            ,strop_return_type_t<Arg2Strop>
+            ,strop_return_type_t<Arg3Strop>
+            ,strop_return_type_t<Arg4Strop>
             >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -322,15 +329,16 @@ namespace streamulus
                    const Arg5Strop arg5, 
                    State engine)
         {   
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>;
+            }
+
             using FuncStropType = Func5<F
-                        ,typename Result::Arg1Type
-                        ,typename Result::Arg2Type
-                        ,typename Result::Arg3Type
-                        ,typename Result::Arg4Type
-                        ,typename Result::Arg5Type
+                        ,strop_return_type_t<Arg1Strop>
+                        ,strop_return_type_t<Arg2Strop>
+                        ,strop_return_type_t<Arg3Strop>
+                        ,strop_return_type_t<Arg4Strop>
+                        ,strop_return_type_t<Arg5Strop>
                         >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
