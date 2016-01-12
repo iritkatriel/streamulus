@@ -92,10 +92,10 @@ namespace streamulus
         struct result<generic_func(FArg,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using R = typename F::template result<F()>::type;
+            using R = typename std::result_of<F()>::type;
             using type = const std::shared_ptr<Strop<R()>>;
         };
-        
+
         template<typename F, typename State>
         typename result<generic_func(const F&,State)>::type
         operator()(const F& f, State engine)
@@ -111,7 +111,7 @@ namespace streamulus
         }        
         
         // Arity = 1
-        template<typename FArg, 
+        template<typename FArg,
         typename Arg1Strop, 
         typename State>
         struct result<generic_func(FArg,Arg1Strop,State)>
