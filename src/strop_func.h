@@ -52,7 +52,7 @@ namespace streamulus {
 
 
     template<class F,
-            typename R =typename F::template result<F(void)>::type>
+            typename R = typename std::result_of<F(void)>::type>
     class Func0 : public FuncBase<F, R(void)> {
     public:
 
