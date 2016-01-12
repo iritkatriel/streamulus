@@ -21,22 +21,22 @@
 
 #pragma once
 
+#include "cpp14_utils.h"
+
 #include <boost/shared_ptr.hpp>
 
 namespace streamulus
 {
+    namespace detail {
+        template<typename StropType>
+        struct StropReturnType;
+
+        template<typename StropType>
+        struct StropReturnType<std::shared_ptr<StropType> > {
+            using type = typename StropType::result_type;
+        };
+    }
+
     template<typename StropType>
-    struct StropReturnType;
-    
-    template<typename StropType>
-    struct StropReturnType<std::shared_ptr<StropType> >
-    {
-        using type = typename StropType::result_type;
-    };
-    
-    template<typename StropType>
-    struct StropReturnType<const std::shared_ptr<StropType> >
-    {
-        using type = typename StropType::result_type;
-    };
+    using strop_return_type_t = typename detail::StropReturnType<remove_const_t<StropType>>::type;
 } // ns streamulus
