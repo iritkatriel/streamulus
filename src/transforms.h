@@ -68,14 +68,6 @@ namespace streamulus
     
     struct AddStropToGraph : proto::callable  
     {
-        template<class Sig> struct result;
-        
-        template<class This, class StropType, class State>
-        struct result<This(StropType,State)>
-        {
-            using type = remove_reference_t<StropType>;
-        };
-        
         template<typename StropType, class State>
         const StropType operator()(StropType strop, State engine)
         {
@@ -371,7 +363,7 @@ namespace streamulus
         struct result<This(const std::shared_ptr<StropType>&,State)>
         {
             using StropPtrType = const std::shared_ptr<StropType>&;
-            using type = typename AddStropToGraph::result<AddStropToGraph(StropPtrType,State)>::type;
+            using type = typename std::result_of<AddStropToGraph(StropPtrType,State)>::type;
         };
         
         template<class This, class StropType, class State>
