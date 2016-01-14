@@ -41,13 +41,17 @@ namespace streamulus {
             Strop<Sig>::SetDisplayName(ss.str());
         }
 
-        inline const F &GetFunction() const {
-            return mFunction;
+        template<typename...Args>
+        typename std::result_of<F(Args...)>::type
+        Apply(Args...args) {
+            return mFunction(args...);
         }
 
     protected:
-        F mFunction;
         bool mInputExists;
+
+    private:
+        F mFunction;
     };
 
 
@@ -63,7 +67,7 @@ namespace streamulus {
         }
 
         virtual void Work() {
-            StropStreamProducer<R>::Output(BaseType::mFunction());
+            StropStreamProducer<R>::Output(BaseType::Apply());
         }
     };
 
@@ -87,7 +91,7 @@ namespace streamulus {
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
                     Stream<A1> *const input1 = StropType::template Input<0>();
-                    StropStreamProducer<R>::Output(BaseType::mFunction(input1->Current()));
+                    StropStreamProducer<R>::Output(BaseType::Apply(input1->Current()));
                 }
             }
         }
@@ -115,7 +119,7 @@ namespace streamulus {
                     Stream<A1> *const input1 = StropType::template Input<0>();
                     Stream<A2> *const input2 = StropType::template Input<1>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                    StropStreamProducer<R>::Output(BaseType::Apply(
                             input1->Current(),
                             input2->Current()
                     ));
@@ -148,7 +152,7 @@ namespace streamulus {
                     Stream<A2> *const input2 = StropType::template Input<1>();
                     Stream<A3> *const input3 = StropType::template Input<2>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                    StropStreamProducer<R>::Output(BaseType::Apply(
                             input1->Current(),
                             input2->Current(),
                             input3->Current()
@@ -184,7 +188,7 @@ namespace streamulus {
                     Stream<A3> *const input3 = StropType::template Input<2>();
                     Stream<A4> *const input4 = StropType::template Input<3>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                    StropStreamProducer<R>::Output(BaseType::Apply(
                             input1->Current(),
                             input2->Current(),
                             input3->Current(),
@@ -224,7 +228,7 @@ namespace streamulus {
                     Stream<A4> *const input4 = StropType::template Input<3>();
                     Stream<A5> *const input5 = StropType::template Input<4>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                    StropStreamProducer<R>::Output(BaseType::Apply(
                             input1->Current(),
                             input2->Current(),
                             input3->Current(),
