@@ -26,17 +26,8 @@
 using namespace streamulus;
 
 struct assert_eq {
-    template<class Sig>
-    struct result;
-
-    template<class This, typename T1, typename T2>
-    struct result<This(T1, T2)> {
-        using type = bool;
-    };
-
     template<typename T1, typename T2>
-    typename result<assert_eq(T1, T2)>::type
-    operator()(const T1 &v1, const T2 &v2) const {
+    bool operator()(const T1 &v1, const T2 &v2) const {
         BOOST_CHECK_EQUAL(v1, v2);
         return (v1 == v2);
     }

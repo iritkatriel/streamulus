@@ -129,14 +129,8 @@ public:
     , mMavg(0)
     {
     }
-    
-    template<class Sig> 
-    struct result 
-    {
-        using type = double;
-    };
-    
-    double operator()(const TimeValue& tick) 
+
+    double operator()(const TimeValue& tick)
     {
         if (! mFirst)
         {
@@ -170,13 +164,7 @@ public:
         : mFirst(true) 
     {
     }
-    
-    template<class Sig> 
-    struct result
-    {
-        using type = boost::optional<T>;
-    };
-    
+
     boost::optional<T> operator()(const T& value) 
     {
         if (mFirst || (value != mPrev))
@@ -197,13 +185,6 @@ private:
 // the type of the cross.
 struct cross_alert
 {
-    template<class Sig> 
-    struct result 
-    {
-        using type = bool;
-    };
-    
-    
     bool operator()(const bool is_golden_cross) 
     {
         if (is_golden_cross)
@@ -220,18 +201,9 @@ struct cross_alert
 // Stremify<print> is a stream function that prints every
 // element of a stream.
 struct print 
-{    
-    template<class Sig> struct result;
-    
-    template<class This,typename T>
-    struct result<This(T)>
-    {
-        using type = T;
-    };
-    
+{
     template<typename T>
-    typename result<print(T)>::type
-    operator()(const T& value) const
+    T operator()(const T& value) const
     { 
         std::cout << value << std::endl;
         return value;
@@ -243,18 +215,9 @@ struct print
 // for printing sub-expression results within a string
 // (converting to string allows + with other strings).
 struct as_string 
-{    
-    template<class Sig> struct result;
-    
-    template<class This,typename T>
-    struct result<This(T)>
-    {
-        using type = std::string;
-    };
-    
+{
     template<typename T>
-    typename result<print(T)>::type
-    operator()(const T& value) const
+    std::string operator()(const T& value) const
     { 
         std::stringstream ss;
         ss << value;

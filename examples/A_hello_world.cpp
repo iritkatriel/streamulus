@@ -47,19 +47,8 @@
 // element of a stream.
 struct print 
 {    
-    template<class Sig> struct result;
-    
-    // Boost result-of protocol (not necessary in C++11)
-    template<class This,typename T>
-    struct result<This(T)>
-    {
-        using type = T;
-    };
-    
-    // The actual function
     template<typename T>
-    typename result<print(T)>::type
-    operator()(const T& value) const
+    T operator()(const T& value) const
     { 
         std::cout << value << std::endl;
         return value;

@@ -69,18 +69,9 @@
 // Stremify<print> is a stream function that prints every
 // element of a stream.
 struct print 
-{    
-    template<class Sig> struct result;
-    
-    template<class This,typename T>
-    struct result<This(T)>
-    {
-        using type = T;
-    };
-    
+{
     template<typename T>
-    typename result<print(T)>::type
-    operator()(const T& value) const
+    T operator()(const T& value) const
     { 
         std::cout << value << std::endl;
         return value;

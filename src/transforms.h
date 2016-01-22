@@ -68,14 +68,6 @@ namespace streamulus
     
     struct AddStropToGraph : proto::callable  
     {
-        template<class Sig> struct result;
-        
-        template<class This, class StropType, class State>
-        struct result<This(StropType,State)>
-        {
-            using type = remove_reference_t<StropType>;
-        };
-        
         template<typename StropType, class State>
         const StropType operator()(StropType strop, State engine)
         {
@@ -84,8 +76,9 @@ namespace streamulus
                 engine->AddVertexToGraph(strop);
                 engine->AddSource(strop);
             }
-            if (engine->IsVerbose())
-                std::cout << "AddStropToGraph: " << strop << " returning " << strop->GetDescriptor() << std::endl; 
+            if (engine->IsVerbose()) {
+                std::cout << "AddStropToGraph: " << strop << " returning " << strop->GetDescriptor() << std::endl;
+            }
             return strop;
         }
     };
@@ -100,16 +93,18 @@ namespace streamulus
         struct result<generic_func(FArg,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using R = typename F::template result<F()>::type;
+            using R = typename std::result_of<F()>::type;
             using type = const std::shared_ptr<Strop<R()>>;
         };
-        
+
         template<typename F, typename State>
         typename result<generic_func(const F&,State)>::type
         operator()(const F& f, State engine)
         {  
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
+            }
+
             using FuncStropType = Func0<F>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -119,14 +114,14 @@ namespace streamulus
         }        
         
         // Arity = 1
-        template<typename FArg, 
+        template<typename FArg,
         typename Arg1Strop, 
         typename State>
         struct result<generic_func(FArg,Arg1Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
-            using  R = typename F::template result<F(Arg1Type)>::type;
+            using Arg1Type = strop_return_type_t<Arg1Strop>;
+            using  R = typename std::result_of<F(Arg1Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type)>>;
         };
         
@@ -138,10 +133,11 @@ namespace streamulus
                    const Arg1Strop arg1, 
                    State engine)
         {  
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,State)>;
-            using FuncStropType = Func1<F,typename Result::Arg1Type>;
+            }
+
+            using FuncStropType = Func1<F,strop_return_type_t<Arg1Strop>>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
@@ -158,9 +154,9 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
-            using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
-            using R = typename F::template result<F(Arg1Type,Arg2Type)>::type;
+            using Arg1Type = strop_return_type_t<Arg1Strop>;
+            using Arg2Type = strop_return_type_t<Arg2Strop>;
+            using R = typename std::result_of<F(Arg1Type,Arg2Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type)>>;
         };
         
@@ -168,10 +164,11 @@ namespace streamulus
         typename result<generic_func(const F&,Arg1Strop,Arg2Strop, State)>::type
         operator()(const F& f,const Arg1Strop arg1, const Arg2Strop arg2, State engine)
         {   
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop, State)>;
-            using FuncStropType = Func2<F, typename Result::Arg1Type, typename Result::Arg2Type>;
+            }
+
+            using FuncStropType = Func2<F, strop_return_type_t<Arg1Strop>, strop_return_type_t<Arg2Strop>>;
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
@@ -193,10 +190,10 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
-            using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
-            using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
-            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type)>::type;
+            using Arg1Type = strop_return_type_t<Arg1Strop>;
+            using Arg2Type = strop_return_type_t<Arg2Strop>;
+            using Arg3Type = strop_return_type_t<Arg3Strop>;
+            using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> >;
         };
         
@@ -212,13 +209,14 @@ namespace streamulus
                    const Arg3Strop arg3, 
                    State engine)
         {   
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,State)>;
+            }
+
             using FuncStropType = Func3<F
-            ,typename Result::Arg1Type
-            ,typename Result::Arg2Type
-            ,typename Result::Arg3Type
+            ,strop_return_type_t<Arg1Strop>
+            ,strop_return_type_t<Arg2Strop>
+            ,strop_return_type_t<Arg3Strop>
             >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -245,11 +243,11 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
-            using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
-            using Arg3Type = typename StropReturnType<const Arg3Strop>::type;
-            using Arg4Type = typename StropReturnType<const Arg4Strop>::type;
-            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type;
+            using Arg1Type = strop_return_type_t<Arg1Strop>;
+            using Arg2Type = strop_return_type_t<Arg2Strop>;
+            using Arg3Type = strop_return_type_t<Arg3Strop>;
+            using Arg4Type = strop_return_type_t<Arg4Strop>;
+            using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> >;
         };
         
@@ -267,14 +265,15 @@ namespace streamulus
                    const Arg4Strop arg4, 
                    State engine)
         {   
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>;
+            }
+
             using FuncStropType = Func4<F
-            ,typename Result::Arg1Type
-            ,typename Result::Arg2Type
-            ,typename Result::Arg3Type
-            ,typename Result::Arg4Type
+            ,strop_return_type_t<Arg1Strop>
+            ,strop_return_type_t<Arg2Strop>
+            ,strop_return_type_t<Arg3Strop>
+            ,strop_return_type_t<Arg4Strop>
             >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -304,12 +303,13 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = typename StropReturnType<const Arg1Strop>::type;
-            using Arg2Type = typename StropReturnType<const Arg2Strop>::type;
-            using Arg3Type = typename StropReturnType<const Arg3Strop>::type ;
-            using Arg4Type = typename StropReturnType<const Arg4Strop>::type ;
-            using Arg5Type = typename StropReturnType<const Arg5Strop>::type;
-            using R = typename F::template result<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type;
+            using Arg1Type = strop_return_type_t<Arg1Strop>;
+            using Arg2Type = strop_return_type_t<Arg2Strop>;
+            using Arg3Type = strop_return_type_t<Arg3Strop>;
+            using Arg4Type = strop_return_type_t<Arg4Strop>;
+            using Arg5Type = strop_return_type_t<Arg5Strop>;
+            using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type;
+
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>>;
         };
         
@@ -329,15 +329,16 @@ namespace streamulus
                    const Arg5Strop arg5, 
                    State engine)
         {   
-            if (engine->IsVerbose())
+            if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
-            using Result = result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>;
+            }
+
             using FuncStropType = Func5<F
-                        ,typename Result::Arg1Type
-                        ,typename Result::Arg2Type
-                        ,typename Result::Arg3Type
-                        ,typename Result::Arg4Type
-                        ,typename Result::Arg5Type
+                        ,strop_return_type_t<Arg1Strop>
+                        ,strop_return_type_t<Arg2Strop>
+                        ,strop_return_type_t<Arg3Strop>
+                        ,strop_return_type_t<Arg4Strop>
+                        ,strop_return_type_t<Arg5Strop>
                         >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -370,7 +371,7 @@ namespace streamulus
         struct result<This(const std::shared_ptr<StropType>&,State)>
         {
             using StropPtrType = const std::shared_ptr<StropType>&;
-            using type = typename AddStropToGraph::result<AddStropToGraph(StropPtrType,State)>::type;
+            using type = typename std::result_of<AddStropToGraph(StropPtrType,State)>::type;
         };
         
         template<class This, class StropType, class State>
@@ -411,7 +412,7 @@ namespace streamulus
         template<typename ArgStrop, typename State>
         struct result<SlidingWindow(const int&,ArgStrop,State)>
         {
-            using input_type = typename StropReturnType<const ArgStrop>::type;
+            using input_type = strop_return_type_t<ArgStrop>;
             using result_type = WindowUpdateType<input_type>;
             using type = const std::shared_ptr<StropStreamProducer<result_type> >;
         };
@@ -420,7 +421,7 @@ namespace streamulus
         typename result<SlidingWindow(const int&,ArgStrop,State)>::type
         operator()(const int& size, const ArgStrop arg, State engine)
         {
-            using WindowStropType = Window<typename StropReturnType<const ArgStrop>::type>;
+            using WindowStropType = Window<strop_return_type_t<ArgStrop>>;
             std::shared_ptr<WindowStropType> strop = std::make_shared<WindowStropType>(size);
 
             typename BaseType<ArgStrop>::type::OutputStreamPtr argStream(arg->MakeOutputStream());

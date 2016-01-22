@@ -41,18 +41,22 @@ namespace streamulus {
             Strop<Sig>::SetDisplayName(ss.str());
         }
 
-        inline const F &GetFunction() const {
-            return mFunction;
+        template<typename...Args>
+        typename std::result_of<F(Args...)>::type
+        Apply(Args...args) {
+            return mFunction(args...);
         }
 
     protected:
-        F mFunction;
         bool mInputExists;
+
+    private:
+        F mFunction;
     };
 
 
     template<class F,
-            typename R =typename F::template result<F(void)>::type>
+            typename R = typename std::result_of<F(void)>::type>
     class Func0 : public FuncBase<F, R(void)> {
     public:
 
@@ -63,14 +67,14 @@ namespace streamulus {
         }
 
         virtual void Work() {
-            StropStreamProducer<R>::Output(BaseType::mFunction());
+            StropStreamProducer<R>::Output(BaseType::Apply());
         }
     };
 
 
     template<class F,
             typename A1,
-            typename R =typename F::template result<F(A1)>::type>
+            typename R = typename std::result_of<F(A1)>::type>
     class Func1 : public FuncBase<F, R(A1)> {
     public:
 
@@ -87,7 +91,7 @@ namespace streamulus {
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
                     Stream<A1> *const input1 = StropType::template Input<0>();
-                    StropStreamProducer<R>::Output(BaseType::mFunction(input1->Current()));
+                    StropStreamProducer<R>::Output(BaseType::Apply(input1->Current()));
                 }
             }
         }
@@ -96,7 +100,7 @@ namespace streamulus {
     template<class F,
             typename A1,
             typename A2,
-            typename R =typename F::template result<F(A1, A2)>::type>
+            typename R =typename std::result_of<F(A1, A2)>::type>
     class Func2 : public FuncBase<F, R(A1, A2)> {
     public:
 
@@ -115,7 +119,7 @@ namespace streamulus {
                     Stream<A1> *const input1 = StropType::template Input<0>();
                     Stream<A2> *const input2 = StropType::template Input<1>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                    StropStreamProducer<R>::Output(BaseType::Apply(
                             input1->Current(),
                             input2->Current()
                     ));
@@ -128,7 +132,7 @@ namespace streamulus {
             typename A1,
             typename A2,
             typename A3,
-            typename R =typename F::template result<F(A1, A2, A3)>::type>
+            typename R =typename std::result_of<F(A1, A2, A3)>::type>
     class Func3 : public FuncBase<F, R(A1, A2, A3)> {
     public:
 
@@ -148,7 +152,7 @@ namespace streamulus {
                     Stream<A2> *const input2 = StropType::template Input<1>();
                     Stream<A3> *const input3 = StropType::template Input<2>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                    StropStreamProducer<R>::Output(BaseType::Apply(
                             input1->Current(),
                             input2->Current(),
                             input3->Current()
@@ -163,7 +167,7 @@ namespace streamulus {
             typename A2,
             typename A3,
             typename A4,
-            typename R =typename F::template result<F(A1, A2, A3, A4)>::type>
+            typename R = typename std::result_of<F(A1, A2, A3, A4)>::type>
     class Func4 : public FuncBase<F, R(A1, A2, A3, A4)> {
     public:
 
@@ -184,7 +188,7 @@ namespace streamulus {
                     Stream<A3> *const input3 = StropType::template Input<2>();
                     Stream<A4> *const input4 = StropType::template Input<3>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                    StropStreamProducer<R>::Output(BaseType::Apply(
                             input1->Current(),
                             input2->Current(),
                             input3->Current(),
@@ -201,7 +205,7 @@ namespace streamulus {
             typename A3,
             typename A4,
             typename A5,
-            typename R =typename F::template result<F(A1, A2, A3, A4, A5)>::type>
+            typename R = typename std::result_of<F(A1, A2, A3, A4, A5)>::type>
     class Func5 : public FuncBase<F, R(A1, A2, A3, A4, A5)> {
     public:
 
@@ -224,7 +228,7 @@ namespace streamulus {
                     Stream<A4> *const input4 = StropType::template Input<3>();
                     Stream<A5> *const input5 = StropType::template Input<4>();
 
-                    StropStreamProducer<R>::Output(BaseType::mFunction(
+                    StropStreamProducer<R>::Output(BaseType::Apply(
                             input1->Current(),
                             input2->Current(),
                             input3->Current(),
