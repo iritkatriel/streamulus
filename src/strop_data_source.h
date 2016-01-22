@@ -32,8 +32,6 @@ namespace streamulus
     class DataSource : public StropStreamProducer<R>  
     {
     public:
-
-        using result_type = R;
         
         DataSource(const std::string& name, bool verbose)
         : mIsValid(false)
