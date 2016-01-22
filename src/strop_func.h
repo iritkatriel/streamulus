@@ -29,21 +29,18 @@
 #include "strop.h"
 
 namespace streamulus {
-    template<class F, typename Sig>
-    class FuncBase : public Strop<Sig> {
+    template<typename R, typename...Args>
+    class FuncBase : public Strop<R(Args...)> {
     public:
-        using function_type = F;
 
-        FuncBase(const F &f)
+        FuncBase(const std::function<R(Args...)>& f)
                 : mFunction(f), mInputExists(false) {
             std::stringstream ss;
             ss << "Func_" << "F";
-            Strop<Sig>::SetDisplayName(ss.str());
+            Strop<R(Args...)>::SetDisplayName(ss.str());
         }
 
-        template<typename...Args>
-        typename std::result_of<F(Args...)>::type
-        Apply(Args...args) {
+        R Apply(Args...args) {
             return mFunction(args...);
         }
 
@@ -51,16 +48,16 @@ namespace streamulus {
         bool mInputExists;
 
     private:
-        F mFunction;
+        std::function<R(Args...)> mFunction;
     };
 
 
     template<class F,
             typename R = typename std::result_of<F(void)>::type>
-    class Func0 : public FuncBase<F, R(void)> {
+    class Func0 : public FuncBase<R> {
     public:
 
-        using BaseType = FuncBase<F, R(void)>;
+        using BaseType = FuncBase<R>;
 
         Func0(const F &f)
                 : BaseType(f) {
@@ -75,10 +72,10 @@ namespace streamulus {
     template<class F,
             typename A1,
             typename R = typename std::result_of<F(A1)>::type>
-    class Func1 : public FuncBase<F, R(A1)> {
+    class Func1 : public FuncBase<R, A1> {
     public:
 
-        using BaseType = FuncBase<F, R(A1)>;
+        using BaseType = FuncBase<R, A1>;
         using StropType = Strop<R(A1)>;
 
         Func1(const F &f)
@@ -101,10 +98,10 @@ namespace streamulus {
             typename A1,
             typename A2,
             typename R =typename std::result_of<F(A1, A2)>::type>
-    class Func2 : public FuncBase<F, R(A1, A2)> {
+    class Func2 : public FuncBase<R, A1, A2> {
     public:
 
-        using BaseType = FuncBase<F, R(A1, A2)>;
+        using BaseType = FuncBase<R, A1, A2>;
         using StropType = Strop<R(A1, A2)>;
 
         Func2(const F &f)
@@ -133,10 +130,10 @@ namespace streamulus {
             typename A2,
             typename A3,
             typename R =typename std::result_of<F(A1, A2, A3)>::type>
-    class Func3 : public FuncBase<F, R(A1, A2, A3)> {
+    class Func3 : public FuncBase<R, A1, A2, A3> {
     public:
 
-        using BaseType = FuncBase<F, R(A1, A2, A3)>;
+        using BaseType = FuncBase<R, A1, A2, A3>;
         using StropType = Strop<R(A1, A2, A3)>;
 
         Func3(const F &f)
@@ -168,10 +165,10 @@ namespace streamulus {
             typename A3,
             typename A4,
             typename R = typename std::result_of<F(A1, A2, A3, A4)>::type>
-    class Func4 : public FuncBase<F, R(A1, A2, A3, A4)> {
+    class Func4 : public FuncBase<R, A1, A2, A3, A4> {
     public:
 
-        using BaseType = FuncBase<F, R(A1, A2, A3, A4)>;
+        using BaseType = FuncBase<R, A1, A2, A3, A4>;
         using StropType = Strop<R(A1, A2, A3, A4)>;
 
         Func4(const F &f)
@@ -206,10 +203,10 @@ namespace streamulus {
             typename A4,
             typename A5,
             typename R = typename std::result_of<F(A1, A2, A3, A4, A5)>::type>
-    class Func5 : public FuncBase<F, R(A1, A2, A3, A4, A5)> {
+    class Func5 : public FuncBase<R, A1, A2, A3, A4, A5> {
     public:
 
-        using BaseType = FuncBase<F, R(A1, A2, A3, A4, A5)>;
+        using BaseType = FuncBase<R, A1, A2, A3, A4, A5>;
         using StropType = Strop<R(A1, A2, A3, A4, A5)>;
 
         Func5(const F &f)
