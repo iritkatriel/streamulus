@@ -120,7 +120,7 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
             using  R = typename std::result_of<F(Arg1Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type)>>;
         };
@@ -137,7 +137,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func1<F,strop_return_type_t<Arg1Strop>>;
+            using FuncStropType = Func1<F,strop_return_type<Arg1Strop>>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
@@ -154,8 +154,8 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
-            using Arg2Type = strop_return_type_t<Arg2Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
+            using Arg2Type = strop_return_type<Arg2Strop>;
             using R = typename std::result_of<F(Arg1Type,Arg2Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type)>>;
         };
@@ -168,7 +168,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func2<F, strop_return_type_t<Arg1Strop>, strop_return_type_t<Arg2Strop>>;
+            using FuncStropType = Func2<F, strop_return_type<Arg1Strop>, strop_return_type<Arg2Strop>>;
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
@@ -190,9 +190,9 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
-            using Arg2Type = strop_return_type_t<Arg2Strop>;
-            using Arg3Type = strop_return_type_t<Arg3Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
+            using Arg2Type = strop_return_type<Arg2Strop>;
+            using Arg3Type = strop_return_type<Arg3Strop>;
             using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> >;
         };
@@ -214,9 +214,9 @@ namespace streamulus
             }
 
             using FuncStropType = Func3<F
-            ,strop_return_type_t<Arg1Strop>
-            ,strop_return_type_t<Arg2Strop>
-            ,strop_return_type_t<Arg3Strop>
+            ,strop_return_type<Arg1Strop>
+            ,strop_return_type<Arg2Strop>
+            ,strop_return_type<Arg3Strop>
             >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -243,10 +243,10 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
-            using Arg2Type = strop_return_type_t<Arg2Strop>;
-            using Arg3Type = strop_return_type_t<Arg3Strop>;
-            using Arg4Type = strop_return_type_t<Arg4Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
+            using Arg2Type = strop_return_type<Arg2Strop>;
+            using Arg3Type = strop_return_type<Arg3Strop>;
+            using Arg4Type = strop_return_type<Arg4Strop>;
             using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> >;
         };
@@ -270,10 +270,10 @@ namespace streamulus
             }
 
             using FuncStropType = Func4<F
-            ,strop_return_type_t<Arg1Strop>
-            ,strop_return_type_t<Arg2Strop>
-            ,strop_return_type_t<Arg3Strop>
-            ,strop_return_type_t<Arg4Strop>
+            ,strop_return_type<Arg1Strop>
+            ,strop_return_type<Arg2Strop>
+            ,strop_return_type<Arg3Strop>
+            ,strop_return_type<Arg4Strop>
             >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -303,11 +303,11 @@ namespace streamulus
         struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
-            using Arg2Type = strop_return_type_t<Arg2Strop>;
-            using Arg3Type = strop_return_type_t<Arg3Strop>;
-            using Arg4Type = strop_return_type_t<Arg4Strop>;
-            using Arg5Type = strop_return_type_t<Arg5Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
+            using Arg2Type = strop_return_type<Arg2Strop>;
+            using Arg3Type = strop_return_type<Arg3Strop>;
+            using Arg4Type = strop_return_type<Arg4Strop>;
+            using Arg5Type = strop_return_type<Arg5Strop>;
             using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type;
 
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>>;
@@ -334,11 +334,11 @@ namespace streamulus
             }
 
             using FuncStropType = Func5<F
-                        ,strop_return_type_t<Arg1Strop>
-                        ,strop_return_type_t<Arg2Strop>
-                        ,strop_return_type_t<Arg3Strop>
-                        ,strop_return_type_t<Arg4Strop>
-                        ,strop_return_type_t<Arg5Strop>
+                        ,strop_return_type<Arg1Strop>
+                        ,strop_return_type<Arg2Strop>
+                        ,strop_return_type<Arg3Strop>
+                        ,strop_return_type<Arg4Strop>
+                        ,strop_return_type<Arg5Strop>
                         >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -412,7 +412,7 @@ namespace streamulus
         template<typename ArgStrop, typename State>
         struct result<SlidingWindow(const int&,ArgStrop,State)>
         {
-            using input_type = strop_return_type_t<ArgStrop>;
+            using input_type = strop_return_type<ArgStrop>;
             using result_type = WindowUpdateType<input_type>;
             using type = const std::shared_ptr<StropStreamProducer<result_type> >;
         };
@@ -421,7 +421,7 @@ namespace streamulus
         typename result<SlidingWindow(const int&,ArgStrop,State)>::type
         operator()(const int& size, const ArgStrop arg, State engine)
         {
-            using WindowStropType = Window<strop_return_type_t<ArgStrop>>;
+            using WindowStropType = Window<strop_return_type<ArgStrop>>;
             std::shared_ptr<WindowStropType> strop = std::make_shared<WindowStropType>(size);
 
             typename BaseType<ArgStrop>::type::OutputStreamPtr argStream(arg->MakeOutputStream());

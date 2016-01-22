@@ -44,17 +44,19 @@ namespace streamulus {
      * remove-optional (where should this live?)
      */
 
-    template<typename T>
-    struct remove_optional {
-        using type = T;
-    };
+    namespace detail {
+            template<typename T>
+            struct remove_optional_impl {
+                using type = T;
+            };
+
+            template<typename T>
+            struct remove_optional_impl<boost::optional<T>> {
+                using type = T;
+            };
+    }
 
     template<typename T>
-    struct remove_optional<boost::optional<T>> {
-        using type = T;
-    };
-
-    template<typename T>
-    using remove_optional_t = typename remove_optional<remove_reference_t<remove_const_t<T>>>::type;
+    using remove_optional = typename detail::remove_optional_impl<remove_reference_t<remove_const_t<T>>>::type;
 
 }

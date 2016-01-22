@@ -40,7 +40,7 @@ namespace streamulus
 
         // FR is the return type of the function that this strop computes.
         // R is the value that the strop publishes on its output stream (and is not optional).
-        using R = remove_optional_t<FR>;
+        using R = remove_optional<FR>;
 
         using result_type = R;
         
