@@ -40,8 +40,8 @@ namespace streamulus {
             Strop<R(Args...)>::SetDisplayName(ss.str());
         }
 
-        R Apply(Args...args) {
-            return mFunction(args...);
+        R ApplyFunction() {
+            return Strop<R(Args...)>::Invoke(mFunction);
         }
 
     protected:
@@ -64,7 +64,7 @@ namespace streamulus {
         }
 
         virtual void Work() {
-            StropStreamProducer<R>::Output(BaseType::Apply());
+            StropStreamProducer<R>::Output(BaseType::ApplyFunction());
         }
     };
 
@@ -84,11 +84,9 @@ namespace streamulus {
 
         virtual void Work() {
             BaseType::mInputExists |= StropType::IsValid();
-
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    Stream<A1> *const input1 = StropType::template Input<0>();
-                    StropStreamProducer<R>::Output(BaseType::Apply(input1->Current()));
+                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
                 }
             }
         }
@@ -113,13 +111,7 @@ namespace streamulus {
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    Stream<A1> *const input1 = StropType::template Input<0>();
-                    Stream<A2> *const input2 = StropType::template Input<1>();
-
-                    StropStreamProducer<R>::Output(BaseType::Apply(
-                            input1->Current(),
-                            input2->Current()
-                    ));
+                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
                 }
             }
         }
@@ -145,15 +137,7 @@ namespace streamulus {
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    Stream<A1> *const input1 = StropType::template Input<0>();
-                    Stream<A2> *const input2 = StropType::template Input<1>();
-                    Stream<A3> *const input3 = StropType::template Input<2>();
-
-                    StropStreamProducer<R>::Output(BaseType::Apply(
-                            input1->Current(),
-                            input2->Current(),
-                            input3->Current()
-                    ));
+                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
                 }
             }
         }
@@ -180,17 +164,7 @@ namespace streamulus {
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    Stream<A1> *const input1 = StropType::template Input<0>();
-                    Stream<A2> *const input2 = StropType::template Input<1>();
-                    Stream<A3> *const input3 = StropType::template Input<2>();
-                    Stream<A4> *const input4 = StropType::template Input<3>();
-
-                    StropStreamProducer<R>::Output(BaseType::Apply(
-                            input1->Current(),
-                            input2->Current(),
-                            input3->Current(),
-                            input4->Current()
-                    ));
+                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
                 }
             }
         }
@@ -219,19 +193,7 @@ namespace streamulus {
 
             if (BaseType::mInputExists) {
                 while (StropType::HasMore()) {
-                    Stream<A1> *const input1 = StropType::template Input<0>();
-                    Stream<A2> *const input2 = StropType::template Input<1>();
-                    Stream<A3> *const input3 = StropType::template Input<2>();
-                    Stream<A4> *const input4 = StropType::template Input<3>();
-                    Stream<A5> *const input5 = StropType::template Input<4>();
-
-                    StropStreamProducer<R>::Output(BaseType::Apply(
-                            input1->Current(),
-                            input2->Current(),
-                            input3->Current(),
-                            input4->Current(),
-                            input5->Current()
-                    ));
+                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
                 }
             }
         }
