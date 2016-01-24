@@ -390,16 +390,16 @@ namespace streamulus
         template<class This, class ConstType, class State>
         struct result<This(ConstType,State)>
         {
-            using ConstFuncResultType = typename ConstFunc<ConstType>::template result<ConstFunc<ConstType>(ConstType)>::type;
-            using type = const std::shared_ptr<Strop<ConstFuncResultType()>>;
+            using type = const std::shared_ptr<
+                    Strop<typename std::result_of<ConstFunc<ConstType>()>::type()>
+            >;
         };
         
         template<typename ConstType, class State>
         typename boost::disable_if<BaseType<ConstType>, typename result<HandleTerminal(ConstType ,State)>::type>::type
         operator()(ConstType const_value, State engine)
         {
-            using T = typename result<HandleTerminal(ConstType ,State)>::ConstFuncResultType;
-            return generic_func()(ConstFunc<T>(const_value),engine);
+            return generic_func()(ConstFunc<ConstType>(const_value),engine);
         }
          
     };
