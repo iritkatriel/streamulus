@@ -110,10 +110,15 @@ namespace streamulus {
         };
 
         bool IsValid() {
-            return boost::fusion::fold(mInputs, true, is_valid_fold_function());
+            return NoInputs() || boost::fusion::fold(mInputs, true, is_valid_fold_function());
+        }
+
+        bool NoInputs() {
+            return boost::fusion::empty(mInputs);
         }
 
     private:
+
         typename boost::fusion::result_of::as_vector<typename input_types::type>::type mInputs;
 
     };

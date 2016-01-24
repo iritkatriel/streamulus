@@ -29,11 +29,14 @@
 #include "strop.h"
 
 namespace streamulus {
-    template<typename R, typename...Args>
-    class FuncBase : public Strop<R(Args...)> {
+    template<class F, typename... Args>
+    class Func : public Strop<typename std::result_of<F(Args...)>::type(Args...)> {
     public:
 
-        FuncBase(const std::function<R(Args...)>& f)
+        using R = typename std::result_of<F(Args...)>::type;
+        using StropType = Strop<R(Args...)>;
+
+        Func(const std::function<R(Args...)> &f)
                 : mFunction(f), mInputExists(false) {
             std::stringstream ss;
             ss << "Func_" << "F";
@@ -44,159 +47,25 @@ namespace streamulus {
             return Strop<R(Args...)>::Invoke(mFunction);
         }
 
-    protected:
-        bool mInputExists;
+
+        virtual void Work() {
+            mInputExists |= StropType::IsValid();
+            if (mInputExists) {
+                if (StropType::NoInputs()) {
+                    // apply function once for strop without inputs
+                    StropStreamProducer<R>::Output(ApplyFunction());
+                } else {
+                    while (StropType::HasMore()) {
+                        // apply function as long as there are more inputsfor strop without inputs
+                        StropStreamProducer<R>::Output(ApplyFunction());
+                    }
+                }
+            }
+        }
 
     private:
+        bool mInputExists;
         std::function<R(Args...)> mFunction;
-    };
-
-
-    template<class F,
-            typename R = typename std::result_of<F(void)>::type>
-    class Func0 : public FuncBase<R> {
-    public:
-
-        using BaseType = FuncBase<R>;
-
-        Func0(const F &f)
-                : BaseType(f) {
-        }
-
-        virtual void Work() {
-            StropStreamProducer<R>::Output(BaseType::ApplyFunction());
-        }
-    };
-
-
-    template<class F,
-            typename A1,
-            typename R = typename std::result_of<F(A1)>::type>
-    class Func1 : public FuncBase<R, A1> {
-    public:
-
-        using BaseType = FuncBase<R, A1>;
-        using StropType = Strop<R(A1)>;
-
-        Func1(const F &f)
-                : BaseType(f) {
-        }
-
-        virtual void Work() {
-            BaseType::mInputExists |= StropType::IsValid();
-            if (BaseType::mInputExists) {
-                while (StropType::HasMore()) {
-                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
-                }
-            }
-        }
-    };
-
-    template<class F,
-            typename A1,
-            typename A2,
-            typename R =typename std::result_of<F(A1, A2)>::type>
-    class Func2 : public FuncBase<R, A1, A2> {
-    public:
-
-        using BaseType = FuncBase<R, A1, A2>;
-        using StropType = Strop<R(A1, A2)>;
-
-        Func2(const F &f)
-                : BaseType(f) {
-        }
-
-        virtual void Work() {
-            BaseType::mInputExists |= StropType::IsValid();
-
-            if (BaseType::mInputExists) {
-                while (StropType::HasMore()) {
-                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
-                }
-            }
-        }
-    };
-
-    template<class F,
-            typename A1,
-            typename A2,
-            typename A3,
-            typename R =typename std::result_of<F(A1, A2, A3)>::type>
-    class Func3 : public FuncBase<R, A1, A2, A3> {
-    public:
-
-        using BaseType = FuncBase<R, A1, A2, A3>;
-        using StropType = Strop<R(A1, A2, A3)>;
-
-        Func3(const F &f)
-                : BaseType(f) {
-        }
-
-        virtual void Work() {
-            BaseType::mInputExists |= StropType::IsValid();
-
-            if (BaseType::mInputExists) {
-                while (StropType::HasMore()) {
-                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
-                }
-            }
-        }
-    };
-
-    template<class F,
-            typename A1,
-            typename A2,
-            typename A3,
-            typename A4,
-            typename R = typename std::result_of<F(A1, A2, A3, A4)>::type>
-    class Func4 : public FuncBase<R, A1, A2, A3, A4> {
-    public:
-
-        using BaseType = FuncBase<R, A1, A2, A3, A4>;
-        using StropType = Strop<R(A1, A2, A3, A4)>;
-
-        Func4(const F &f)
-                : BaseType(f) {
-        }
-
-        virtual void Work() {
-            BaseType::mInputExists |= StropType::IsValid();
-
-            if (BaseType::mInputExists) {
-                while (StropType::HasMore()) {
-                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
-                }
-            }
-        }
-    };
-
-    template<class F,
-            typename A1,
-            typename A2,
-            typename A3,
-            typename A4,
-            typename A5,
-            typename R = typename std::result_of<F(A1, A2, A3, A4, A5)>::type>
-    class Func5 : public FuncBase<R, A1, A2, A3, A4, A5> {
-    public:
-
-        using BaseType = FuncBase<R, A1, A2, A3, A4, A5>;
-        using StropType = Strop<R(A1, A2, A3, A4, A5)>;
-
-        Func5(const F &f)
-                : BaseType(f) {
-        }
-
-        virtual void Work() {
-
-            BaseType::mInputExists |= StropType::IsValid();
-
-            if (BaseType::mInputExists) {
-                while (StropType::HasMore()) {
-                    StropStreamProducer<R>::Output(BaseType::ApplyFunction());
-                }
-            }
-        }
     };
 
 

@@ -105,7 +105,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func0<F>;
+            using FuncStropType = Func<F>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             engine->AddVertexToGraph(funcStropPtr);
@@ -137,7 +137,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func1<F,strop_return_type<Arg1Strop>>;
+            using FuncStropType = Func<F,strop_return_type<Arg1Strop>>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
@@ -168,7 +168,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func2<F, strop_return_type<Arg1Strop>, strop_return_type<Arg2Strop>>;
+            using FuncStropType = Func<F, strop_return_type<Arg1Strop>, strop_return_type<Arg2Strop>>;
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
@@ -213,7 +213,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func3<F
+            using FuncStropType = Func<F
             ,strop_return_type<Arg1Strop>
             ,strop_return_type<Arg2Strop>
             ,strop_return_type<Arg3Strop>
@@ -269,7 +269,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func4<F
+            using FuncStropType = Func<F
             ,strop_return_type<Arg1Strop>
             ,strop_return_type<Arg2Strop>
             ,strop_return_type<Arg3Strop>
@@ -333,7 +333,7 @@ namespace streamulus
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func5<F
+            using FuncStropType = Func<F
                         ,strop_return_type<Arg1Strop>
                         ,strop_return_type<Arg2Strop>
                         ,strop_return_type<Arg3Strop>
