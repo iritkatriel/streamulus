@@ -89,17 +89,17 @@ namespace streamulus
         template<typename Sig> struct result;
         
         // Arity = 0
-        template<typename FArg, typename State>
-        struct result<generic_func(FArg,State)>
+        template<typename State, typename FArg>
+        struct result<generic_func(State,FArg)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using R = typename std::result_of<F()>::type;
             using type = const std::shared_ptr<Strop<R()>>;
         };
 
-        template<typename F, typename State>
-        typename result<generic_func(const F&,State)>::type
-        operator()(const F& f, State engine)
+        template<typename State, typename F>
+        typename result<generic_func(State, const F&)>::type
+        operator()(State engine, const F& f)
         {  
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
@@ -114,10 +114,10 @@ namespace streamulus
         }        
         
         // Arity = 1
-        template<typename FArg,
-        typename Arg1Strop, 
-        typename State>
-        struct result<generic_func(FArg,Arg1Strop,State)>
+        template<typename State,
+                typename FArg,
+                typename Arg1Strop>
+        struct result<generic_func(State,FArg,Arg1Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = strop_return_type<Arg1Strop>;
@@ -125,13 +125,13 @@ namespace streamulus
             using type = const std::shared_ptr<Strop<R(Arg1Type)>>;
         };
         
-        template<typename F, 
-        typename Arg1Strop, 
-        typename State>
-        typename result<generic_func(const F&,Arg1Strop,State)>::type
-        operator()(const F& f,
-                   const Arg1Strop arg1, 
-                   State engine)
+        template<typename State,
+                typename F,
+                typename Arg1Strop>
+        typename result<generic_func(State,const F&,Arg1Strop)>::type
+        operator()(State engine,
+                   const F& f,
+                   const Arg1Strop arg1)
         {  
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
@@ -150,8 +150,8 @@ namespace streamulus
         }
 
         // Arity = 2
-        template<typename FArg, typename Arg1Strop, typename Arg2Strop, typename State>
-        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,State)>
+        template<typename State, typename FArg, typename Arg1Strop, typename Arg2Strop>
+        struct result<generic_func(State,FArg,Arg1Strop,Arg2Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = strop_return_type<Arg1Strop>;
@@ -160,9 +160,9 @@ namespace streamulus
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type)>>;
         };
         
-        template<typename F, typename Arg1Strop, typename Arg2Strop, typename State>
-        typename result<generic_func(const F&,Arg1Strop,Arg2Strop, State)>::type
-        operator()(const F& f,const Arg1Strop arg1, const Arg2Strop arg2, State engine)
+        template<typename State, typename F, typename Arg1Strop, typename Arg2Strop>
+        typename result<generic_func(State,const F&,Arg1Strop,Arg2Strop)>::type
+        operator()(State engine, const F& f,const Arg1Strop arg1, const Arg2Strop arg2)
         {   
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
@@ -182,12 +182,12 @@ namespace streamulus
         }
 
         // Arity = 3
-        template<typename FArg, 
-        typename Arg1Strop, 
-        typename Arg2Strop, 
-        typename Arg3Strop, 
-        typename State>
-        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,State)>
+        template<typename State,
+                typename FArg,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop>
+        struct result<generic_func(State,FArg,Arg1Strop,Arg2Strop,Arg3Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = strop_return_type<Arg1Strop>;
@@ -197,17 +197,17 @@ namespace streamulus
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> >;
         };
         
-        template<typename F, 
-        typename Arg1Strop, 
-        typename Arg2Strop, 
-        typename Arg3Strop, 
-        typename State>
-        typename result<generic_func(const F&,Arg1Strop,Arg2Strop,Arg3Strop,State)>::type
-        operator()(const F& f,
+        template<typename State,
+                typename F,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop>
+        typename result<generic_func(State,const F&,Arg1Strop,Arg2Strop,Arg3Strop)>::type
+        operator()(State engine,
+                   const F& f,
                    const Arg1Strop arg1, 
                    const Arg2Strop arg2, 
-                   const Arg3Strop arg3, 
-                   State engine)
+                   const Arg3Strop arg3)
         {   
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
@@ -234,13 +234,13 @@ namespace streamulus
         }
         
         // Arity = 4
-        template<typename FArg, 
-        typename Arg1Strop, 
-        typename Arg2Strop, 
-        typename Arg3Strop, 
-        typename Arg4Strop, 
-        typename State>
-        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>
+        template<typename State,
+                typename FArg,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop,
+                typename Arg4Strop>
+        struct result<generic_func(State,FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = strop_return_type<Arg1Strop>;
@@ -251,19 +251,19 @@ namespace streamulus
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> >;
         };
         
-        template<typename F, 
-        typename Arg1Strop, 
-        typename Arg2Strop, 
-        typename Arg3Strop, 
-        typename Arg4Strop, 
-        typename State>
-        typename result<generic_func(const F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>::type
-        operator()(const F& f,
+        template<typename State,
+                typename F,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop,
+                typename Arg4Strop>
+        typename result<generic_func(State,const F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop)>::type
+        operator()(State engine,
+                   const F& f,
                    const Arg1Strop arg1, 
                    const Arg2Strop arg2, 
                    const Arg3Strop arg3, 
-                   const Arg4Strop arg4, 
-                   State engine)
+                   const Arg4Strop arg4)
         {   
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
@@ -293,14 +293,14 @@ namespace streamulus
         }
         
         // Arity = 5
-        template<typename FArg, 
-                 typename Arg1Strop, 
-                 typename Arg2Strop, 
-                 typename Arg3Strop, 
-                 typename Arg4Strop, 
-                 typename Arg5Strop, 
-                 typename State>
-        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>
+        template<typename State,
+                typename FArg,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop,
+                typename Arg4Strop,
+                typename Arg5Strop>
+        struct result<generic_func(State,FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using Arg1Type = strop_return_type<Arg1Strop>;
@@ -313,21 +313,21 @@ namespace streamulus
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>>;
         };
         
-        template<typename F, 
-                 typename Arg1Strop, 
-                 typename Arg2Strop, 
-                 typename Arg3Strop, 
-                 typename Arg4Strop, 
-                 typename Arg5Strop, 
-                 typename State>
-        typename result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>::type
-        operator()(const F& f,
+        template<typename State,
+                typename F,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop,
+                typename Arg4Strop,
+                typename Arg5Strop>
+        typename result<generic_func(State,F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop)>::type
+        operator()(State engine,
+                   const F& f,
                    const Arg1Strop arg1, 
                    const Arg2Strop arg2, 
                    const Arg3Strop arg3, 
                    const Arg4Strop arg4, 
-                   const Arg5Strop arg5, 
-                   State engine)
+                   const Arg5Strop arg5)
         {   
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
@@ -399,7 +399,7 @@ namespace streamulus
         typename boost::disable_if<BaseType<ConstType>, typename result<HandleTerminal(ConstType ,State)>::type>::type
         operator()(ConstType const_value, State engine)
         {
-            return generic_func()(ConstFunc<ConstType>(const_value),engine);
+            return generic_func()(engine,ConstFunc<ConstType>(const_value));
         }
          
     };
