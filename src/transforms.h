@@ -68,8 +68,8 @@ namespace streamulus
     
     struct AddStropToGraph : proto::callable  
     {
-        template<typename StropType, class State>
-        const StropType operator()(StropType strop, State engine)
+        template<class State, typename StropType>
+        const StropType operator()(State engine, StropType strop)
         {
             if (!strop->GetEngine())
             {
@@ -367,37 +367,37 @@ namespace streamulus
         template<class Sig> struct result;
         
         // Case 1: terminal is a shared_ptr to a strop 
-        template<class This, class StropType, class State>
-        struct result<This(const std::shared_ptr<StropType>&,State)>
+        template<class State, class This, class StropType>
+        struct result<This(State, const std::shared_ptr<StropType>&)>
         {
             using StropPtrType = const std::shared_ptr<StropType>&;
-            using type = typename std::result_of<AddStropToGraph(StropPtrType,State)>::type;
+            using type = typename std::result_of<AddStropToGraph(State, StropPtrType)>::type;
         };
         
-        template<class This, class StropType, class State>
-        struct result<This(std::shared_ptr<StropType>,State)>
-        : result<This(const std::shared_ptr<StropType>&,State)>
+        template<class State, class This, class StropType>
+        struct result<This(State, std::shared_ptr<StropType>)>
+        : result<This(State, const std::shared_ptr<StropType>&)>
         {};
         
-        template<typename StropType, class State>
-        typename boost::enable_if<BaseType<StropType>, typename result<HandleTerminal(StropType ,State)>::type>::type
-        operator()(StropType strop, State engine)
+        template<class State, typename StropType>
+        typename boost::enable_if<BaseType<StropType>, typename result<HandleTerminal(State, StropType)>::type>::type
+        operator()(State engine, StropType strop)
         {
-            return AddStropToGraph()(strop, engine);
+            return AddStropToGraph()(engine, strop);
         }
         
         // Final case: Terminal is any other constant
-        template<class This, class ConstType, class State>
-        struct result<This(ConstType,State)>
+        template<class State, class This, class ConstType>
+        struct result<This(State, ConstType)>
         {
             using type = const std::shared_ptr<
                     Strop<typename std::result_of<ConstFunc<ConstType>()>::type()>
             >;
         };
         
-        template<typename ConstType, class State>
-        typename boost::disable_if<BaseType<ConstType>, typename result<HandleTerminal(ConstType ,State)>::type>::type
-        operator()(ConstType const_value, State engine)
+        template<class State, typename ConstType>
+        typename boost::disable_if<BaseType<ConstType>, typename result<HandleTerminal(State, ConstType)>::type>::type
+        operator()(State engine, ConstType const_value)
         {
             return generic_func()(engine,ConstFunc<ConstType>(const_value));
         }
@@ -409,17 +409,17 @@ namespace streamulus
     {
         template<typename Sig> struct result;
         
-        template<typename ArgStrop, typename State>
-        struct result<SlidingWindow(const int&,ArgStrop,State)>
+        template<typename State, typename ArgStrop>
+        struct result<SlidingWindow(State,const int&,ArgStrop)>
         {
             using input_type = strop_return_type<ArgStrop>;
             using result_type = WindowUpdateType<input_type>;
             using type = const std::shared_ptr<StropStreamProducer<result_type> >;
         };
         
-        template<typename ArgStrop, typename State>
-        typename result<SlidingWindow(const int&,ArgStrop,State)>::type
-        operator()(const int& size, const ArgStrop arg, State engine)
+        template<typename State, typename ArgStrop>
+        typename result<SlidingWindow(State,const int&,ArgStrop)>::type
+        operator()(State engine, const int& size, const ArgStrop arg)
         {
             using WindowStropType = Window<strop_return_type<ArgStrop>>;
             std::shared_ptr<WindowStropType> strop = std::make_shared<WindowStropType>(size);
