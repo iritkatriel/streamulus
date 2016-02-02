@@ -26,6 +26,7 @@
 #include <boost/fusion/functional/invocation/invoke.hpp>
 #include <boost/fusion/include/vector.hpp>
 #include <boost/fusion/include/transform.hpp>
+#include <boost/fusion/include/make_vector.hpp>
 #include <boost/proto/proto.hpp>
 
 
@@ -52,10 +53,9 @@ namespace streamulus {
         virtual ~Strop() {
         }
 
-        template<typename Inputs>
-        // a fusion sequence of the inputs
-        void SetInputs(const Inputs &inputs) {
-            mInputs = inputs;
+        template<typename... Inputs>
+        void SetInputs(Inputs... inputs) {
+            mInputs = boost::fusion::make_vector(inputs...);
         }
 
         template<int I>

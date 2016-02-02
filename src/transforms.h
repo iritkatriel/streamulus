@@ -32,8 +32,6 @@
 #include "funcs.h"
 #include "cpp14_utils.h"
 
-#include <boost/fusion/include/make_vector.hpp>
-#include <boost/fusion/include/algorithm.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits.hpp>
@@ -142,7 +140,7 @@ namespace streamulus
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream));
+            funcStropPtr->SetInputs(arg1Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -173,7 +171,7 @@ namespace streamulus
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream));
+            funcStropPtr->SetInputs(arg1Stream, arg2Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -224,7 +222,7 @@ namespace streamulus
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
             typename BaseType<Arg3Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream));
+            funcStropPtr->SetInputs(arg1Stream, arg2Stream, arg3Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -282,7 +280,7 @@ namespace streamulus
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
             typename BaseType<Arg3Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
             typename BaseType<Arg4Strop>::type::OutputStreamPtr arg4Stream(arg4->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream, arg4Stream));
+            funcStropPtr->SetInputs(arg1Stream, arg2Stream, arg3Stream, arg4Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -348,7 +346,7 @@ namespace streamulus
             typename BaseType<Arg3Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
             typename BaseType<Arg4Strop>::type::OutputStreamPtr arg4Stream(arg4->MakeOutputStream());
             typename BaseType<Arg5Strop>::type::OutputStreamPtr arg5Stream(arg5->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream, arg4Stream, arg5Stream));
+            funcStropPtr->SetInputs(arg1Stream, arg2Stream, arg3Stream, arg4Stream, arg5Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -425,7 +423,7 @@ namespace streamulus
             std::shared_ptr<WindowStropType> strop = std::make_shared<WindowStropType>(size);
 
             typename BaseType<ArgStrop>::type::OutputStreamPtr argStream(arg->MakeOutputStream());
-            strop->SetInputs(boost::fusion::make_vector(argStream));
+            strop->SetInputs(argStream);
             
             engine->AddVertexToGraph(strop);
             engine->AddEdgeToGraph(arg, strop, argStream);
