@@ -29,14 +29,14 @@ namespace streamulus
 {
     namespace detail {
         template<typename StropType>
-        struct StropReturnType;
+        struct strop_return_type_impl;
 
         template<typename StropType>
-        struct StropReturnType<std::shared_ptr<StropType> > {
+        struct strop_return_type_impl<std::shared_ptr<StropType> > {
             using type = typename StropType::result_type;
         };
     }
 
     template<typename StropType>
-    using strop_return_type_t = typename detail::StropReturnType<remove_const_t<StropType>>::type;
+    using strop_return_type = typename detail::strop_return_type_impl<remove_const_t<StropType>>::type;
 } // ns streamulus

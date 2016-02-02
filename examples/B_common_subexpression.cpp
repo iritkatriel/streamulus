@@ -78,7 +78,7 @@ void common_subexpressions()
     //     print it 
     //     emit it into the output stream
     // 
-    // the output is assined to the 'greeting' variable, 
+    // the output is assigned to the 'greeting' variable,
     // which can be used in other streamulus expressions. 
     // 
     Subscription<std::string>::type greeting = 

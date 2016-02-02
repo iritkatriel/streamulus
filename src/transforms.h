@@ -32,8 +32,6 @@
 #include "funcs.h"
 #include "cpp14_utils.h"
 
-#include <boost/fusion/include/make_vector.hpp>
-#include <boost/fusion/include/algorithm.hpp>
 #include <boost/type_traits.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits.hpp>
@@ -68,8 +66,8 @@ namespace streamulus
     
     struct AddStropToGraph : proto::callable  
     {
-        template<typename StropType, class State>
-        const StropType operator()(StropType strop, State engine)
+        template<class State, typename StropType>
+        const StropType operator()(State engine, StropType strop)
         {
             if (!strop->GetEngine())
             {
@@ -89,23 +87,23 @@ namespace streamulus
         template<typename Sig> struct result;
         
         // Arity = 0
-        template<typename FArg, typename State>
-        struct result<generic_func(FArg,State)>
+        template<typename State, typename FArg>
+        struct result<generic_func(State,FArg)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
             using R = typename std::result_of<F()>::type;
             using type = const std::shared_ptr<Strop<R()>>;
         };
 
-        template<typename F, typename State>
-        typename result<generic_func(const F&,State)>::type
-        operator()(const F& f, State engine)
+        template<typename State, typename F>
+        typename result<generic_func(State, const F&)>::type
+        operator()(State engine, const F& f)
         {  
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func0<F>;
+            using FuncStropType = Func<F>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             engine->AddVertexToGraph(funcStropPtr);
@@ -114,35 +112,35 @@ namespace streamulus
         }        
         
         // Arity = 1
-        template<typename FArg,
-        typename Arg1Strop, 
-        typename State>
-        struct result<generic_func(FArg,Arg1Strop,State)>
+        template<typename State,
+                typename FArg,
+                typename Arg1Strop>
+        struct result<generic_func(State,FArg,Arg1Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
             using  R = typename std::result_of<F(Arg1Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type)>>;
         };
         
-        template<typename F, 
-        typename Arg1Strop, 
-        typename State>
-        typename result<generic_func(const F&,Arg1Strop,State)>::type
-        operator()(const F& f,
-                   const Arg1Strop arg1, 
-                   State engine)
+        template<typename State,
+                typename F,
+                typename Arg1Strop>
+        typename result<generic_func(State,const F&,Arg1Strop)>::type
+        operator()(State engine,
+                   const F& f,
+                   const Arg1Strop arg1)
         {  
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func1<F,strop_return_type_t<Arg1Strop>>;
+            using FuncStropType = Func<F,strop_return_type<Arg1Strop>>;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream));
+            funcStropPtr->SetInputs(arg1Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -150,30 +148,30 @@ namespace streamulus
         }
 
         // Arity = 2
-        template<typename FArg, typename Arg1Strop, typename Arg2Strop, typename State>
-        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,State)>
+        template<typename State, typename FArg, typename Arg1Strop, typename Arg2Strop>
+        struct result<generic_func(State,FArg,Arg1Strop,Arg2Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
-            using Arg2Type = strop_return_type_t<Arg2Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
+            using Arg2Type = strop_return_type<Arg2Strop>;
             using R = typename std::result_of<F(Arg1Type,Arg2Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type)>>;
         };
         
-        template<typename F, typename Arg1Strop, typename Arg2Strop, typename State>
-        typename result<generic_func(const F&,Arg1Strop,Arg2Strop, State)>::type
-        operator()(const F& f,const Arg1Strop arg1, const Arg2Strop arg2, State engine)
+        template<typename State, typename F, typename Arg1Strop, typename Arg2Strop>
+        typename result<generic_func(State,const F&,Arg1Strop,Arg2Strop)>::type
+        operator()(State engine, const F& f,const Arg1Strop arg1, const Arg2Strop arg2)
         {   
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func2<F, strop_return_type_t<Arg1Strop>, strop_return_type_t<Arg2Strop>>;
+            using FuncStropType = Func<F, strop_return_type<Arg1Strop>, strop_return_type<Arg2Strop>>;
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
             
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream));
+            funcStropPtr->SetInputs(arg1Stream, arg2Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -182,41 +180,41 @@ namespace streamulus
         }
 
         // Arity = 3
-        template<typename FArg, 
-        typename Arg1Strop, 
-        typename Arg2Strop, 
-        typename Arg3Strop, 
-        typename State>
-        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,State)>
+        template<typename State,
+                typename FArg,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop>
+        struct result<generic_func(State,FArg,Arg1Strop,Arg2Strop,Arg3Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
-            using Arg2Type = strop_return_type_t<Arg2Strop>;
-            using Arg3Type = strop_return_type_t<Arg3Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
+            using Arg2Type = strop_return_type<Arg2Strop>;
+            using Arg3Type = strop_return_type<Arg3Strop>;
             using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type)> >;
         };
         
-        template<typename F, 
-        typename Arg1Strop, 
-        typename Arg2Strop, 
-        typename Arg3Strop, 
-        typename State>
-        typename result<generic_func(const F&,Arg1Strop,Arg2Strop,Arg3Strop,State)>::type
-        operator()(const F& f,
+        template<typename State,
+                typename F,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop>
+        typename result<generic_func(State,const F&,Arg1Strop,Arg2Strop,Arg3Strop)>::type
+        operator()(State engine,
+                   const F& f,
                    const Arg1Strop arg1, 
                    const Arg2Strop arg2, 
-                   const Arg3Strop arg3, 
-                   State engine)
+                   const Arg3Strop arg3)
         {   
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func3<F
-            ,strop_return_type_t<Arg1Strop>
-            ,strop_return_type_t<Arg2Strop>
-            ,strop_return_type_t<Arg3Strop>
+            using FuncStropType = Func<F
+            ,strop_return_type<Arg1Strop>
+            ,strop_return_type<Arg2Strop>
+            ,strop_return_type<Arg3Strop>
             >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -224,7 +222,7 @@ namespace streamulus
             typename BaseType<Arg1Strop>::type::OutputStreamPtr arg1Stream(arg1->MakeOutputStream());
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
             typename BaseType<Arg3Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream));
+            funcStropPtr->SetInputs(arg1Stream, arg2Stream, arg3Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -234,46 +232,46 @@ namespace streamulus
         }
         
         // Arity = 4
-        template<typename FArg, 
-        typename Arg1Strop, 
-        typename Arg2Strop, 
-        typename Arg3Strop, 
-        typename Arg4Strop, 
-        typename State>
-        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>
+        template<typename State,
+                typename FArg,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop,
+                typename Arg4Strop>
+        struct result<generic_func(State,FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
-            using Arg2Type = strop_return_type_t<Arg2Strop>;
-            using Arg3Type = strop_return_type_t<Arg3Strop>;
-            using Arg4Type = strop_return_type_t<Arg4Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
+            using Arg2Type = strop_return_type<Arg2Strop>;
+            using Arg3Type = strop_return_type<Arg3Strop>;
+            using Arg4Type = strop_return_type<Arg4Strop>;
             using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type)>::type;
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type)> >;
         };
         
-        template<typename F, 
-        typename Arg1Strop, 
-        typename Arg2Strop, 
-        typename Arg3Strop, 
-        typename Arg4Strop, 
-        typename State>
-        typename result<generic_func(const F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,State)>::type
-        operator()(const F& f,
+        template<typename State,
+                typename F,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop,
+                typename Arg4Strop>
+        typename result<generic_func(State,const F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop)>::type
+        operator()(State engine,
+                   const F& f,
                    const Arg1Strop arg1, 
                    const Arg2Strop arg2, 
                    const Arg3Strop arg3, 
-                   const Arg4Strop arg4, 
-                   State engine)
+                   const Arg4Strop arg4)
         {   
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func4<F
-            ,strop_return_type_t<Arg1Strop>
-            ,strop_return_type_t<Arg2Strop>
-            ,strop_return_type_t<Arg3Strop>
-            ,strop_return_type_t<Arg4Strop>
+            using FuncStropType = Func<F
+            ,strop_return_type<Arg1Strop>
+            ,strop_return_type<Arg2Strop>
+            ,strop_return_type<Arg3Strop>
+            ,strop_return_type<Arg4Strop>
             >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -282,7 +280,7 @@ namespace streamulus
             typename BaseType<Arg2Strop>::type::OutputStreamPtr arg2Stream(arg2->MakeOutputStream());
             typename BaseType<Arg3Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
             typename BaseType<Arg4Strop>::type::OutputStreamPtr arg4Stream(arg4->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream, arg4Stream));
+            funcStropPtr->SetInputs(arg1Stream, arg2Stream, arg3Stream, arg4Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -293,52 +291,52 @@ namespace streamulus
         }
         
         // Arity = 5
-        template<typename FArg, 
-                 typename Arg1Strop, 
-                 typename Arg2Strop, 
-                 typename Arg3Strop, 
-                 typename Arg4Strop, 
-                 typename Arg5Strop, 
-                 typename State>
-        struct result<generic_func(FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>
+        template<typename State,
+                typename FArg,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop,
+                typename Arg4Strop,
+                typename Arg5Strop>
+        struct result<generic_func(State,FArg,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop)>
         {
             using F = remove_const_t<remove_reference_t<FArg>>;
-            using Arg1Type = strop_return_type_t<Arg1Strop>;
-            using Arg2Type = strop_return_type_t<Arg2Strop>;
-            using Arg3Type = strop_return_type_t<Arg3Strop>;
-            using Arg4Type = strop_return_type_t<Arg4Strop>;
-            using Arg5Type = strop_return_type_t<Arg5Strop>;
+            using Arg1Type = strop_return_type<Arg1Strop>;
+            using Arg2Type = strop_return_type<Arg2Strop>;
+            using Arg3Type = strop_return_type<Arg3Strop>;
+            using Arg4Type = strop_return_type<Arg4Strop>;
+            using Arg5Type = strop_return_type<Arg5Strop>;
             using R = typename std::result_of<F(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>::type;
 
             using type = const std::shared_ptr<Strop<R(Arg1Type,Arg2Type,Arg3Type,Arg4Type,Arg5Type)>>;
         };
         
-        template<typename F, 
-                 typename Arg1Strop, 
-                 typename Arg2Strop, 
-                 typename Arg3Strop, 
-                 typename Arg4Strop, 
-                 typename Arg5Strop, 
-                 typename State>
-        typename result<generic_func(F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop,State)>::type
-        operator()(const F& f,
+        template<typename State,
+                typename F,
+                typename Arg1Strop,
+                typename Arg2Strop,
+                typename Arg3Strop,
+                typename Arg4Strop,
+                typename Arg5Strop>
+        typename result<generic_func(State,F&,Arg1Strop,Arg2Strop,Arg3Strop,Arg4Strop,Arg5Strop)>::type
+        operator()(State engine,
+                   const F& f,
                    const Arg1Strop arg1, 
                    const Arg2Strop arg2, 
                    const Arg3Strop arg3, 
                    const Arg4Strop arg4, 
-                   const Arg5Strop arg5, 
-                   State engine)
+                   const Arg5Strop arg5)
         {   
             if (engine->IsVerbose()) {
                 std::cout << "generic_func" << std::endl;
             }
 
-            using FuncStropType = Func5<F
-                        ,strop_return_type_t<Arg1Strop>
-                        ,strop_return_type_t<Arg2Strop>
-                        ,strop_return_type_t<Arg3Strop>
-                        ,strop_return_type_t<Arg4Strop>
-                        ,strop_return_type_t<Arg5Strop>
+            using FuncStropType = Func<F
+                        ,strop_return_type<Arg1Strop>
+                        ,strop_return_type<Arg2Strop>
+                        ,strop_return_type<Arg3Strop>
+                        ,strop_return_type<Arg4Strop>
+                        ,strop_return_type<Arg5Strop>
                         >;
 
             std::shared_ptr<FuncStropType> funcStropPtr = std::make_shared<FuncStropType>(f);
@@ -348,7 +346,7 @@ namespace streamulus
             typename BaseType<Arg3Strop>::type::OutputStreamPtr arg3Stream(arg3->MakeOutputStream());
             typename BaseType<Arg4Strop>::type::OutputStreamPtr arg4Stream(arg4->MakeOutputStream());
             typename BaseType<Arg5Strop>::type::OutputStreamPtr arg5Stream(arg5->MakeOutputStream());
-            funcStropPtr->SetInputs(boost::fusion::make_vector(arg1Stream, arg2Stream, arg3Stream, arg4Stream, arg5Stream));
+            funcStropPtr->SetInputs(arg1Stream, arg2Stream, arg3Stream, arg4Stream, arg5Stream);
             
             engine->AddVertexToGraph(funcStropPtr);
             engine->AddEdgeToGraph(arg1, funcStropPtr, arg1Stream);
@@ -367,39 +365,39 @@ namespace streamulus
         template<class Sig> struct result;
         
         // Case 1: terminal is a shared_ptr to a strop 
-        template<class This, class StropType, class State>
-        struct result<This(const std::shared_ptr<StropType>&,State)>
+        template<class State, class This, class StropType>
+        struct result<This(State, const std::shared_ptr<StropType>&)>
         {
             using StropPtrType = const std::shared_ptr<StropType>&;
-            using type = typename std::result_of<AddStropToGraph(StropPtrType,State)>::type;
+            using type = typename std::result_of<AddStropToGraph(State, StropPtrType)>::type;
         };
         
-        template<class This, class StropType, class State>
-        struct result<This(std::shared_ptr<StropType>,State)>
-        : result<This(const std::shared_ptr<StropType>&,State)>
+        template<class State, class This, class StropType>
+        struct result<This(State, std::shared_ptr<StropType>)>
+        : result<This(State, const std::shared_ptr<StropType>&)>
         {};
         
-        template<typename StropType, class State>
-        typename boost::enable_if<BaseType<StropType>, typename result<HandleTerminal(StropType ,State)>::type>::type
-        operator()(StropType strop, State engine)
+        template<class State, typename StropType>
+        typename boost::enable_if<BaseType<StropType>, typename result<HandleTerminal(State, StropType)>::type>::type
+        operator()(State engine, StropType strop)
         {
-            return AddStropToGraph()(strop, engine);
+            return AddStropToGraph()(engine, strop);
         }
         
         // Final case: Terminal is any other constant
-        template<class This, class ConstType, class State>
-        struct result<This(ConstType,State)>
+        template<class State, class This, class ConstType>
+        struct result<This(State, ConstType)>
         {
-            using ConstFuncResultType = typename ConstFunc<ConstType>::template result<ConstFunc<ConstType>(ConstType)>::type;
-            using type = const std::shared_ptr<Strop<ConstFuncResultType()>>;
+            using type = const std::shared_ptr<
+                    Strop<typename std::result_of<ConstFunc<ConstType>()>::type()>
+            >;
         };
         
-        template<typename ConstType, class State>
-        typename boost::disable_if<BaseType<ConstType>, typename result<HandleTerminal(ConstType ,State)>::type>::type
-        operator()(ConstType const_value, State engine)
+        template<class State, typename ConstType>
+        typename boost::disable_if<BaseType<ConstType>, typename result<HandleTerminal(State, ConstType)>::type>::type
+        operator()(State engine, ConstType const_value)
         {
-            using T = typename result<HandleTerminal(ConstType ,State)>::ConstFuncResultType;
-            return generic_func()(ConstFunc<T>(const_value),engine);
+            return generic_func()(engine,ConstFunc<ConstType>(const_value));
         }
          
     };
@@ -409,23 +407,23 @@ namespace streamulus
     {
         template<typename Sig> struct result;
         
-        template<typename ArgStrop, typename State>
-        struct result<SlidingWindow(const int&,ArgStrop,State)>
+        template<typename State, typename ArgStrop>
+        struct result<SlidingWindow(State,const int&,ArgStrop)>
         {
-            using input_type = strop_return_type_t<ArgStrop>;
+            using input_type = strop_return_type<ArgStrop>;
             using result_type = WindowUpdateType<input_type>;
             using type = const std::shared_ptr<StropStreamProducer<result_type> >;
         };
         
-        template<typename ArgStrop, typename State>
-        typename result<SlidingWindow(const int&,ArgStrop,State)>::type
-        operator()(const int& size, const ArgStrop arg, State engine)
+        template<typename State, typename ArgStrop>
+        typename result<SlidingWindow(State,const int&,ArgStrop)>::type
+        operator()(State engine, const int& size, const ArgStrop arg)
         {
-            using WindowStropType = Window<strop_return_type_t<ArgStrop>>;
+            using WindowStropType = Window<strop_return_type<ArgStrop>>;
             std::shared_ptr<WindowStropType> strop = std::make_shared<WindowStropType>(size);
 
             typename BaseType<ArgStrop>::type::OutputStreamPtr argStream(arg->MakeOutputStream());
-            strop->SetInputs(boost::fusion::make_vector(argStream));
+            strop->SetInputs(argStream);
             
             engine->AddVertexToGraph(strop);
             engine->AddEdgeToGraph(arg, strop, argStream);

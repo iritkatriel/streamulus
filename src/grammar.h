@@ -154,15 +154,21 @@ namespace streamulus
         struct case_
         : proto::or_<
              proto::when<unary_op_rule,
-                        generic_func(functor_of<TAG>(), smls_grammar(proto::_child), proto::_state)>
+                        generic_func(proto::_state,
+                                     functor_of<TAG>(),
+                                     smls_grammar(proto::_child))>
 
            , proto::when<binary_op_rule,
-                        generic_func(functor_of<TAG>(), smls_grammar(proto::_left), 
-                                                        smls_grammar(proto::_right), proto::_state)> 
+                        generic_func(proto::_state,
+                                     functor_of<TAG>(),
+                                     smls_grammar(proto::_left),
+                                     smls_grammar(proto::_right))>
            , proto::when<ternary_op_rule,
-                        generic_func(functor_of<TAG>(), smls_grammar(proto::_child0), 
-                                                        smls_grammar(proto::_child1),  
-                                                        smls_grammar(proto::_child2), proto::_state)> 
+                        generic_func(proto::_state,
+                                     functor_of<TAG>(),
+                                     smls_grammar(proto::_child0),
+                                     smls_grammar(proto::_child1),
+                                     smls_grammar(proto::_child2))>
          >
         {};
     };
@@ -170,7 +176,7 @@ namespace streamulus
     // Terminal expressions 
     template<>
     struct smls_grammar_cases::case_<proto::tag::terminal>
-        : proto::when<proto::_, HandleTerminal(proto::_value,proto::_state)>  
+        : proto::when<proto::_, HandleTerminal(proto::_state, proto::_value)>
     {};
     
     
@@ -181,45 +187,45 @@ namespace streamulus
     struct smls_grammar_cases::case_<proto::tag::function>
     : proto::or_< 
         proto::when<window_rule,
-                    SlidingWindow(get_terminal_value(proto::_child1), smls_grammar(proto::_child2), proto::_state)
+                    SlidingWindow(proto::_state, get_terminal_value(proto::_child1), smls_grammar(proto::_child2))
         >
         , proto::when<function_0_rule, 
-                    generic_func(get_terminal_value(proto::_child0), proto::_state)
+                    generic_func(proto::_state, get_terminal_value(proto::_child0))
         >
         , proto::when<function_1_rule, 
-                    generic_func(get_terminal_value(proto::_child0), 
-                                 smls_grammar(proto::_child1), 
-                                 proto::_state)
+                    generic_func(proto::_state,
+                                 get_terminal_value(proto::_child0),
+                                 smls_grammar(proto::_child1))
         >
         , proto::when<function_2_rule, 
-                    generic_func(get_terminal_value(proto::_child0), 
-                                   smls_grammar(proto::_child1),
-                                   smls_grammar(proto::_child2),
-                                   proto::_state)
+                    generic_func(proto::_state,
+                                 get_terminal_value(proto::_child0),
+                                 smls_grammar(proto::_child1),
+                                 smls_grammar(proto::_child2))
         >
-        , proto::when<function_3_rule, 
-                    generic_func(get_terminal_value(proto::_child0), 
-                                   smls_grammar(proto::_child1), 
-                                   smls_grammar(proto::_child2), 
-                                   smls_grammar(proto::_child3), 
-                                   proto::_state) 
+        , proto::when<function_3_rule,
+                    generic_func(proto::_state,
+                                 get_terminal_value(proto::_child0),
+                                 smls_grammar(proto::_child1),
+                                 smls_grammar(proto::_child2),
+                                 smls_grammar(proto::_child3))
         >
         , proto::when<function_4_rule, 
-                      generic_func(get_terminal_value(proto::_child0),
+                      generic_func(proto::_state,
+                                   get_terminal_value(proto::_child0),
                                    smls_grammar(proto::_child1),
                                    smls_grammar(proto::_child2),
                                    smls_grammar(proto::_child3),
-                                   smls_grammar(proto::_child4),
-                                   proto::_state)
+                                   smls_grammar(proto::_child4))
         >
         , proto::when<function_5_rule,
-                      generic_func(get_terminal_value(proto::_child0),
+                      generic_func(proto::_state,
+                                   get_terminal_value(proto::_child0),
                                    smls_grammar(proto::_child1),
                                    smls_grammar(proto::_child2),
                                    smls_grammar(proto::_child3),
                                    smls_grammar(proto::_child4),
-                                   smls_grammar(proto::_child5),
-                                   proto::_state)
+                                   smls_grammar(proto::_child5))
         >
     >
     {};

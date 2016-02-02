@@ -34,13 +34,7 @@ namespace streamulus
         {
         }
         
-        template<class Sig> 
-        struct result
-        {
-            using type = remove_const_t<remove_reference_t<T>>;
-        };
-
-        typename result<ConstFunc(T)>::type
+        remove_const_t<remove_reference_t<T>>
         operator()() const
         {
             return mValue;

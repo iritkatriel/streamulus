@@ -39,17 +39,9 @@ namespace streamulus
             : mFunction(f)
         {
         }
-        
-        template<class Sig> struct result;
 
-        template<class This,typename WA> 
-        struct result<This(WA)>
-        {
-            using type = typename F::template value_type<F(typename WindowBaseType<WA>::type)>::type;
-        };
-                
         template<typename WA>
-        boost::optional<typename result<WindowFunc(WA)>::type>
+        boost::optional<typename F::template value_type<F(typename WindowBaseType<WA>::type)>::type>
         operator()(const WA& window_update) 
         { 
             if (window_update.first == DATA_OUT)
